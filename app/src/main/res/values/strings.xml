@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Interscheckin</string>
+
+    <!-- MainScreen -->
+    <string name="main_request_venue_list_update">Update Venue list</string>
+    <string name="main_go_to_settings_button_label">Settings</string>
+    <string name="main_location_loading">Retrieving location...</string>
+    <string name="main_location_loaded">You are at %1$s (± %2$s m)</string>
+    <string name="main_shout_placeholder">What are you up to?</string>
+    <string name="main_button_checkin">Check-in</string>
+    <string name="main_driving_mode_checkbox_label">driving mode</string>
+    <string name="main_venue_selected">selected</string>
+    <string name="main_message_lets_checkin_today">Let\'s check-in today!</string>
+    <string name="main_message_creating_checkin">Creating check-in...</string>
+    <string name="main_message_checkin_success">Check-in created at %1$s</string>
+    <string name="main_venues_not_updated_as_location_is_not_changed">Location not changed, skipping update of Venue list</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings_topbar_title">Settings</string>
+    <string name="settings_foursquare_oauth_token_label">Foursquare OAuth token</string>
+    <string name="settings_foursquare_api_ken">Foursquare API key</string>
+    <string name="settings_save">Save settings</string>
+    <string name="settings_reason_credentials_not_set">Please set credentials first to use Interscheckin.</string>
+    <string name="settings_reason_invalid_credentials">Invalid credentials.\nConsider generating new OAuth token, or check typos.</string>
+</resources>

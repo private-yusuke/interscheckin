@@ -1,4 +1,4 @@
-# Interschecin
+# Interscheckin
 
 交差点でのチェックインを補助するために作成された Swarm 利用者のための Android アプリケーション
 

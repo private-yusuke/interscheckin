@@ -65,7 +65,7 @@ fun MainScreen(
     viewModel: MainContract.ViewModel,
     navController: NavController
 ) {
-    var drivingModeState = viewModel.drivingModeFlow
+    val drivingModeState = viewModel.drivingModeFlow
         .collectAsState(initial = false)
 
     var shout by remember { mutableStateOf("") }

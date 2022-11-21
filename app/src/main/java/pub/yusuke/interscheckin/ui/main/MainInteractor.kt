@@ -5,12 +5,16 @@ import android.content.Context
 import android.location.Location
 import android.os.VibrationEffect
 import android.os.VibratorManager
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import pub.yusuke.foursquareclient.models.Checkin
 import pub.yusuke.foursquareclient.models.Venue
+import pub.yusuke.fusedlocationktx.locationFlow
 import pub.yusuke.interscheckin.repositories.UserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareCheckinsRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlacesRepository
@@ -43,28 +47,21 @@ class MainInteractor @Inject constructor(
         )
 
     @SuppressLint("MissingPermission")
-    override fun fetchLocation(): Location {
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-        return fusedLocationClient.lastLocation.result
+    override suspend fun fetchLocation(): Location {
+        val locationRequest = LocationRequest.Builder(16)
+            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+            .setMinUpdateIntervalMillis(16)
+            .build()
+
+        return fusedLocationProviderClient
+            .locationFlow(locationRequest)
+            .first()
     }
 
-    override fun fetchDrivingModelFlow(): Flow<Boolean> =
+    override fun fetchDrivingModeFlow(): Flow<Boolean> =
         userPreferencesRepository
             .userPreferencesFlow
             .map { it.drivingMode }
-
-//    override fun fetchLocationFlow(
-//        intervalMills: Long,
-//        minUpdateIntervalMillis: Long,
-//    ): Flow<Location> {
-//        val locationRequest = LocationRequest.Builder(intervalMills)
-//            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-//            .setMinUpdateIntervalMillis(minUpdateIntervalMillis)
-//            .build()
-//
-//        return fusedLocationProviderClient
-//            .locationFlow(locationRequest)
-//    }
 
     override suspend fun enableDrivingMode(enabled: Boolean) =
         userPreferencesRepository.enableDrivingMode(enabled)

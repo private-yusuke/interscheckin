@@ -23,7 +23,7 @@ interface MainContract {
         )
 
         fun onVibrationRequested()
-        fun onLocationUpdateRequested()
+        suspend fun onLocationUpdateRequested()
         fun onNavigationFinished()
         fun onSnackbarDisplayed()
     }
@@ -37,8 +37,8 @@ interface MainContract {
             query: String? = null
         ): List<Venue>
 
-        fun fetchLocation(): Location
-        fun fetchDrivingModelFlow(): Flow<Boolean>
+        suspend fun fetchLocation(): Location
+        fun fetchDrivingModeFlow(): Flow<Boolean>
         suspend fun enableDrivingMode(enabled: Boolean)
         suspend fun createCheckin(
             venueId: String,

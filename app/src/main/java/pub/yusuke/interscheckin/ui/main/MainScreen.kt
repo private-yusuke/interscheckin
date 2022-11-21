@@ -165,7 +165,7 @@ fun MainScreen(
                     }
                 )
                 Button(
-                    onClick = { viewModel.onLocationUpdateRequested() },
+                    onClick = { coroutineScope.launch { viewModel.onLocationUpdateRequested() } },
                     enabled = viewModel.locationState.value is MainContract.LocationState.Loaded
                 ) {
                     Text(
@@ -369,7 +369,7 @@ private fun MainActivityScreenPreview() {
             override suspend fun checkIn(venueId: String, shout: String?) {}
 
             override fun onVibrationRequested() {}
-            override fun onLocationUpdateRequested() {}
+            override suspend fun onLocationUpdateRequested() {}
             override fun onNavigationFinished() {}
             override fun onSnackbarDisplayed() {}
 

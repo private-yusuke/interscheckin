@@ -1,18 +1,14 @@
 package pub.yusuke.interscheckin.ui.main
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.os.VibrationEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
-import com.google.android.gms.location.LocationServices
+import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
 import pub.yusuke.foursquareclient.FoursquareClient
 import pub.yusuke.foursquareclient.FoursquareClientImpl
 import pub.yusuke.foursquareclient.models.Checkin
@@ -21,19 +17,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    application: Application,
     private val interactor: MainContract.Interactor
-) : AndroidViewModel(application), MainContract.ViewModel {
-    private val fusedLocationProviderClient =
-        LocationServices.getFusedLocationProviderClient(application)
-
+) : ViewModel(), MainContract.ViewModel {
     /**
      * Venue の更新が必要であるか
      * 例：Location が更新された、driving mode が更新された等
      */
     private var requireVenueUpdate = false
 
-    override var drivingModeFlow: Flow<Boolean> = interactor.fetchDrivingModelFlow()
+    override var drivingModeFlow: Flow<Boolean> = interactor.fetchDrivingModeFlow()
 
     private var _checkinState: MutableState<MainContract.CheckinState> =
         mutableStateOf(MainContract.CheckinState.InitialIdle)
@@ -158,7 +150,7 @@ class MainViewModel @Inject constructor(
         )
 
     @SuppressLint("MissingPermission")
-    override fun onLocationUpdateRequested() {
+    override suspend fun onLocationUpdateRequested() {
         val lastLocation = when (val it = locationState.value) {
             is MainContract.LocationState.Loading ->
                 it.lastLocation
@@ -169,19 +161,19 @@ class MainViewModel @Inject constructor(
         }
         _locationState.value = MainContract.LocationState.Loading(lastLocation)
 
-        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-            _locationState.value = MainContract.LocationState.Loaded(
-                location = location
-            )
-            // 最後の Location と異なっている場合は Venue の update をする必要がある
-            requireVenueUpdate = requireVenueUpdate || (lastLocation != location)
+        val location = interactor.fetchLocation()
+        _locationState.value = MainContract.LocationState.Loaded(
+            location = location
+        )
 
-            if (requireVenueUpdate) {
-                viewModelScope.launch { updateVenuesState() }
-            } else {
-                _snackbarMessageState.value =
-                    R.string.main_venues_not_updated_as_location_is_not_changed
-            }
+        // 最後の Location と異なっている場合は Venue の update をする必要がある
+        requireVenueUpdate = requireVenueUpdate || (lastLocation != location)
+
+        if (requireVenueUpdate) {
+            updateVenuesState()
+        } else {
+            _snackbarMessageState.value =
+                R.string.main_venues_not_updated_as_location_is_not_changed
         }
     }
 

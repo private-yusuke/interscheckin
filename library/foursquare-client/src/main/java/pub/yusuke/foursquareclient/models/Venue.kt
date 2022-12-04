@@ -1,11 +1,9 @@
 package pub.yusuke.foursquareclient.models
 
-import android.location.LocationManager
-
 data class Venue(
     val categories: List<Category>,
     val chains: List<Chain>?,
-    val distance: Int?,
+    val distance: Long?,
     val fsq_id: String,
     val geocodes: Geocodes,
     val link: String?,
@@ -57,10 +55,6 @@ data class LatAndLong(
 )
 
 fun LatAndLong.llString() = "${latitude.toBigDecimal().toPlainString()},${longitude.toBigDecimal().toPlainString()}"
-fun LatAndLong.toLocation() = android.location.Location(LocationManager.GPS_PROVIDER).apply {
-    latitude = this@toLocation.latitude
-    longitude = this@toLocation.longitude
-}
 
 data class Parent(
     val fsq_id: String,

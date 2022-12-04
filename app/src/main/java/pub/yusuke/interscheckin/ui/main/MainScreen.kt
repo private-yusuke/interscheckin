@@ -115,8 +115,8 @@ fun MainScreen(
                     Button(
                         onClick = { coroutineScope.launch { viewModel.checkIn(selectedVenueIdState) } },
                         enabled = viewModel.locationState.value is MainContract.LocationState.Loaded &&
-                            viewModel.checkinState.value !is MainContract.CheckinState.Loading &&
-                            selectedVenueIdState != "",
+                                viewModel.checkinState.value !is MainContract.CheckinState.Loading &&
+                                selectedVenueIdState != "",
                         modifier = Modifier
                             .semantics { contentDescription = "Create a Checkin" }
                     ) {
@@ -157,7 +157,7 @@ fun MainScreen(
                         is MainContract.CheckinState.Idle ->
                             stringResource(
                                 R.string.main_message_checkin_success,
-                                it.lastCheckin.venue.name
+                                it.lastCheckin.venueName
                             )
                         is MainContract.CheckinState.Error ->
                             "Error: ${it.throwable.message}\n${it.throwable.stackTrace}"

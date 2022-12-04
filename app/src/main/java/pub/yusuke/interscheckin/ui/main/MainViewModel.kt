@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import pub.yusuke.foursquareclient.FoursquareClient
 import pub.yusuke.foursquareclient.FoursquareClientImpl
-import pub.yusuke.foursquareclient.models.Checkin
 import pub.yusuke.interscheckin.R
 import javax.inject.Inject
 
@@ -136,7 +135,7 @@ class MainViewModel @Inject constructor(
         shout: String,
         latitude: Double,
         longitude: Double
-    ): Checkin =
+    ): MainContract.Checkin =
         interactor.createCheckin(
             venueId = venueId,
             shout = shout,

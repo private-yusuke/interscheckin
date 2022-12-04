@@ -4,7 +4,6 @@ import android.location.Location
 import android.os.VibrationEffect
 import androidx.compose.runtime.State
 import kotlinx.coroutines.flow.Flow
-import pub.yusuke.foursquareclient.models.Checkin
 
 interface MainContract {
     interface ViewModel {
@@ -61,6 +60,10 @@ interface MainContract {
             val url: String
         )
     }
+
+    data class Checkin(
+        val venueName: String
+    )
 
     sealed class LocationState {
         /**

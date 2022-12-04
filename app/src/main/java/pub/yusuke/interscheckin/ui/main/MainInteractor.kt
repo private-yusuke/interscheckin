@@ -72,12 +72,12 @@ class MainInteractor @Inject constructor(
         shout: String,
         latitude: Double,
         longitude: Double
-    ): Checkin = foursquareCheckinsRepository.createCheckin(
+    ): MainContract.Checkin = foursquareCheckinsRepository.createCheckin(
         venueId = venueId,
         shout = shout,
         latitude = latitude,
         longitude = longitude
-    )
+    ).translateToMainContractCheckin()
 
     override fun vibrate(vibrationEffect: VibrationEffect) =
         vibratorManager.defaultVibrator.vibrate(vibrationEffect)
@@ -95,5 +95,10 @@ class MainInteractor @Inject constructor(
                 name = this.categories.first().name,
                 url = this.categories.first().icon.url()
             )
+        )
+
+    private fun Checkin.translateToMainContractCheckin(): MainContract.Checkin =
+        MainContract.Checkin(
+            venueName = this.venue.name
         )
 }

@@ -91,10 +91,12 @@ class MainInteractor @Inject constructor(
             name = this.name,
             categoriesString = this.categories.joinToString(", ") { it.name },
             distance = this.distance,
-            icon = MainContract.Venue.Icon(
-                name = this.categories.first().name,
-                url = this.categories.first().icon.url()
-            )
+            icon = this.categories.firstOrNull()?.let { category ->
+                MainContract.Venue.Icon(
+                    name = category.name,
+                    url = category.icon.url()
+                )
+            }
         )
 
     private fun Checkin.translateToMainContractCheckin(): MainContract.Checkin =

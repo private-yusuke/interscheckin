@@ -53,7 +53,7 @@ interface MainContract {
         val name: String,
         val categoriesString: String,
         val distance: Long?,
-        val icon: Icon
+        val icon: Icon?
     ) {
         data class Icon(
             val name: String,

@@ -45,7 +45,7 @@ jobs:
       run: | # https://github.com/android/sunflower/blob/e404b8c310d9b9199dd1d74d58072f4116d380f2/.github/workflows/android.yml#L66
         ./gradlew pixel6api33DebugAndroidTest \
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" \
-          -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=20 \
+          -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=600 \
           -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true \
           --info
     - uses: actions/upload-artifact@v3

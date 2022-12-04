@@ -50,13 +50,6 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import pub.yusuke.foursquareclient.models.Category
-import pub.yusuke.foursquareclient.models.Geocodes
-import pub.yusuke.foursquareclient.models.Icon
-import pub.yusuke.foursquareclient.models.LatAndLong
-import pub.yusuke.foursquareclient.models.Location
-import pub.yusuke.foursquareclient.models.Venue
-import pub.yusuke.foursquareclient.models.url
 import pub.yusuke.fusedlocationktx.toFormattedString
 import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
@@ -164,7 +157,7 @@ fun MainScreen(
                         is MainContract.CheckinState.Idle ->
                             stringResource(
                                 R.string.main_message_checkin_success,
-                                it.lastCheckin.venue.name
+                                it.lastCheckin.venueName
                             )
                         is MainContract.CheckinState.Error ->
                             "Error: ${it.throwable.message}\n${it.throwable.stackTrace}"
@@ -213,7 +206,7 @@ fun MainScreen(
 
 @Composable
 fun VenueColumn(
-    venues: List<Venue>,
+    venues: List<MainContract.Venue>,
     selectedVenueIdState: String,
     onClickVenue: (String) -> Unit,
     onLongClickVenue: (String) -> Unit
@@ -221,7 +214,7 @@ fun VenueColumn(
     LazyColumn {
         items(venues) { venue ->
             VenueRow(
-                selected = venue.fsq_id == selectedVenueIdState,
+                selected = venue.id == selectedVenueIdState,
                 onClick = onClickVenue,
                 onLongClick = onLongClickVenue,
                 venue = venue
@@ -279,7 +272,7 @@ fun VenueRow(
     selected: Boolean,
     onClick: (String) -> Unit,
     onLongClick: (String) -> Unit,
-    venue: Venue
+    venue: MainContract.Venue
 ) {
     Box {
         Box(
@@ -294,24 +287,24 @@ fun VenueRow(
                 .fillMaxWidth()
                 .padding(4.dp)
                 .combinedClickable(
-                    onClick = { onClick.invoke(venue.fsq_id) },
-                    onLongClick = { onLongClick.invoke(venue.fsq_id) }
+                    onClick = { onClick.invoke(venue.id) },
+                    onLongClick = { onLongClick.invoke(venue.id) }
                 )
         ) {
-            if (venue.categories.isEmpty()) {
+            if (venue.icon == null) {
                 Text("no icon")
             } else {
                 Image(
-                    painter = rememberAsyncImagePainter(venue.categories.first().icon.url()),
-                    contentDescription = venue.categories.first().name,
+                    painter = rememberAsyncImagePainter(venue.icon.url),
+                    contentDescription = venue.icon.name,
                     modifier = Modifier.size(32.dp)
                 )
             }
             Column {
                 Row {
-                    Text("${venue.name} (${venue.distance} m)")
+                    Text("${venue.name} (${venue.distance ?: "?"} m)")
                 }
-                Text(venue.categories.joinToString(", ") { it.name })
+                Text(venue.categoriesString)
                 if (selected) {
                     Text(
                         modifier = Modifier
@@ -325,39 +318,15 @@ fun VenueRow(
 }
 
 private val previewVenue =
-    Venue(
-        categories = listOf(
-            Category(
-                id = "testCategoryId",
-                name = "testCategory",
-                icon = Icon("prefix", "suffix")
-            )
-        ),
-        chains = listOf(),
-        distance = -1,
-        fsq_id = "fsq_id",
-        geocodes = Geocodes(
-            LatAndLong(
-                latitude = 0.0,
-                longitude = 0.0
-            )
-        ),
-        link = "https://example.com/",
-        location = Location(
-            address = "210 S King St",
-            address_extended = null,
-            census_block = "511076105052013",
-            country = "US",
-            cross_street = null,
-            dma = "Washington, Dc-Hagrstwn",
-            formatted_address = "210 S King St, Leesburg, VA 20175",
-            locality = "Leesburg",
-            postcode = "20175",
-            region = "バージニア州"
-        ),
-        name = "Black Walnut Brewery",
-        related_places = null,
-        timezone = "America/New_York"
+    MainContract.Venue(
+        id = "id",
+        name = "test venue",
+        categoriesString = "test category, test category 2",
+        distance = 12,
+        icon = MainContract.Venue.Icon(
+            name = "test category",
+            url = "https://example.com/foo.png"
+        )
     )
 
 @SuppressLint("UnrememberedMutableState")

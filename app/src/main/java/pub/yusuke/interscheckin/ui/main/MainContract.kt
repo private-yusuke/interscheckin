@@ -4,8 +4,6 @@ import android.location.Location
 import android.os.VibrationEffect
 import androidx.compose.runtime.State
 import kotlinx.coroutines.flow.Flow
-import pub.yusuke.foursquareclient.models.Checkin
-import pub.yusuke.foursquareclient.models.Venue
 
 interface MainContract {
     interface ViewModel {
@@ -49,6 +47,23 @@ interface MainContract {
 
         fun vibrate(vibrationEffect: VibrationEffect)
     }
+
+    data class Venue(
+        val id: String,
+        val name: String,
+        val categoriesString: String,
+        val distance: Long?,
+        val icon: Icon?
+    ) {
+        data class Icon(
+            val name: String,
+            val url: String
+        )
+    }
+
+    data class Checkin(
+        val venueName: String
+    )
 
     sealed class LocationState {
         /**

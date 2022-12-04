@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import pub.yusuke.foursquareclient.models.Checkin
 import pub.yusuke.foursquareclient.models.Venue
+import pub.yusuke.foursquareclient.models.url
 import pub.yusuke.fusedlocationktx.locationFlow
 import pub.yusuke.interscheckin.repositories.UserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareCheckinsRepository
@@ -37,14 +38,14 @@ class MainInteractor @Inject constructor(
         hacc: Double?,
         limit: Int?,
         query: String?
-    ): List<Venue> =
+    ): List<MainContract.Venue> =
         foursquarePlacesRepository.searchPlacesNearby(
             latitude = latitude,
             longitude = longitude,
             hacc = hacc,
             limit = limit,
             query = query
-        )
+        ).translateToMainContractVenues()
 
     @SuppressLint("MissingPermission")
     override suspend fun fetchLocation(): Location {
@@ -71,13 +72,35 @@ class MainInteractor @Inject constructor(
         shout: String,
         latitude: Double,
         longitude: Double
-    ): Checkin = foursquareCheckinsRepository.createCheckin(
+    ): MainContract.Checkin = foursquareCheckinsRepository.createCheckin(
         venueId = venueId,
         shout = shout,
         latitude = latitude,
         longitude = longitude
-    )
+    ).translateToMainContractCheckin()
 
     override fun vibrate(vibrationEffect: VibrationEffect) =
         vibratorManager.defaultVibrator.vibrate(vibrationEffect)
+
+    private fun List<Venue>.translateToMainContractVenues(): List<MainContract.Venue> =
+        map { it.translateToMainContractVenue() }
+
+    private fun Venue.translateToMainContractVenue(): MainContract.Venue =
+        MainContract.Venue(
+            id = this.fsq_id,
+            name = this.name,
+            categoriesString = this.categories.joinToString(", ") { it.name },
+            distance = this.distance,
+            icon = this.categories.firstOrNull()?.let { category ->
+                MainContract.Venue.Icon(
+                    name = category.name,
+                    url = category.icon.url()
+                )
+            }
+        )
+
+    private fun Checkin.translateToMainContractCheckin(): MainContract.Checkin =
+        MainContract.Checkin(
+            venueName = this.venue.name
+        )
 }

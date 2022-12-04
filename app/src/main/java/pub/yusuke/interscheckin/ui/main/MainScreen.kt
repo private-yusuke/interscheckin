@@ -122,8 +122,8 @@ fun MainScreen(
                     Button(
                         onClick = { coroutineScope.launch { viewModel.checkIn(selectedVenueIdState) } },
                         enabled = viewModel.locationState.value is MainContract.LocationState.Loaded &&
-                                viewModel.checkinState.value !is MainContract.CheckinState.Loading &&
-                                selectedVenueIdState != "",
+                            viewModel.checkinState.value !is MainContract.CheckinState.Loading &&
+                            selectedVenueIdState != "",
                         modifier = Modifier
                             .semantics { contentDescription = "Create a Checkin" }
                     ) {

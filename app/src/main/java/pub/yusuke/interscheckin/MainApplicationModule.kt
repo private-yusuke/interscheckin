@@ -1,10 +1,11 @@
 package pub.yusuke.interscheckin
 
-// import com.example.foursquare_client.FoursquareClientMock
 import android.app.Application
 import android.content.Context
+import android.os.VibratorManager
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
+import com.google.android.gms.location.LocationServices
 import com.google.crypto.tink.Aead
 import com.google.crypto.tink.KeyTemplates
 import com.google.crypto.tink.aead.AeadConfig
@@ -112,4 +113,14 @@ class MainApplicationModule {
             serializer = SettingsPreferencesSerializer(aead)
         )
     }
+
+    @Provides
+    fun provideVibratorManager(
+        @ApplicationContext context: Context
+    ) = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+
+    @Provides
+    fun provideFusedLocationProviderClient(
+        @ApplicationContext context: Context
+    ) = LocationServices.getFusedLocationProviderClient(context)
 }

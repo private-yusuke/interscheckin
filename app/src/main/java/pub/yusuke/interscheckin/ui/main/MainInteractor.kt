@@ -1,14 +1,12 @@
 package pub.yusuke.interscheckin.ui.main
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.location.Location
 import android.os.VibrationEffect
 import android.os.VibratorManager
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -25,13 +23,9 @@ class MainInteractor @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val foursquarePlacesRepository: FoursquarePlacesRepository,
     private val foursquareCheckinsRepository: FoursquareCheckinsRepository,
-    @ApplicationContext private val context: Context
+    private val vibratorManager: VibratorManager,
+    private val fusedLocationProviderClient: FusedLocationProviderClient
 ) : MainContract.Interactor {
-    private val vibratorManager =
-        context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-    private val fusedLocationProviderClient =
-        LocationServices.getFusedLocationProviderClient(context)
-
     override suspend fun fetchVenues(
         latitude: Double,
         longitude: Double,

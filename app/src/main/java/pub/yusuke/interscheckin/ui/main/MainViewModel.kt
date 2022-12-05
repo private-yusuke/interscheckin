@@ -1,6 +1,7 @@
 package pub.yusuke.interscheckin.ui.main
 
 import android.annotation.SuppressLint
+import android.location.Location
 import android.os.VibrationEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -101,13 +102,11 @@ class MainViewModel @Inject constructor(
         venueId: String,
         shout: String?
     ) {
-        /*
-         * LocationState.Loaded になってから Venue が設定され、その後この関数が呼び出されるので、
-         * ここの型キャストは安全であると考える
-         */
-        val loadedState = locationState.value as MainContract.LocationState.Loaded
-        val latitude = loadedState.location.latitude
-        val longitude = loadedState.location.longitude
+        val location: Location = when (val it = _locationState.value) {
+            is MainContract.LocationState.Loading -> requireNotNull(it.lastLocation)
+            is MainContract.LocationState.Loaded -> it.location
+            else -> throw IllegalStateException("checkIn called while location is unavailable")
+        }
 
         _checkinState.value = MainContract.CheckinState.Loading
 
@@ -115,8 +114,8 @@ class MainViewModel @Inject constructor(
             val checkIn = createCheckin(
                 venueId = venueId,
                 shout = shout ?: "",
-                latitude = latitude,
-                longitude = longitude
+                latitude = location.latitude,
+                longitude = location.longitude
             )
 
             MainContract.CheckinState.Idle(checkIn)

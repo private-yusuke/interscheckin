@@ -24,6 +24,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.components.SingletonComponent
 import io.mockk.MockKAnnotations
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
@@ -211,5 +212,38 @@ class MainScreenTest {
         )
         val checkin = (vm.checkinState.value as MainContract.CheckinState.Idle).lastCheckin
         assert(checkin.shout == shout)
+    }
+
+    @Test
+    fun verifyCreatingCheckinWithLongClickWhileUpdatingVenuesList() {
+        // when (both the location and the venues are loading)
+        every { vm.locationState } returns mutableStateOf(MainScreenTestData.locationStateLoading)
+        every { vm.venuesState } returns mutableStateOf(MainScreenTestData.venuesStateLoading)
+
+        composeTestRule.setContent {
+            MainScreen(
+                viewModel = vm,
+                navController = navController
+            )
+        }
+
+        // given
+        val shout = "shout test"
+        composeTestRule
+            .onNodeWithContentDescription("TextField for shout")
+            .performTextInput(shout)
+
+        // when
+        composeTestRule
+            .onNodeWithText("test venue", substring = true)
+            .performTouchInput {
+                longClick()
+            }
+        composeTestRule.waitUntil {
+            vm.checkinState.value is MainContract.CheckinState.Idle
+        }
+
+        // then
+        coVerify { vm.checkIn(MainScreenTestData.venue.id, shout) }
     }
 }

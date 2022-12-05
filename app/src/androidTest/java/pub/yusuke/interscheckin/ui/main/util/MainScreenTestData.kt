@@ -17,10 +17,10 @@ object MainScreenTestData {
         )
 
     val venuesStateIdle = MainContract.VenuesState.Idle(listOf(venue))
-    val venuesStateLoading = MainContract.VenuesState.Loading(emptyList())
+    val venuesStateLoading = MainContract.VenuesState.Loading(listOf(venue))
 
     val location = Location("")
 
     val locationStateLoaded = MainContract.LocationState.Loaded(location)
-    val locationStateLoading = MainContract.LocationState.Loading(null)
+    val locationStateLoading = MainContract.LocationState.Loading(location)
 }

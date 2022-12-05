@@ -95,6 +95,8 @@ class MainInteractor @Inject constructor(
 
     private fun Checkin.translateToMainContractCheckin(): MainContract.Checkin =
         MainContract.Checkin(
-            venueName = this.venue.name
+            id = this.venue.id,
+            venueName = this.venue.name,
+            shout = this.shout
         )
 }

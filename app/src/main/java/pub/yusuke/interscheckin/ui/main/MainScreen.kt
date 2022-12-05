@@ -88,7 +88,10 @@ fun MainScreen(
                         .fillMaxWidth(),
                     onLongClickVenue = { venueId ->
                         viewModel.onVibrationRequested()
-                        coroutineScope.launch { viewModel.checkIn(venueId) }
+                        coroutineScope.launch {
+                            viewModel.checkIn(venueId, shout)
+                            shout = ""
+                        }
                     }
                 )
                 Text(
@@ -106,19 +109,25 @@ fun MainScreen(
                     value = shout,
                     onValueChange = { shout = it },
                     modifier = Modifier
-                        .height(150.dp),
+                        .height(150.dp)
+                        .semantics { contentDescription = "TextField for shout" },
                     placeholder = { Text(stringResource(R.string.main_shout_placeholder)) }
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(
-                        onClick = { coroutineScope.launch { viewModel.checkIn(selectedVenueIdState) } },
+                        onClick = {
+                            coroutineScope.launch {
+                                viewModel.checkIn(selectedVenueIdState, shout)
+                                shout = ""
+                            }
+                        },
                         enabled = viewModel.locationState.value is MainContract.LocationState.Loaded &&
                             viewModel.checkinState.value !is MainContract.CheckinState.Loading &&
                             selectedVenueIdState != "",
                         modifier = Modifier
-                            .semantics { contentDescription = "Create a Checkin" }
+                            .semantics { contentDescription = "Button for creating a Checkin" }
                     ) {
                         Text(stringResource(R.string.main_button_checkin))
                     }

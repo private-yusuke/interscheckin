@@ -13,7 +13,7 @@ class FakeFoursquareCheckinsRepository @Inject constructor() : FoursquareCheckin
         longitude: Double
     ): Checkin =
         Checkin(
-            id = venueId,
+            id = "checkin_id",
             shout = shout,
             createdAt = 100,
             type = "checkin",
@@ -24,6 +24,7 @@ class FakeFoursquareCheckinsRepository @Inject constructor() : FoursquareCheckin
                 total = 1
             ),
             venue = V3Venue(
+                id = venueId,
                 name = "good venue"
             )
         )

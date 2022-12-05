@@ -1,48 +1,93 @@
 package pub.yusuke.interscheckin.ui.main
 
+import android.location.Location
+import android.os.VibratorManager
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.navigation.NavController
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.components.SingletonComponent
+import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
-import kotlinx.coroutines.flow.flowOf
+import io.mockk.mockk
+import io.mockk.spyk
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
+import javax.inject.Inject
 
 @HiltAndroidTest
 class MainScreenTest {
-    @get:Rule(order = 0)
     val mockkRule = MockKRule(this)
-
-    @get:Rule(order = 1)
     val hiltRule = HiltAndroidRule(this)
-
-    @get:Rule(order = 2)
     val composeTestRule = createComposeRule()
 
-    @MockK(relaxUnitFun = true)
+    @get:Rule
+    val uiTestRule = RuleChain
+        .outerRule(mockkRule)
+        .around(hiltRule)
+        .around(composeTestRule)
+
+    @Module
+    @InstallIn(SingletonComponent::class)
+    object MainScreenTestModule {
+        @Provides
+        fun provideViewModel(
+            interactor: MainContract.Interactor
+        ): MainContract.ViewModel = spyk(MainViewModel(interactor))
+    }
+
+    @Inject
     lateinit var vm: MainContract.ViewModel
 
     @MockK
     lateinit var navController: NavController
 
+    @BindValue
+    @MockK
+    lateinit var vibratorManager: VibratorManager
+
+    @BindValue
+    @MockK
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
     @Before
     fun init() {
-        // TODO: テスト時には実際の外部 API を叩かせないようにモックを作成して注入するようにする
         hiltRule.inject()
+        MockKAnnotations.init()
 
-        every { vm.drivingModeFlow } returns flowOf(true)
-        every { vm.navigationRequiredState } returns mutableStateOf(null)
-        every { vm.snackbarMessageState } returns mutableStateOf(0)
-        every { vm.venuesState } returns mutableStateOf(MainContract.VenuesState.Idle(emptyList()))
+        every {
+            fusedLocationProviderClient.requestLocationUpdates(
+                any(),
+                any<LocationCallback>(),
+                any()
+            )
+        } returns mockk()
+        every {
+            fusedLocationProviderClient.removeLocationUpdates(any<LocationCallback>())
+        } returns mockk()
+    }
+
+    @Test
+    fun verifyCheckinButtonDisabledWhileUpdatingVenuesList() {
+        // when
         every { vm.locationState } returns mutableStateOf(MainContract.LocationState.Loading())
-        every { vm.checkinState } returns mutableStateOf(MainContract.CheckinState.InitialIdle)
+        every { vm.venuesState } returns mutableStateOf(MainContract.VenuesState.Loading(emptyList()))
 
         composeTestRule.setContent {
             MainScreen(
@@ -50,16 +95,56 @@ class MainScreenTest {
                 navController = navController
             )
         }
-    }
 
-    @Test
-    fun verifyCheckinButtonCannotBePressedWhileUpdatingVenuesList() {
-        every { vm.locationState } returns mutableStateOf(MainContract.LocationState.Loading())
-        every { vm.venuesState } returns mutableStateOf(MainContract.VenuesState.Loading(emptyList()))
-
+        // then
         composeTestRule
             .onNodeWithContentDescription("Create a Checkin")
             .assertIsNotEnabled()
+    }
+
+    @Test
+    fun verifyCheckinButtonEnabledAfterUpdatingVenuesList() {
+        // given
+        every { vm.locationState } returns mutableStateOf(
+            MainContract.LocationState.Loaded(
+                Location(
+                    ""
+                )
+            )
+        )
+        every { vm.venuesState } returns mutableStateOf(
+            MainContract.VenuesState.Idle(
+                listOf(
+                    MainContract.Venue(
+                        id = "abc",
+                        name = "test venue",
+                        categoriesString = "test categories",
+                        distance = 1,
+                        icon = MainContract.Venue.Icon(
+                            name = "icon name",
+                            url = "https://example.com/test.icon"
+                        )
+                    )
+                )
+            )
+        )
+
+        composeTestRule.setContent {
+            MainScreen(
+                viewModel = vm,
+                navController = navController
+            )
+        }
+
+        // when
+        composeTestRule
+            .onNodeWithText("test categories")
+            .performClick()
+
+        // then
+        composeTestRule
+            .onNodeWithContentDescription("Create a Checkin")
+            .assertIsEnabled()
     }
 
     /*

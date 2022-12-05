@@ -15,6 +15,7 @@ data class Checkin(
 )
 
 data class V3Venue(
+    val id: String,
     val name: String
 )
 

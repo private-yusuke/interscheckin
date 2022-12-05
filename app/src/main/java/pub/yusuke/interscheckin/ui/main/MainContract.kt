@@ -62,7 +62,9 @@ interface MainContract {
     }
 
     data class Checkin(
-        val venueName: String
+        val id: String,
+        val venueName: String,
+        val shout: String?
     )
 
     sealed class LocationState {

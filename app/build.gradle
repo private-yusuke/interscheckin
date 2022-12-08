@@ -63,7 +63,7 @@ android {
         }
         managedDevices {
             devices {
-                pixel6api33 (ManagedVirtualDevice) {
+                pixel6api33(ManagedVirtualDevice) {
                     device = "Pixel 6"
                     apiLevel = 33
                 }
@@ -73,15 +73,18 @@ android {
 }
 
 dependencies {
+    def composeBom = platform('androidx.compose:compose-bom:2022.12.00')
+    implementation composeBom
+    androidTestImplementation composeBom
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     implementation 'androidx.activity:activity-compose:1.6.1'
     implementation 'androidx.fragment:fragment-ktx:1.5.5'
-    implementation "androidx.compose.ui:ui:$compose_ui_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
-    implementation "androidx.compose.material:material:$compose_ui_version"
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.material:material'
     implementation "androidx.navigation:navigation-compose:$compose_nav_version"
     implementation "androidx.datastore:datastore-preferences:$datastore_preferences_version"
     implementation "com.google.android.gms:play-services-location:$play_services_location_version"
@@ -100,9 +103,9 @@ dependencies {
     androidTestImplementation "io.mockk:mockk-agent:$mockk_version"
     androidTestImplementation "androidx.test.ext:junit:$androidx_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"

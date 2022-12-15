@@ -8,14 +8,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import pub.yusuke.interscheckin.navigation.InterscheckinNavHost
-import pub.yusuke.interscheckin.repositories.settings.SettingsRepository
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var settingsRepository: SettingsRepository
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

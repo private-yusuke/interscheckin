@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +44,7 @@ import pub.yusuke.interscheckin.ui.utils.isValidResourceId
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsContract.ViewModel,
+    viewModel: SettingsContract.ViewModel = hiltViewModel<SettingsViewModel>(),
     navController: NavController,
     onRecreateRequired: () -> Unit
 ) {

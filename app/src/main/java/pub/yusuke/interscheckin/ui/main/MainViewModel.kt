@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import pub.yusuke.foursquareclient.FoursquareClient
 import pub.yusuke.foursquareclient.FoursquareClientImpl
 import pub.yusuke.interscheckin.R
+import pub.yusuke.interscheckin.navigation.InterscheckinScreens
 import javax.inject.Inject
 
 @HiltViewModel
@@ -80,12 +81,12 @@ class MainViewModel @Inject constructor(
                     } catch (e: FoursquareClient.InvalidRequestTokenException) {
                         // 認証情報を更新してもらうために画面を遷移させる
                         _navigationRequiredState.value =
-                            "settings/${R.string.settings_reason_invalid_credentials}"
+                            InterscheckinScreens.Settings.createRoute(R.string.settings_reason_invalid_credentials)
                         emptyList()
                     } catch (e: FoursquareClientImpl.EmptyAPIKeyException) {
                         // 認証情報を設定してもらうために画面を遷移させる（おそらく初回起動時）
                         _navigationRequiredState.value =
-                            "settings/${R.string.settings_reason_credentials_not_set}"
+                            InterscheckinScreens.Settings.createRoute(R.string.settings_reason_credentials_not_set)
                         emptyList()
                     }
                 )

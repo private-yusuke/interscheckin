@@ -45,6 +45,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
@@ -52,12 +53,13 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import pub.yusuke.fusedlocationktx.toFormattedString
 import pub.yusuke.interscheckin.R
+import pub.yusuke.interscheckin.navigation.InterscheckinScreens
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
 import pub.yusuke.interscheckin.ui.utils.isValidResourceId
 
 @Composable
 fun MainScreen(
-    viewModel: MainContract.ViewModel,
+    viewModel: MainContract.ViewModel = hiltViewModel<MainViewModel>(),
     navController: NavController
 ) {
     val drivingModeState = viewModel.drivingModeFlow
@@ -184,7 +186,13 @@ fun MainScreen(
                     )
                 }
                 Button(
-                    onClick = { coroutineScope.launch { navController.navigate("settings/0") } }
+                    onClick = {
+                        coroutineScope.launch {
+                            navController.navigate(
+                                InterscheckinScreens.Settings.createRoute()
+                            )
+                        }
+                    }
                 ) {
                     Text(stringResource(R.string.main_go_to_settings_button_label))
                 }

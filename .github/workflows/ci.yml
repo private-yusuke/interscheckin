@@ -49,6 +49,7 @@ jobs:
           -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true \
           --info
     - uses: actions/upload-artifact@v3
+      if: always()
       with:
         name: outputs
         path: app/build/reports/

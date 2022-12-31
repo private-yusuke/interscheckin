@@ -22,4 +22,13 @@ class FoursquareCheckinsRepositoryImpl(
                 longitude = longitude
             ).llString()
         )
+
+    override suspend fun getCheckins(
+        beforeTimestamp: Long?,
+        limit: Long?,
+    ): List<Checkin> =
+        foursquareClient.getUserCheckins(
+            beforeTimestamp = beforeTimestamp,
+            limit = limit,
+        )
 }

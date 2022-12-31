@@ -7,14 +7,12 @@ data class Checkin(
     val shout: String?,
     val timeZoneOffset: Int,
     val editableUntil: Long?,
-    // TODO: これは v3 のエンドポイントが返す Venue とは別物だと考えたほうがよい
-//    val venue: Venue,
-    val venue: V3Venue,
+    val venue: V2Venue,
     val isMayor: Boolean,
     val score: Score
 )
 
-data class V3Venue(
+data class V2Venue(
     val id: String,
     val name: String
 )

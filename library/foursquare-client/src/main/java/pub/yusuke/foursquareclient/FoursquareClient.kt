@@ -66,5 +66,18 @@ interface FoursquareClient {
         ll: String
     ): Checkin
 
+    /**
+     * Retrieves the check-ins created by the user whose id is [userId].
+     * Calls an V2 API endpoint in the implementation.
+     * if [userId] is null, the result will be the ones that is created by the logged-in user.
+     *
+     * @param beforeTimestamp if specified, returns the check-ins created before it. Expects an UNIX timestamp.
+     */
+    suspend fun getUserCheckins(
+        userId: Long? = null,
+        beforeTimestamp: Long? = null,
+        limit: Long? = null,
+    ): List<Checkin>
+
     class InvalidRequestTokenException(message: String) : Exception(message)
 }

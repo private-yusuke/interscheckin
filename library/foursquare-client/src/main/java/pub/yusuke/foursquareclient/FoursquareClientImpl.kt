@@ -190,6 +190,27 @@ class FoursquareClientImpl(
         }
     }
 
+    override suspend fun getUserCheckins(
+        userId: Long?,
+        beforeTimestamp: Long?,
+        limit: Long?,
+    ): List<Checkin> = coroutineScope {
+        try {
+            checkinApiService.getCheckins(
+                userId = userId?.toString() ?: "self",
+                beforeTimestamp = beforeTimestamp,
+                oauthToken = oauth_token,
+                authorization = api_key,
+            ).response.checkins.items
+        } catch (e: HttpException) {
+            if (e.code() == 401) {
+                throw FoursquareClient.InvalidRequestTokenException(e.message())
+            } else {
+                throw e
+            }
+        }
+    }
+
     class EmptyOAuthTokenException(message: String) : Exception(message)
     class EmptyAPIKeyException(message: String) : Exception(message)
 }

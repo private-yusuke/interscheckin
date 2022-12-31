@@ -9,4 +9,9 @@ interface FoursquareCheckinsRepository {
         latitude: Double,
         longitude: Double
     ): Checkin
+
+    suspend fun getCheckins(
+        beforeTimestamp: Long? = null,
+        limit: Long? = null,
+    ): List<Checkin>
 }

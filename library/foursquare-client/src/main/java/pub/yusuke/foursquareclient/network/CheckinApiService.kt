@@ -1,9 +1,11 @@
 package pub.yusuke.foursquareclient.network
 
 import pub.yusuke.foursquareclient.models.Checkin
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface CheckinApiService {
@@ -41,4 +43,32 @@ interface CheckinApiService {
         val code: String,
         val requestId: String
     )
+
+    @GET("/v2/users/{userId}/checkins")
+    @Headers("Accept: application/json")
+    suspend fun getCheckins(
+        @Path("userId")
+        userId: String,
+        @Query("beforeTimestamp")
+        beforeTimestamp: Long? = null,
+        @Query("oauth_token")
+        oauthToken: String,
+        @Query("v")
+        v: String? = "20221002",
+        @Header("Authorization")
+        authorization: String
+    ): GetCheckinResponse
+
+    data class GetCheckinResponse(
+        val response: Response,
+    ) {
+        data class Response(
+            val checkins: Checkins,
+        ) {
+            data class Checkins(
+                val count: Long,
+                val items: List<Checkin>,
+            )
+        }
+    }
 }

@@ -19,4 +19,6 @@
     <string name="main_button_checkin">チェックイン</string>
     <string name="main_venues_not_updated_as_location_is_not_changed">位置情報が変化しなかったため、リストは更新されませんでした</string>
     <string name="main_venue_selected">選択中</string>
+    <string name="histories_topbar_title">履歴</string>
+    <string name="main_button_histories">履歴一覧</string>
 </resources>

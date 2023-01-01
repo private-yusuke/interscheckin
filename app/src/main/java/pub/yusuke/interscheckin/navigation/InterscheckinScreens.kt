@@ -27,6 +27,8 @@ sealed class InterscheckinScreens(
                 route.replace("{reasonId}", it.toString())
             } ?: name
     }
+
+    object Histories : InterscheckinScreens("histories")
 }
 
 private fun String.withArguments(navArguments: List<NamedNavArgument>): String {

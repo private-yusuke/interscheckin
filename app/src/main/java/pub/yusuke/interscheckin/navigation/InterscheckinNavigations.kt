@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import pub.yusuke.interscheckin.MainActivity
+import pub.yusuke.interscheckin.ui.histories.HistoriesScreen
 import pub.yusuke.interscheckin.ui.main.MainScreen
 import pub.yusuke.interscheckin.ui.settings.SettingsScreen
 
@@ -29,6 +30,11 @@ fun NavGraphBuilder.InterscheckinNavigations(
                 activity.startActivity(intent)
                 activity.finishAffinity()
             }
+        )
+    }
+    composable(InterscheckinScreens.Histories.route) {
+        HistoriesScreen(
+            navController = navController
         )
     }
 }

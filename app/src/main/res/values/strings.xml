@@ -14,6 +14,7 @@
     <string name="main_message_creating_checkin">Creating check-in...</string>
     <string name="main_message_checkin_success">Check-in created at %1$s</string>
     <string name="main_venues_not_updated_as_location_is_not_changed">Location not changed, skipping update of Venue list</string>
+    <string name="main_button_histories">Histories</string>
 
     <!-- SettingsScreen -->
     <string name="settings_topbar_title">Settings</string>
@@ -22,4 +23,7 @@
     <string name="settings_save">Save settings</string>
     <string name="settings_reason_credentials_not_set">Please set credentials first to use Interscheckin.</string>
     <string name="settings_reason_invalid_credentials">Invalid credentials.\nConsider generating new OAuth token, or check typos.</string>
+
+    <!-- HistoriesScreen -->
+    <string name="histories_topbar_title">Histories</string>
 </resources>

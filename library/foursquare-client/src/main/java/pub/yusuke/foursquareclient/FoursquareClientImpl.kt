@@ -192,15 +192,17 @@ class FoursquareClientImpl(
 
     override suspend fun getUserCheckins(
         userId: Long?,
+        offset: Long?,
         beforeTimestamp: Long?,
-        limit: Long?,
+        limit: Long?
     ): List<Checkin> = coroutineScope {
         try {
-            checkinApiService.getCheckins(
+            checkinApiService.getCheckinHistories(
                 userId = userId?.toString() ?: "self",
+                offset = offset,
                 beforeTimestamp = beforeTimestamp,
                 oauthToken = oauth_token,
-                authorization = api_key,
+                authorization = api_key
             ).response.checkins.items
         } catch (e: HttpException) {
             if (e.code() == 401) {

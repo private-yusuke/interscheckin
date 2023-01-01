@@ -75,8 +75,9 @@ interface FoursquareClient {
      */
     suspend fun getUserCheckins(
         userId: Long? = null,
+        offset: Long? = null,
         beforeTimestamp: Long? = null,
-        limit: Long? = null,
+        limit: Long? = null
     ): List<Checkin>
 
     class InvalidRequestTokenException(message: String) : Exception(message)

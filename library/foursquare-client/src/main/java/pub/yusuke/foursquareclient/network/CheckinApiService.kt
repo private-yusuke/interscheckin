@@ -44,30 +44,32 @@ interface CheckinApiService {
         val requestId: String
     )
 
-    @GET("/v2/users/{userId}/checkins")
+    @GET("/v2/users/{userId}/historysearch")
     @Headers("Accept: application/json")
-    suspend fun getCheckins(
+    suspend fun getCheckinHistories(
         @Path("userId")
         userId: String,
         @Query("beforeTimestamp")
         beforeTimestamp: Long? = null,
+        @Query("offset")
+        offset: Long? = null,
         @Query("oauth_token")
         oauthToken: String,
         @Query("v")
         v: String? = "20221002",
         @Header("Authorization")
         authorization: String
-    ): GetCheckinResponse
+    ): GetCheckinHistoriesResponse
 
-    data class GetCheckinResponse(
-        val response: Response,
+    data class GetCheckinHistoriesResponse(
+        val response: Response
     ) {
         data class Response(
-            val checkins: Checkins,
+            val checkins: Checkins
         ) {
             data class Checkins(
                 val count: Long,
-                val items: List<Checkin>,
+                val items: List<Checkin>
             )
         }
     }

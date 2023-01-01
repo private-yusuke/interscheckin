@@ -11,7 +11,9 @@ interface FoursquareCheckinsRepository {
     ): Checkin
 
     suspend fun getCheckins(
+        userId: Long? = null,
+        offset: Long? = null,
         beforeTimestamp: Long? = null,
-        limit: Long? = null,
+        limit: Long? = null
     ): List<Checkin>
 }

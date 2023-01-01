@@ -24,11 +24,15 @@ class FoursquareCheckinsRepositoryImpl(
         )
 
     override suspend fun getCheckins(
+        userId: Long?,
+        offset: Long?,
         beforeTimestamp: Long?,
-        limit: Long?,
+        limit: Long?
     ): List<Checkin> =
         foursquareClient.getUserCheckins(
+            userId = userId,
+            offset = offset,
             beforeTimestamp = beforeTimestamp,
-            limit = limit,
+            limit = limit
         )
 }

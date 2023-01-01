@@ -1,8 +1,6 @@
 package pub.yusuke.interscheckin.repositories.foursquarecheckins
 
 import pub.yusuke.foursquareclient.models.Checkin
-import pub.yusuke.foursquareclient.models.Score
-import pub.yusuke.foursquareclient.models.V2Venue
 import javax.inject.Inject
 
 class FakeFoursquareCheckinsRepository @Inject constructor() : FoursquareCheckinsRepository {
@@ -14,12 +12,29 @@ class FakeFoursquareCheckinsRepository @Inject constructor() : FoursquareCheckin
         timeZoneOffset = 0,
         editableUntil = null,
         isMayor = false,
-        score = Score(
+        score = Checkin.Score(
             total = 1
         ),
-        venue = V2Venue(
+        venue = Checkin.V2Venue(
             id = "venue_id",
-            name = "good venue"
+            name = "good venue",
+            location = Checkin.V2Venue.Location(
+                state = "茨城県",
+                city = "つくば市"
+            ),
+            categories = listOf(
+                Checkin.V2Venue.Category(
+                    id = "category_id",
+                    name = "Intersection",
+                    pluralName = "Intersections",
+                    shortName = "Intersection",
+                    icon = Checkin.V2Venue.Category.Icon(
+                        prefix = "https://example.com/",
+                        suffix = "foo.png"
+                    ),
+                    primary = true
+                )
+            )
         )
     )
 
@@ -36,6 +51,8 @@ class FakeFoursquareCheckinsRepository @Inject constructor() : FoursquareCheckin
     )
 
     override suspend fun getCheckins(
+        userId: Long?,
+        offset: Long?,
         beforeTimestamp: Long?,
         limit: Long?
     ): List<Checkin> =

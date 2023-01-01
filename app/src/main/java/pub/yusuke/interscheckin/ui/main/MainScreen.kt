@@ -185,16 +185,27 @@ fun MainScreen(
                         )
                     )
                 }
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            navController.navigate(
+                                InterscheckinScreens.Histories.route
+                            )
+                        }
+                    ) {
+                        Text(stringResource(R.string.main_button_histories))
+                    }
+                    Button(
+                        onClick = {
                             navController.navigate(
                                 InterscheckinScreens.Settings.createRoute()
                             )
                         }
+                    ) {
+                        Text(stringResource(R.string.main_go_to_settings_button_label))
                     }
-                ) {
-                    Text(stringResource(R.string.main_go_to_settings_button_label))
                 }
             }
         }

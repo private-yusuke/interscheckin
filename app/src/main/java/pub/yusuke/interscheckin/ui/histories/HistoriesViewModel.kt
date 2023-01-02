@@ -22,7 +22,7 @@ class HistoriesViewModel @Inject constructor(
         Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
-                initialLoadSize = PAGE_SIZE * 3
+                initialLoadSize = INITIAL_LOAD_SIZE
             ),
             initialKey = null,
             pagingSourceFactory = {
@@ -31,6 +31,7 @@ class HistoriesViewModel @Inject constructor(
         ).flow.cachedIn(viewModelScope)
 
     companion object {
-        private const val PAGE_SIZE = 20
+        private const val PAGE_SIZE = 50
+        private const val INITIAL_LOAD_SIZE = 100
     }
 }

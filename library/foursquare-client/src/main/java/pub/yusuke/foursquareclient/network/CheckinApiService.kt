@@ -53,6 +53,8 @@ interface CheckinApiService {
         beforeTimestamp: Long? = null,
         @Query("offset")
         offset: Long? = null,
+        @Query("limit")
+        limit: Long? = null,
         @Query("oauth_token")
         oauthToken: String,
         @Query("v")

@@ -22,5 +22,5 @@ jobs:
       run: ./gradlew assembleRelease
     - uses: actions/upload-artifact@v3
       with:
-        name: outputs
-        path: app/build/outputs/
+        name: Interscheckin-${{ github.sha }}.apk
+        path: app/build/outputs/apk/release/app-release-unsigned.apk

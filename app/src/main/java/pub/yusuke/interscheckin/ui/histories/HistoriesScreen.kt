@@ -115,7 +115,9 @@ private fun HistoriesContent(
             start = 12.dp,
             end = 12.dp
         ),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
         items(lazyPagingItems) {
             it?.let { checkin ->

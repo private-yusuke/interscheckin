@@ -200,6 +200,7 @@ class FoursquareClientImpl(
             checkinApiService.getCheckinHistories(
                 userId = userId?.toString() ?: "self",
                 offset = offset,
+                limit = limit,
                 beforeTimestamp = beforeTimestamp,
                 oauthToken = oauth_token,
                 authorization = api_key

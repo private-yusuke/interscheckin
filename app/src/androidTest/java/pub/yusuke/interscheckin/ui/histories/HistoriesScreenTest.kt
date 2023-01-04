@@ -59,4 +59,30 @@ class HistoriesScreenTest {
             .onAllNodesWithText("test venue 1")
             .assertCountEquals(1)
     }
+
+    @Test
+    fun `Display _No Histories Found_ when no check-in history is found`() {
+        // given (that no histories are available)
+        every { vm.checkinsFlow } returns flowOf(
+            PagingData.empty(
+                LoadStates(
+                    LoadState.NotLoading(true),
+                    LoadState.NotLoading(true),
+                    LoadState.NotLoading(true)
+                )
+            )
+        )
+
+        composeTestRule.setContent {
+            HistoriesScreen(
+                viewModel = vm,
+                navController = navController
+            )
+        }
+
+        // then
+        composeTestRule
+            .onNodeWithContentDescription("No histories found")
+            .assertExists()
+    }
 }

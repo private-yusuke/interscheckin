@@ -21,4 +21,5 @@
     <string name="main_venue_selected">選択中</string>
     <string name="histories_topbar_title">履歴</string>
     <string name="main_button_histories">履歴一覧</string>
+    <string name="histories_no_histories_found">履歴はありません</string>
 </resources>

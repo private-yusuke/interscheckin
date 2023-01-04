@@ -26,4 +26,5 @@
 
     <!-- HistoriesScreen -->
     <string name="histories_topbar_title">Histories</string>
+    <string name="histories_no_histories_found">No histories found</string>
 </resources>

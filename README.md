@@ -43,3 +43,5 @@ Interscheckin は Foursquare が提供している v3 API を利用していま�
 
 注意点：履歴に基いた Venue の追加表示は、利用者自身が履歴を表示しなければ追加されません。
 定期的に履歴一覧画面を開き、直近で初めてチェックインした Venue をこまめにアプリに追加することをおすすめします。
+
+こちらも参照: https://github.com/private-yusuke/interscheckin/pull/51

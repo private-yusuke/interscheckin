@@ -1,19 +1,15 @@
 package pub.yusuke.interscheckin.ui.main
 
-import android.annotation.SuppressLint
 import android.location.Location
 import android.os.VibrationEffect
 import android.os.VibratorManager
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.Priority
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import pub.yusuke.foursquareclient.models.Checkin
 import pub.yusuke.foursquareclient.models.Venue
 import pub.yusuke.foursquareclient.models.url
-import pub.yusuke.fusedlocationktx.locationFlow
+import pub.yusuke.fusedlocationktx.currentLocation
 import pub.yusuke.interscheckin.repositories.UserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareCheckinsRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlacesRepository
@@ -41,17 +37,9 @@ class MainInteractor @Inject constructor(
             query = query
         ).translateToMainContractVenues()
 
-    @SuppressLint("MissingPermission")
-    override suspend fun fetchLocation(): Location {
-        val locationRequest = LocationRequest.Builder(16)
-            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-            .setMinUpdateIntervalMillis(16)
-            .build()
-
-        return fusedLocationProviderClient
-            .locationFlow(locationRequest)
-            .first()
-    }
+    override suspend fun fetchLocation(): Location =
+        fusedLocationProviderClient
+            .currentLocation()
 
     override fun fetchDrivingModeFlow(): Flow<Boolean> =
         userPreferencesRepository

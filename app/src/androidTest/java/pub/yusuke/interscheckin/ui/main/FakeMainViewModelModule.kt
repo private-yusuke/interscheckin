@@ -9,9 +9,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
+import pub.yusuke.fusedlocationktx.currentLocation
 import pub.yusuke.interscheckin.ui.main.util.MainScreenTestData
 
 @Module
@@ -59,6 +61,9 @@ interface FakeMainViewModelModule {
             every {
                 fusedLocationProviderClient.removeLocationUpdates(any<LocationCallback>())
             } returns mockk()
+            coEvery {
+                fusedLocationProviderClient.currentLocation()
+            } returns MainScreenTestData.location
 
             return fusedLocationProviderClient
         }

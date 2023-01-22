@@ -6,13 +6,13 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.navigation.NavController
+import androidx.test.espresso.action.ViewActions.longClick
 import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -20,6 +20,9 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -56,7 +59,18 @@ class MainScreenTest {
      */
     @Before
     fun init() {
+        /*
+         * To mock `suspend fun FusedLocationProviderClient.currentLocation()`,
+         * calling `mockkStatic` is required.
+         * See https://mockk.io/#extension-functions
+         */
+        mockkStatic("pub.yusuke.fusedlocationktx.LocationUtilsKt")
         hiltRule.inject()
+    }
+
+    @After
+    fun deinit() {
+        unmockkStatic("pub.yusuke.fusedlocationktx.LocationUtilsKt")
     }
 
     @Test

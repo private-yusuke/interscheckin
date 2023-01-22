@@ -9,7 +9,9 @@ class FakeFoursquareCheckinsRepository @Inject constructor() : FoursquareCheckin
         name = "good venue",
         location = Checkin.V2Venue.Location(
             state = "茨城県",
-            city = "つくば市"
+            city = "つくば市",
+            lat = 36.107565,
+            lng = 140.104733
         ),
         categories = listOf(
             Checkin.V2Venue.Category(

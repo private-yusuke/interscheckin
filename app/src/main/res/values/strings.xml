@@ -23,6 +23,7 @@
     <string name="settings_save">Save settings</string>
     <string name="settings_reason_credentials_not_set">Please set credentials first to use Interscheckin.</string>
     <string name="settings_reason_invalid_credentials">Invalid credentials.\nConsider generating new OAuth token, or check typos.</string>
+    <string name="settings_reset_cached_venues">Reset cached venues</string>
 
     <!-- HistoriesScreen -->
     <string name="histories_topbar_title">Histories</string>

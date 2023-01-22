@@ -5,6 +5,9 @@ import android.content.Context
 import android.os.VibratorManager
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import co.anbora.labs.spatia.builder.SpatiaRoom
 import com.google.android.gms.location.LocationServices
 import com.google.crypto.tink.Aead
 import com.google.crypto.tink.KeyTemplates
@@ -28,6 +31,7 @@ import pub.yusuke.interscheckin.repositories.settings.SettingsPreferencesSeriali
 import pub.yusuke.interscheckin.repositories.settings.SettingsRepository
 import pub.yusuke.interscheckin.repositories.settings.SettingsRepositoryImpl
 import pub.yusuke.interscheckin.repositories.userpreferences.UserPreferencesRepositoryImpl
+import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenue
 import java.io.File
 import javax.inject.Singleton
 
@@ -123,4 +127,31 @@ class MainApplicationModule {
     fun provideFusedLocationProviderClient(
         @ApplicationContext context: Context
     ) = LocationServices.getFusedLocationProviderClient(context)
+
+    @Singleton
+    @Provides
+    fun provideAppDatabase(
+        @ApplicationContext context: Context
+    ) = SpatiaRoom.databaseBuilder(
+        context,
+        AppDatabase::class.java,
+        "interscheckin"
+    ).addCallback(object : RoomDatabase.Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            db.query(
+                """
+                select
+                    RecoverGeometryColumn('visited_venues', 'location', ${VisitedVenue.SRID}, 'POINT', 'XY');
+            """
+            ).moveToNext()
+            db.query("select CreateSpatialIndex('visited_venues', 'location');").moveToNext()
+        }
+    }).build()
+
+    @Singleton
+    @Provides
+    fun provideVisitedVenueDao(
+        appDatabase: AppDatabase
+    ) = appDatabase.visitedVenueDao()
 }

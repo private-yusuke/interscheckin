@@ -12,6 +12,8 @@ import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlaces
 import pub.yusuke.interscheckin.repositories.settings.FakeSettingsRepository
 import pub.yusuke.interscheckin.repositories.settings.SettingsRepository
 import pub.yusuke.interscheckin.repositories.userpreferences.FakeUserPreferencesRepository
+import pub.yusuke.interscheckin.repositories.visitedvenues.FakeVisitedVenueDao
+import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenueDao
 import javax.inject.Singleton
 
 @Module
@@ -41,4 +43,10 @@ interface FakeMainApplicationModule {
     fun bindFoursquarePlacesRepository(
         foursquarePlacesRepository: FakeFoursquarePlacesRepository
     ): FoursquarePlacesRepository
+
+    @Singleton
+    @Binds
+    fun bindVisitedVenueDao(
+        visitedVenueDao: FakeVisitedVenueDao
+    ): VisitedVenueDao
 }

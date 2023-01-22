@@ -29,7 +29,7 @@ interface VisitedVenueDao {
         latitude: Double,
         longitude: Double,
         nameLike: String = "",
-        limit: Long = 10,
+        limit: Long = 10
     ): List<VisitedVenue>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

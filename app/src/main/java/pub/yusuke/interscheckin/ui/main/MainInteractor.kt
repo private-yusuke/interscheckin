@@ -44,7 +44,7 @@ class MainInteractor @Inject constructor(
         val localVenues = visitedVenueDao.findByLatLong(
             latitude = latitude,
             longitude = longitude,
-            nameLike = query.orEmpty(),
+            nameLike = query.orEmpty()
         ).translateToMainContractVenues(latitude, longitude)
 
         return remoteVenues.plus(localVenues).toSet().distinctBy {

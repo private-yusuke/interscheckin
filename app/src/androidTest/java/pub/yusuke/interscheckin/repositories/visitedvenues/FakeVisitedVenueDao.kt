@@ -7,6 +7,7 @@ class FakeVisitedVenueDao @Inject constructor() : VisitedVenueDao {
     override suspend fun findByLatLong(
         latitude: Double,
         longitude: Double,
+        nameLike: String,
         limit: Long
     ): List<VisitedVenue> = listOf(
         VisitedVenue(

@@ -7,9 +7,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withContext
 import pub.yusuke.foursquareclient.FoursquareClient
 import pub.yusuke.foursquareclient.FoursquareClientImpl
 import pub.yusuke.interscheckin.R
@@ -160,7 +163,8 @@ class MainViewModel @Inject constructor(
         }
         _locationState.value = MainContract.LocationState.Loading(lastLocation)
 
-        val location = interactor.fetchLocation()
+        val location =
+            withContext(viewModelScope.coroutineContext + Dispatchers.IO) { interactor.fetchLocation() }
         _locationState.value = MainContract.LocationState.Loaded(
             location = location
         )

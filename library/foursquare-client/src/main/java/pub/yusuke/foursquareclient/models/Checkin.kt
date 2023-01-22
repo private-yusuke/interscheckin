@@ -14,12 +14,14 @@ data class Checkin(
     data class V2Venue(
         val id: String,
         val name: String,
-        val location: Location?,
+        val location: Location,
         val categories: List<Category>
     ) {
         data class Location(
             val state: String?,
-            val city: String?
+            val city: String?,
+            val lat: Double,
+            val lng: Double
         )
 
         data class Category(

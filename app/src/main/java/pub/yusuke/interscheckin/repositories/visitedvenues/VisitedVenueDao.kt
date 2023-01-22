@@ -14,6 +14,8 @@ interface VisitedVenueDao {
             *
         from
             ${VisitedVenue.TABLE_NAME}
+        where
+            name like '%' || :nameLike || '%'
         order by
             distance(
                 setsrid(location, ${VisitedVenue.SRID}),
@@ -26,7 +28,8 @@ interface VisitedVenueDao {
     suspend fun findByLatLong(
         latitude: Double,
         longitude: Double,
-        limit: Long = 10
+        nameLike: String = "",
+        limit: Long = 10,
     ): List<VisitedVenue>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

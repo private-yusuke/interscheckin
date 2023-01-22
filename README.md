@@ -32,3 +32,16 @@
 | 位置情報取得の許可をする画面（†1） | 認証情報を入力する画面（†2） |
 | --- | --- |
 | <img width="200" src="README.md.assets/screenshot_location_request.png"> | <img width="200" src="README.md.assets/screenshot_set_credentials_first.png"> |
+
+### より便利な利用法
+
+Interscheckin は Foursquare が提供している v3 API を利用していますが、これは公式アプリが表示する Venue の一覧とは異なるリストを返すものです。
+そのため、公式アプリには表示される Venue が Interscheckin では表示されない現象がよく発生します。
+
+この問題を軽減するために、履歴一覧画面から履歴をいくつか表示させてみることができます。 
+表示された Venue が Interscheckin で今後チェックインする際に選択できるようになります。
+
+注意点：履歴に基いた Venue の追加表示は、利用者自身が履歴を表示しなければ追加されません。
+定期的に履歴一覧画面を開き、直近で初めてチェックインした Venue をこまめにアプリに追加することをおすすめします。
+
+こちらも参照: https://github.com/private-yusuke/interscheckin/pull/51

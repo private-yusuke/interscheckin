@@ -94,6 +94,17 @@ fun SettingsScreen(
                 ) {
                     Text(stringResource(R.string.settings_save))
                 }
+                Button(
+                    onClick = {
+                        coroutineScope.launch {
+                            viewModel.resetCachedVenues()
+                            scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                            onRecreateRequired()
+                        }
+                    }
+                ) {
+                    Text(stringResource(R.string.settings_reset_cached_venues))
+                }
             }
         }
     }
@@ -174,6 +185,9 @@ private fun SettingsScreenPreview() =
                 foursquareOAuthToken: String,
                 foursquareApiKey: String
             ) {
+            }
+
+            override suspend fun resetCachedVenues() {
             }
         },
         navController = rememberNavController(),

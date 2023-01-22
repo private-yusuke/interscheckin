@@ -3,10 +3,12 @@ package pub.yusuke.interscheckin.ui.settings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import pub.yusuke.interscheckin.repositories.settings.SettingsRepository
+import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenueDao
 import javax.inject.Inject
 
 class SettingsInteractor @Inject constructor(
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val visitedVenueDao: VisitedVenueDao
 ) : SettingsContract.Interactor {
     override fun fetchFoursquareOAuthTokenFlow(): Flow<String> =
         settingsRepository
@@ -23,4 +25,7 @@ class SettingsInteractor @Inject constructor(
 
     override suspend fun setFoursquareApiKey(foursquareApiKey: String) =
         settingsRepository.setFoursquareApiKey(foursquareApiKey)
+
+    override suspend fun resetCachedVenuesDatabase() =
+        visitedVenueDao.deleteAll()
 }

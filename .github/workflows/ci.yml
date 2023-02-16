@@ -56,33 +56,12 @@ jobs:
       - name: Build AndroidTest APK
         run: ./gradlew assembleDebugAndroidTest
   androidtest:
-    runs-on: ubuntu-22.04
+    runs-on: [self-hosted, androidtest, pixel3axl, apilevel32]
     timeout-minutes: 30
     steps:
     - uses: actions/checkout@v3
-    - name: 'Authenticate to Google Cloud'
-      uses: google-github-actions/auth@v1
-      with:
-        credentials_json: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CREDENTIAL_JSON }}'
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v1'
-    - uses: actions/setup-java@v3
-      with:
-        distribution: zulu
-        java-version: '17'
-        cache: 'gradle'
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug
-    - name: Build DebugAndroidTest APK
-      run: ./gradlew assembleDebugAndroidTest
-    - name: Set execute project id
-      run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
-    - name: 'Run instrumented tests with Firebase Test Lab'
-      run: |-
-        gcloud firebase test android run \
-        --type instrumentation \
-        --app app/build/outputs/apk/debug/app-debug.apk \
-        --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
-        --device 'model=oriole,version=33,locale=en' \
-        --use-orchestrator
+    - name: Wake up the device
+      run: adb shell input keyevent KEYCODE_MENU
+    - name: Run instrumented tests with the physical device connected
+      run: ./gradlew connectedAndroidTest
     

@@ -121,7 +121,7 @@ dependencies {
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // For encrypting and decrypting credentials
-    implementation 'com.google.crypto.tink:tink-android:1.7.0'
+    implementation 'com.google.crypto.tink:tink-android:1.8.0'
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.4.1"
 
     // Room

@@ -3,6 +3,9 @@ package pub.yusuke.interscheckin.repositories.settings
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.google.crypto.tink.Aead
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.protobuf.ProtoBuf
 import java.io.InputStream
@@ -14,6 +17,7 @@ import java.io.OutputStream
 class SettingsPreferencesSerializer(
     private val aead: Aead
 ) : Serializer<SettingsPreferences> {
+    @ExperimentalSerializationApi
     override suspend fun readFrom(input: InputStream): SettingsPreferences {
         return try {
             val encryptedInput = input.readBytes()
@@ -30,11 +34,14 @@ class SettingsPreferencesSerializer(
         }
     }
 
+    @ExperimentalSerializationApi
     override suspend fun writeTo(t: SettingsPreferences, output: OutputStream) {
         val byteArray = ProtoBuf.encodeToByteArray(SettingsPreferences.serializer(), t)
         val encryptedBytes = aead.encrypt(byteArray, null)
 
-        output.write(encryptedBytes)
+        withContext(Dispatchers.IO) {
+            output.write(encryptedBytes)
+        }
     }
 
     override val defaultValue: SettingsPreferences =

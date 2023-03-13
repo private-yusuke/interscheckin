@@ -122,7 +122,7 @@ dependencies {
 
     // For encrypting and decrypting credentials
     implementation 'com.google.crypto.tink:tink-android:1.8.0'
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.4.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.5.0"
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"

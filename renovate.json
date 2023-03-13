@@ -5,8 +5,16 @@
   ],
   "packageRules": [
     {
-      "matchPackagePatterns": ["^org.jetbrains.kotlin"],
-      "enabled": false
+      "matchPackagePatterns": ["org.jetbrains.kotlin.*"],
+      "groupName": "kotlin"
+    },
+    {
+      "matchPackagePatterns": ["androidx.compose.compiler:compiler"],
+      "groupName": "kotlin"
+    },
+    {
+      "matchPackagePatterns": ["com.google.devtools.ksp"],
+      "groupName": "kotlin"
     },
     {
       "matchUpdateTypes": ["minor", "patch"],

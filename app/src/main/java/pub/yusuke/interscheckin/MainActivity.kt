@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
 
             InterscheckinNavHost(
                 navController = navController,
-                activity = this
+                activity = this,
             )
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -28,15 +28,15 @@ class MainActivity : ComponentActivity() {
 
     private fun requestLocationPermission() {
         val locationPermissionRequest = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
+            ActivityResultContracts.RequestMultiplePermissions(),
         ) { permissions ->
             when {
                 permissions.getOrDefault(
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    false
+                    false,
                 ) && permissions.getOrDefault(
                     android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                    false
+                    false,
                 ) -> {
                 }
                 else -> {
@@ -46,8 +46,8 @@ class MainActivity : ComponentActivity() {
         locationPermissionRequest.launch(
             arrayOf(
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-            )
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            ),
         )
     }
 }

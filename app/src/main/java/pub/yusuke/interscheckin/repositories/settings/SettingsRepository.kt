@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SettingsPreferences(
     val foursquareOAuthToken: String = "",
-    val foursquareApiKey: String = ""
+    val foursquareApiKey: String = "",
 )
 
 interface SettingsRepository {

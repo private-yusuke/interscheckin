@@ -26,11 +26,11 @@ interface VenueApiService {
         @Query("limit")
         limit: Int? = null,
         @Header("Authorization")
-        authorization: String
+        authorization: String,
     ): SearchPlacesResponse
 
     data class SearchPlacesResponse(
-        val results: List<Venue>
+        val results: List<Venue>,
     )
 
     /**
@@ -48,11 +48,11 @@ interface VenueApiService {
         @Query("limit")
         limit: Int? = null,
         @Header("Authorization")
-        authorization: String
+        authorization: String,
     ): SearchPlacesNearbyResponse
 
     data class SearchPlacesNearbyResponse(
-        val results: List<Venue>
+        val results: List<Venue>,
     )
 
     /**
@@ -62,9 +62,9 @@ interface VenueApiService {
         message = "The corresponding API endpoint is deprecated.",
         replaceWith = ReplaceWith(
             "searchPlacesNearby(...)",
-            "com.example.foursquare_client.network.searchPlacesNearby"
+            "com.example.foursquare_client.network.searchPlacesNearby",
         ),
-        DeprecationLevel.ERROR
+        DeprecationLevel.ERROR,
     )
     @GET("/v2/venues/search")
     @Headers("Accept: application/json")
@@ -87,11 +87,11 @@ interface VenueApiService {
         @Query("oauth_token")
         oauthToken: String,
         @Query("v")
-        v: String? = "20221002"
+        v: String? = "20221002",
     ): SearchVenuesResponse
 
     data class SearchVenuesResponse(
-        val venues: List<Venue>
+        val venues: List<Venue>,
     )
 
     @GET("/v3/autocomplete")
@@ -108,15 +108,15 @@ interface VenueApiService {
         @Query("session_token")
         sessionToken: String,
         @Header("Authorization")
-        authorization: String
+        authorization: String,
     ): GetAutocompleteResultsResponse
 
     data class GetAutocompleteResultsResponse(
-        val results: List<GetAutoCompleteResultsResponseItem>
+        val results: List<GetAutoCompleteResultsResponseItem>,
     )
 
     data class GetAutoCompleteResultsResponseItem(
         val type: String,
-        val place: Venue?
+        val place: Venue?,
     )
 }

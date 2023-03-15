@@ -17,7 +17,7 @@ interface MainContract {
         suspend fun onDrivingModeStateChanged(enabled: Boolean)
         suspend fun checkIn(
             venueId: String,
-            shout: String? = null
+            shout: String? = null,
         )
 
         fun onVibrationRequested()
@@ -32,7 +32,7 @@ interface MainContract {
             longitude: Double,
             hacc: Double?,
             limit: Int? = null,
-            query: String? = null
+            query: String? = null,
         ): List<Venue>
 
         suspend fun fetchLocation(): Location
@@ -42,7 +42,7 @@ interface MainContract {
             venueId: String,
             shout: String,
             latitude: Double,
-            longitude: Double
+            longitude: Double,
         ): Checkin
 
         fun vibrate(vibrationEffect: VibrationEffect)
@@ -53,18 +53,18 @@ interface MainContract {
         val name: String,
         val categoriesString: String,
         val distance: Long?,
-        val icon: Icon?
+        val icon: Icon?,
     ) {
         data class Icon(
             val name: String,
-            val url: String
+            val url: String,
         )
     }
 
     data class Checkin(
         val id: String,
         val venueName: String,
-        val shout: String?
+        val shout: String?,
     )
 
     sealed class LocationState {

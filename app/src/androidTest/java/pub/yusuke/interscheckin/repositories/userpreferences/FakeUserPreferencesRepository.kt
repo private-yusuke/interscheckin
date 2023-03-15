@@ -10,8 +10,8 @@ import javax.inject.Inject
 class FakeUserPreferencesRepository @Inject constructor() : UserPreferencesRepository {
     private var _userPreferencesFlow = MutableStateFlow(
         UserPreferences(
-            drivingMode = false
-        )
+            drivingMode = false,
+        ),
     )
 
     override val userPreferencesFlow: Flow<UserPreferences>

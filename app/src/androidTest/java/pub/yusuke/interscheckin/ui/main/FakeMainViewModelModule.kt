@@ -19,7 +19,7 @@ import pub.yusuke.interscheckin.ui.main.util.MainScreenTestData
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [MainViewModelModule::class]
+    replaces = [MainViewModelModule::class],
 )
 interface FakeMainViewModelModule {
     @Binds
@@ -28,7 +28,7 @@ interface FakeMainViewModelModule {
     companion object {
         @Provides
         fun provideViewModel(
-            interactor: MainContract.Interactor
+            interactor: MainContract.Interactor,
         ): MainContract.ViewModel {
             val vm = spyk(MainViewModel(interactor))
 
@@ -55,7 +55,7 @@ interface FakeMainViewModelModule {
                 fusedLocationProviderClient.requestLocationUpdates(
                     any(),
                     any<LocationCallback>(),
-                    any()
+                    any(),
                 )
             } returns mockk()
             every {

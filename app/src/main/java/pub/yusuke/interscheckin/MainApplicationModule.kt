@@ -40,7 +40,7 @@ import javax.inject.Singleton
 class MainApplicationModule {
     @Provides
     fun provideFoursquareClient(
-        settingsRepository: SettingsRepository
+        settingsRepository: SettingsRepository,
     ): FoursquareClient {
         val settings = runBlocking { settingsRepository.fetchSettings() }
         val oauthToken = settings.foursquareOAuthToken
@@ -48,14 +48,14 @@ class MainApplicationModule {
 
         return FoursquareClientImpl(
             oauth_token = oauthToken,
-            api_key = apiKey
+            api_key = apiKey,
         )
     }
 
     @Singleton
     @Provides
     fun provideUserPreferencesRepository(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): UserPreferencesRepository {
         return UserPreferencesRepositoryImpl(context)
     }
@@ -63,21 +63,21 @@ class MainApplicationModule {
     @Singleton
     @Provides
     fun provideSettingsRepository(
-        dataStore: DataStore<SettingsPreferences>
+        dataStore: DataStore<SettingsPreferences>,
     ): SettingsRepository {
         return SettingsRepositoryImpl(dataStore)
     }
 
     @Provides
     fun provideFoursquareCheckinsRepository(
-        foursquareClient: FoursquareClient
+        foursquareClient: FoursquareClient,
     ): FoursquareCheckinsRepository {
         return FoursquareCheckinsRepositoryImpl(foursquareClient)
     }
 
     @Provides
     fun provideFoursquarePlacesRepository(
-        foursquareClient: FoursquareClient
+        foursquareClient: FoursquareClient,
     ): FoursquarePlacesRepository {
         return FoursquarePlacesRepositoryImpl(foursquareClient)
     }
@@ -93,7 +93,7 @@ class MainApplicationModule {
     @Singleton
     @Provides
     fun provideAead(
-        application: Application
+        application: Application,
     ): Aead {
         AeadConfig.register()
 
@@ -110,32 +110,32 @@ class MainApplicationModule {
     @Provides
     fun provideSettingsDataStore(
         application: Application,
-        aead: Aead
+        aead: Aead,
     ): DataStore<SettingsPreferences> {
         return DataStoreFactory.create(
             produceFile = { File(application.filesDir, "datastore/$DATASTORE_FILE") },
-            serializer = SettingsPreferencesSerializer(aead)
+            serializer = SettingsPreferencesSerializer(aead),
         )
     }
 
     @Provides
     fun provideVibratorManager(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ) = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
 
     @Provides
     fun provideFusedLocationProviderClient(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ) = LocationServices.getFusedLocationProviderClient(context)
 
     @Singleton
     @Provides
     fun provideAppDatabase(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ) = SpatiaRoom.databaseBuilder(
         context,
         AppDatabase::class.java,
-        "interscheckin"
+        "interscheckin",
     ).addCallback(object : RoomDatabase.Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
@@ -143,7 +143,7 @@ class MainApplicationModule {
                 """
                 select
                     RecoverGeometryColumn('visited_venues', 'location', ${VisitedVenue.SRID}, 'POINT', 'XY');
-            """
+            """,
             ).moveToNext()
             db.query("select CreateSpatialIndex('visited_venues', 'location');").moveToNext()
         }
@@ -152,6 +152,6 @@ class MainApplicationModule {
     @Singleton
     @Provides
     fun provideVisitedVenueDao(
-        appDatabase: AppDatabase
+        appDatabase: AppDatabase,
     ) = appDatabase.visitedVenueDao()
 }

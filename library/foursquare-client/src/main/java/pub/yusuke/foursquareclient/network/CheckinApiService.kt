@@ -27,21 +27,21 @@ interface CheckinApiService {
         @Query("v")
         v: String? = "20221002",
         @Header("Authorization")
-        authorization: String
+        authorization: String,
     ): CreateCheckinResponse
 
     data class CreateCheckinResponse(
         val meta: CreateCheckinResponseMeta,
-        val response: CreateCheckinResponseResponse
+        val response: CreateCheckinResponseResponse,
     )
 
     data class CreateCheckinResponseResponse(
-        val checkin: Checkin
+        val checkin: Checkin,
     )
 
     data class CreateCheckinResponseMeta(
         val code: String,
-        val requestId: String
+        val requestId: String,
     )
 
     @GET("/v2/users/{userId}/historysearch")
@@ -60,18 +60,18 @@ interface CheckinApiService {
         @Query("v")
         v: String? = "20221002",
         @Header("Authorization")
-        authorization: String
+        authorization: String,
     ): GetCheckinHistoriesResponse
 
     data class GetCheckinHistoriesResponse(
-        val response: Response
+        val response: Response,
     ) {
         data class Response(
-            val checkins: Checkins
+            val checkins: Checkins,
         ) {
             data class Checkins(
                 val count: Long,
-                val items: List<Checkin>
+                val items: List<Checkin>,
             )
         }
     }

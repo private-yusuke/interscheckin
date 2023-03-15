@@ -18,7 +18,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 class FoursquareClientImpl(
     base_url: String = "https://api.foursquare.com",
     private val oauth_token: String,
-    private val api_key: String
+    private val api_key: String,
 ) : FoursquareClient {
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
@@ -52,7 +52,7 @@ class FoursquareClientImpl(
         radius: Int?,
         limit: Int?,
         categories: String?,
-        sort: String?
+        sort: String?,
     ): List<Venue> = try {
         if (api_key.isBlank()) {
             throw EmptyAPIKeyException("Foursquare API key is blank.")
@@ -64,7 +64,7 @@ class FoursquareClientImpl(
             limit = limit,
             categories = categories,
             sort = sort,
-            authorization = api_key
+            authorization = api_key,
         ).results
     } catch (e: HttpException) {
         if (e.code() == 401) {
@@ -78,7 +78,7 @@ class FoursquareClientImpl(
         ll: LatAndLong,
         hacc: Double?,
         query: String?,
-        limit: Int?
+        limit: Int?,
     ): List<Venue> =
         try {
             if (api_key.isBlank()) {
@@ -89,7 +89,7 @@ class FoursquareClientImpl(
                 hacc = hacc,
                 query = query,
                 limit = limit,
-                authorization = api_key
+                authorization = api_key,
             ).results
         } catch (e: HttpException) {
             if (e.code() == 401) {
@@ -103,9 +103,9 @@ class FoursquareClientImpl(
         message = "The corresponding API endpoint is deprecated.",
         replaceWith = ReplaceWith(
             "searchPlacesNearby(...)",
-            "com.example.foursquare_client.FoursquareClientImpl"
+            "com.example.foursquare_client.FoursquareClientImpl",
         ),
-        DeprecationLevel.ERROR
+        DeprecationLevel.ERROR,
     )
     @Suppress("DEPRECATION_ERROR")
     override suspend fun searchVenues(
@@ -114,7 +114,7 @@ class FoursquareClientImpl(
         radius: Int?,
         query: String?,
         categoryId: String?,
-        limit: Int?
+        limit: Int?,
     ): List<Venue> = try {
         if (oauth_token.isBlank()) {
             throw EmptyOAuthTokenException("Foursquare OAuth token is blank.")
@@ -126,7 +126,7 @@ class FoursquareClientImpl(
             query = query,
             categoryId = categoryId,
             limit = limit,
-            oauthToken = oauth_token
+            oauthToken = oauth_token,
         ).venues
     } catch (e: HttpException) {
         if (e.code() == 401) {
@@ -141,7 +141,7 @@ class FoursquareClientImpl(
         query: String?,
         radius: Int?,
         limit: Int?,
-        sessionToken: String
+        sessionToken: String,
     ): List<Venue> = try {
         val result = venueApiService.getAutocompleteResults(
             ll = ll?.llString(),
@@ -149,7 +149,7 @@ class FoursquareClientImpl(
             radius = radius,
             limit = limit,
             sessionToken = sessionToken,
-            authorization = api_key
+            authorization = api_key,
         )
         if (result.results.first().type == "search") {
             emptyList()
@@ -169,7 +169,7 @@ class FoursquareClientImpl(
         shout: String?,
         mentions: String?,
         broadcast: String?,
-        ll: String
+        ll: String,
     ): Checkin = coroutineScope {
         try {
             checkinApiService.createCheckin(
@@ -179,7 +179,7 @@ class FoursquareClientImpl(
                 broadcast = broadcast,
                 ll = ll,
                 oauthToken = oauth_token,
-                authorization = api_key
+                authorization = api_key,
             ).response.checkin
         } catch (e: HttpException) {
             if (e.code() == 401) {
@@ -194,7 +194,7 @@ class FoursquareClientImpl(
         userId: Long?,
         offset: Long?,
         beforeTimestamp: Long?,
-        limit: Long?
+        limit: Long?,
     ): List<Checkin> = coroutineScope {
         try {
             checkinApiService.getCheckinHistories(
@@ -203,7 +203,7 @@ class FoursquareClientImpl(
                 limit = limit,
                 beforeTimestamp = beforeTimestamp,
                 oauthToken = oauth_token,
-                authorization = api_key
+                authorization = api_key,
             ).response.checkins.items
         } catch (e: HttpException) {
             if (e.code() == 401) {

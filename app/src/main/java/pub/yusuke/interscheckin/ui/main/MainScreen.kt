@@ -60,7 +60,7 @@ import pub.yusuke.interscheckin.ui.utils.isValidResourceId
 @Composable
 fun MainScreen(
     viewModel: MainContract.ViewModel = hiltViewModel<MainViewModel>(),
-    navController: NavController
+    navController: NavController,
 ) {
     val drivingModeState = viewModel.drivingModeFlow
         .collectAsState(initial = false)
@@ -73,12 +73,12 @@ fun MainScreen(
     InterscheckinTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            scaffoldState = scaffoldState
+            scaffoldState = scaffoldState,
         ) { innerPadding ->
             Column(
                 modifier = Modifier.padding(innerPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 VenueList(
                     venuesState = viewModel.venuesState,
@@ -94,7 +94,7 @@ fun MainScreen(
                             viewModel.checkIn(venueId, shout)
                             shout = ""
                         }
-                    }
+                    },
                 )
                 Text(
                     text = when (val it = viewModel.locationState.value) {
@@ -102,10 +102,10 @@ fun MainScreen(
                         is MainContract.LocationState.Loaded -> stringResource(
                             R.string.main_location_loaded,
                             it.location.toFormattedString(),
-                            it.location.accuracy
+                            it.location.accuracy,
                         )
                         is MainContract.LocationState.Error -> it.throwable.stackTraceToString()
-                    }
+                    },
                 )
                 TextField(
                     value = shout,
@@ -113,10 +113,10 @@ fun MainScreen(
                     modifier = Modifier
                         .height(150.dp)
                         .semantics { contentDescription = "TextField for shout" },
-                    placeholder = { Text(stringResource(R.string.main_shout_placeholder)) }
+                    placeholder = { Text(stringResource(R.string.main_shout_placeholder)) },
                 )
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Button(
                         onClick = {
@@ -129,7 +129,7 @@ fun MainScreen(
                             viewModel.checkinState.value !is MainContract.CheckinState.Loading &&
                             selectedVenueIdState != "",
                         modifier = Modifier
-                            .semantics { contentDescription = "Button for creating a Checkin" }
+                            .semantics { contentDescription = "Button for creating a Checkin" },
                     ) {
                         Text(stringResource(R.string.main_button_checkin))
                     }
@@ -141,21 +141,21 @@ fun MainScreen(
                                 onValueChange = {
                                     coroutineScope.launch {
                                         viewModel.onDrivingModeStateChanged(
-                                            !drivingModeState.value
+                                            !drivingModeState.value,
                                         )
                                     }
-                                }
+                                },
                             )
                             .padding(8.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Checkbox(
                             checked = drivingModeState.value,
-                            onCheckedChange = null
+                            onCheckedChange = null,
                         )
                         Text(
-                            text = stringResource(id = R.string.main_driving_mode_checkbox_label)
+                            text = stringResource(id = R.string.main_driving_mode_checkbox_label),
                         )
                     }
                 }
@@ -168,41 +168,41 @@ fun MainScreen(
                         is MainContract.CheckinState.Idle ->
                             stringResource(
                                 R.string.main_message_checkin_success,
-                                it.lastCheckin.venueName
+                                it.lastCheckin.venueName,
                             )
                         is MainContract.CheckinState.Error ->
                             "Error: ${it.throwable.message}\n${it.throwable.stackTrace}"
-                    }
+                    },
                 )
                 Button(
                     onClick = { coroutineScope.launch { viewModel.onLocationUpdateRequested() } },
-                    enabled = viewModel.locationState.value is MainContract.LocationState.Loaded
+                    enabled = viewModel.locationState.value is MainContract.LocationState.Loaded,
                 ) {
                     Text(
                         text = stringResource(id = R.string.main_request_venue_list_update),
                         style = TextStyle.Default.copy(
-                            fontSize = 40.sp
-                        )
+                            fontSize = 40.sp,
+                        ),
                     )
                 }
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Button(
                         onClick = {
                             navController.navigate(
-                                InterscheckinScreens.Histories.route
+                                InterscheckinScreens.Histories.route,
                             )
-                        }
+                        },
                     ) {
                         Text(stringResource(R.string.main_button_histories))
                     }
                     Button(
                         onClick = {
                             navController.navigate(
-                                InterscheckinScreens.Settings.createRoute()
+                                InterscheckinScreens.Settings.createRoute(),
                             )
-                        }
+                        },
                     ) {
                         Text(stringResource(R.string.main_go_to_settings_button_label))
                     }
@@ -237,7 +237,7 @@ fun VenueColumn(
     venues: List<MainContract.Venue>,
     selectedVenueIdState: String,
     onClickVenue: (String) -> Unit,
-    onLongClickVenue: (String) -> Unit
+    onLongClickVenue: (String) -> Unit,
 ) {
     LazyColumn {
         items(venues) { venue ->
@@ -245,7 +245,7 @@ fun VenueColumn(
                 selected = venue.id == selectedVenueIdState,
                 onClick = onClickVenue,
                 onLongClick = onLongClickVenue,
-                venue = venue
+                venue = venue,
             )
         }
     }
@@ -258,31 +258,31 @@ fun VenueList(
     selectedVenueIdState: String,
     onClickVenue: (String) -> Unit,
     onLongClickVenue: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier,
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         when (val it = venuesState.value) {
             is MainContract.VenuesState.Error ->
                 Text(
                     modifier = modifier,
-                    text = "Error: ${(venuesState.value as MainContract.VenuesState.Error).throwable.stackTraceToString()}"
+                    text = "Error: ${(venuesState.value as MainContract.VenuesState.Error).throwable.stackTraceToString()}",
                 )
             is MainContract.VenuesState.Idle ->
                 VenueColumn(
                     venues = it.venues,
                     selectedVenueIdState = selectedVenueIdState,
                     onClickVenue = onClickVenue,
-                    onLongClickVenue = onLongClickVenue
+                    onLongClickVenue = onLongClickVenue,
                 )
             is MainContract.VenuesState.Loading ->
                 VenueColumn(
                     venues = it.lastVenues,
                     selectedVenueIdState = selectedVenueIdState,
                     onClickVenue = onClickVenue,
-                    onLongClickVenue = onLongClickVenue
+                    onLongClickVenue = onLongClickVenue,
                 )
         }
         if (
@@ -300,7 +300,7 @@ fun VenueRow(
     selected: Boolean,
     onClick: (String) -> Unit,
     onLongClick: (String) -> Unit,
-    venue: MainContract.Venue
+    venue: MainContract.Venue,
 ) {
     Box {
         Box(
@@ -308,7 +308,7 @@ fun VenueRow(
                 .matchParentSize()
                 .applyIf(venue.name.contains("交差点")) {
                     background(Color.Green.copy(alpha = 0.3f))
-                }
+                },
         )
         Row(
             modifier = Modifier
@@ -316,8 +316,8 @@ fun VenueRow(
                 .padding(4.dp)
                 .combinedClickable(
                     onClick = { onClick.invoke(venue.id) },
-                    onLongClick = { onLongClick.invoke(venue.id) }
-                )
+                    onLongClick = { onLongClick.invoke(venue.id) },
+                ),
         ) {
             if (venue.icon == null) {
                 Text("no icon")
@@ -325,7 +325,7 @@ fun VenueRow(
                 Image(
                     painter = rememberAsyncImagePainter(venue.icon.url),
                     contentDescription = venue.icon.name,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(32.dp),
                 )
             }
             Column {
@@ -337,7 +337,7 @@ fun VenueRow(
                     Text(
                         modifier = Modifier
                             .background(Color.Red),
-                        text = stringResource(R.string.main_venue_selected)
+                        text = stringResource(R.string.main_venue_selected),
                     )
                 }
             }
@@ -353,8 +353,8 @@ private val previewVenue =
         distance = 12,
         icon = MainContract.Venue.Icon(
             name = "test category",
-            url = "https://example.com/foo.png"
-        )
+            url = "https://example.com/foo.png",
+        ),
     )
 
 @SuppressLint("UnrememberedMutableState")
@@ -382,7 +382,7 @@ private fun MainActivityScreenPreview() {
             override val locationState: State<MainContract.LocationState> =
                 mutableStateOf(MainContract.LocationState.Loading())
         },
-        navController = rememberNavController()
+        navController = rememberNavController(),
     )
 }
 
@@ -393,7 +393,7 @@ private fun VenueRowPreview() =
         selected = false,
         onClick = {},
         onLongClick = {},
-        venue = previewVenue
+        venue = previewVenue,
     )
 
 @Preview
@@ -403,7 +403,7 @@ private fun VenueRowSelectedPreview() =
         selected = true,
         onClick = {},
         onLongClick = {},
-        venue = previewVenue
+        venue = previewVenue,
     )
 
 private fun Modifier.applyIf(condition: Boolean, modifier: Modifier.() -> Modifier): Modifier =

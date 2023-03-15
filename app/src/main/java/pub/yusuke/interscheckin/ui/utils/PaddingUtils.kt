@@ -11,11 +11,11 @@ fun PaddingValues.copy(
     top: Dp = this.calculateTopPadding(),
     bottom: Dp = this.calculateBottomPadding(),
     start: Dp = this.calculateStartPadding(layoutDirection),
-    end: Dp = this.calculateEndPadding(layoutDirection)
+    end: Dp = this.calculateEndPadding(layoutDirection),
 ): PaddingValues =
     PaddingValues(
         top = top,
         bottom = bottom,
         start = start,
-        end = end
+        end = end,
     )

@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val interactor: MainContract.Interactor
+    private val interactor: MainContract.Interactor,
 ) : ViewModel(), MainContract.ViewModel {
     /**
      * Venue の更新が必要であるか
@@ -63,7 +63,7 @@ class MainViewModel @Inject constructor(
                 emptyList()
         }
         _venuesState.value = MainContract.VenuesState.Loading(
-            lastVenues = lastVenues
+            lastVenues = lastVenues,
         )
 
         _venuesState.value = when (val it = locationState.value) {
@@ -79,7 +79,7 @@ class MainViewModel @Inject constructor(
                             longitude = it.location.longitude,
                             hacc = it.location.accuracy.toDouble(),
                             limit = 50,
-                            query = if (drivingModeFlow.firstOrNull() == true) "交差" else ""
+                            query = if (drivingModeFlow.firstOrNull() == true) "交差" else "",
                         ).sortedBy { it.distance }
                     } catch (e: FoursquareClient.InvalidRequestTokenException) {
                         // 認証情報を更新してもらうために画面を遷移させる
@@ -91,7 +91,7 @@ class MainViewModel @Inject constructor(
                         _navigationRequiredState.value =
                             InterscheckinScreens.Settings.createRoute(R.string.settings_reason_credentials_not_set)
                         emptyList()
-                    }
+                    },
                 )
         }
 
@@ -104,7 +104,7 @@ class MainViewModel @Inject constructor(
      */
     override suspend fun checkIn(
         venueId: String,
-        shout: String?
+        shout: String?,
     ) {
         val location: Location = when (val it = _locationState.value) {
             is MainContract.LocationState.Loading -> requireNotNull(it.lastLocation)
@@ -119,7 +119,7 @@ class MainViewModel @Inject constructor(
                 venueId = venueId,
                 shout = shout ?: "",
                 latitude = location.latitude,
-                longitude = location.longitude
+                longitude = location.longitude,
             )
 
             MainContract.CheckinState.Idle(checkIn)
@@ -137,18 +137,18 @@ class MainViewModel @Inject constructor(
         venueId: String,
         shout: String,
         latitude: Double,
-        longitude: Double
+        longitude: Double,
     ): MainContract.Checkin =
         interactor.createCheckin(
             venueId = venueId,
             shout = shout,
             latitude = latitude,
-            longitude = longitude
+            longitude = longitude,
         )
 
     override fun onVibrationRequested() =
         interactor.vibrate(
-            VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE)
+            VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE),
         )
 
     @SuppressLint("MissingPermission")
@@ -166,7 +166,7 @@ class MainViewModel @Inject constructor(
         val location =
             withContext(viewModelScope.coroutineContext + Dispatchers.IO) { interactor.fetchLocation() }
         _locationState.value = MainContract.LocationState.Loaded(
-            location = location
+            location = location,
         )
 
         // 最後の Location と異なっている場合は Venue の update をする必要がある

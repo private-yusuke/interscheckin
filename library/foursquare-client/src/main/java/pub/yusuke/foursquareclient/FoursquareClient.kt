@@ -14,7 +14,7 @@ interface FoursquareClient {
         radius: Int? = null,
         limit: Int? = null,
         categories: String? = null,
-        sort: String? = null
+        sort: String? = null,
     ): List<Venue>
 
     /**
@@ -25,7 +25,7 @@ interface FoursquareClient {
         ll: LatAndLong,
         hacc: Double? = null,
         query: String? = null,
-        limit: Int? = null
+        limit: Int? = null,
     ): List<Venue>
 
     /**
@@ -38,7 +38,7 @@ interface FoursquareClient {
         radius: Int? = null,
         query: String? = null,
         categoryId: String? = null,
-        limit: Int? = null
+        limit: Int? = null,
     ): List<Venue>
 
     /**
@@ -49,7 +49,7 @@ interface FoursquareClient {
         query: String? = null,
         radius: Int? = null,
         limit: Int? = null,
-        sessionToken: String
+        sessionToken: String,
     ): List<Venue>
 
     /**
@@ -63,7 +63,7 @@ interface FoursquareClient {
         shout: String? = null,
         mentions: String? = null,
         broadcast: String? = null,
-        ll: String
+        ll: String,
     ): Checkin
 
     /**
@@ -77,7 +77,7 @@ interface FoursquareClient {
         userId: Long? = null,
         offset: Long? = null,
         beforeTimestamp: Long? = null,
-        limit: Long? = null
+        limit: Long? = null,
     ): List<Checkin>
 
     class InvalidRequestTokenException(message: String) : Exception(message)

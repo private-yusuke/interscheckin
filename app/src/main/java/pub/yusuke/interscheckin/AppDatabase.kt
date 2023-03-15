@@ -9,10 +9,10 @@ import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenueDao
 
 @Database(
     entities = [
-        VisitedVenue::class
+        VisitedVenue::class,
     ],
     version = 1,
-    exportSchema = true
+    exportSchema = true,
 )
 @TypeConverters(GeometryConverters::class)
 abstract class AppDatabase : RoomDatabase() {

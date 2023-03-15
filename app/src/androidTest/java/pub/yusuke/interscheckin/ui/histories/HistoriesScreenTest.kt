@@ -51,7 +51,7 @@ class HistoriesScreenTest {
         composeTestRule.setContent {
             HistoriesScreen(
                 viewModel = vm,
-                navController = navController
+                navController = navController,
             )
         }
 
@@ -68,15 +68,15 @@ class HistoriesScreenTest {
                 LoadStates(
                     LoadState.NotLoading(true),
                     LoadState.NotLoading(true),
-                    LoadState.NotLoading(true)
-                )
-            )
+                    LoadState.NotLoading(true),
+                ),
+            ),
         )
 
         composeTestRule.setContent {
             HistoriesScreen(
                 viewModel = vm,
-                navController = navController
+                navController = navController,
             )
         }
 

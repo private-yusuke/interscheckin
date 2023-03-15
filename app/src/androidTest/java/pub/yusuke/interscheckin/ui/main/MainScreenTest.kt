@@ -82,7 +82,7 @@ class MainScreenTest {
         composeTestRule.setContent {
             MainScreen(
                 viewModel = vm,
-                navController = navController
+                navController = navController,
             )
         }
 
@@ -97,7 +97,7 @@ class MainScreenTest {
         composeTestRule.setContent {
             MainScreen(
                 viewModel = vm,
-                navController = navController
+                navController = navController,
             )
         }
 
@@ -117,7 +117,7 @@ class MainScreenTest {
         composeTestRule.setContent {
             MainScreen(
                 viewModel = vm,
-                navController = navController
+                navController = navController,
             )
         }
 
@@ -145,7 +145,7 @@ class MainScreenTest {
                 .fetchSemanticsNode()
                 .config[SemanticsProperties.EditableText]
                 .text
-                .isEmpty()
+                .isEmpty(),
         )
         val checkin = (vm.checkinState.value as MainContract.CheckinState.Idle).lastCheckin
         assert(checkin.shout == shout)
@@ -156,7 +156,7 @@ class MainScreenTest {
         composeTestRule.setContent {
             MainScreen(
                 viewModel = vm,
-                navController = navController
+                navController = navController,
             )
         }
 
@@ -183,7 +183,7 @@ class MainScreenTest {
                 .fetchSemanticsNode()
                 .config[SemanticsProperties.EditableText]
                 .text
-                .isEmpty()
+                .isEmpty(),
         )
         val checkin = (vm.checkinState.value as MainContract.CheckinState.Idle).lastCheckin
         assert(checkin.shout == shout)
@@ -198,7 +198,7 @@ class MainScreenTest {
         composeTestRule.setContent {
             MainScreen(
                 viewModel = vm,
-                navController = navController
+                navController = navController,
             )
         }
 

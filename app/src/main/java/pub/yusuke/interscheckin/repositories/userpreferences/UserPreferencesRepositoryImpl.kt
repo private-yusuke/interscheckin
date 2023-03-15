@@ -24,7 +24,7 @@ private object PreferencesKeys {
 }
 
 class UserPreferencesRepositoryImpl(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
 ) : UserPreferencesRepository {
     constructor(context: Context) : this(context.dataStore)
 
@@ -54,5 +54,5 @@ class UserPreferencesRepositoryImpl(
 }
 
 private val Context.dataStore by preferencesDataStore(
-    name = USER_PREFERENCES_NAME
+    name = USER_PREFERENCES_NAME,
 )

@@ -19,34 +19,34 @@ import javax.inject.Singleton
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [MainApplicationModule::class]
+    replaces = [MainApplicationModule::class],
 )
 interface FakeMainApplicationModule {
     @Singleton
     @Binds
     fun bindUserPreferencesRepository(
-        userPreferencesRepository: FakeUserPreferencesRepository
+        userPreferencesRepository: FakeUserPreferencesRepository,
     ): UserPreferencesRepository
 
     @Singleton
     @Binds
     fun bindSettingsRepository(
-        settingsRepository: FakeSettingsRepository
+        settingsRepository: FakeSettingsRepository,
     ): SettingsRepository
 
     @Binds
     fun bindFoursquareCheckinsRepository(
-        foursquareCheckinsRepository: FakeFoursquareCheckinsRepository
+        foursquareCheckinsRepository: FakeFoursquareCheckinsRepository,
     ): FoursquareCheckinsRepository
 
     @Binds
     fun bindFoursquarePlacesRepository(
-        foursquarePlacesRepository: FakeFoursquarePlacesRepository
+        foursquarePlacesRepository: FakeFoursquarePlacesRepository,
     ): FoursquarePlacesRepository
 
     @Singleton
     @Binds
     fun bindVisitedVenueDao(
-        visitedVenueDao: FakeVisitedVenueDao
+        visitedVenueDao: FakeVisitedVenueDao,
     ): VisitedVenueDao
 }

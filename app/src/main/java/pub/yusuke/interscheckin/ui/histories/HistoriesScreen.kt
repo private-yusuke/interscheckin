@@ -55,7 +55,7 @@ import java.time.format.FormatStyle
 @Composable
 fun HistoriesScreen(
     viewModel: HistoriesContract.ViewModel = hiltViewModel<HistoriesViewModel>(),
-    navController: NavController
+    navController: NavController,
 ) {
     val lazyPagingItems = viewModel.checkinsFlow.collectAsLazyPagingItems()
     val scaffoldState = rememberScaffoldState()
@@ -67,15 +67,15 @@ fun HistoriesScreen(
             scaffoldState = scaffoldState,
             topBar = {
                 HistoriesTopBar(
-                    onNavigateToPreviousRoute = { navController.popBackStack() }
+                    onNavigateToPreviousRoute = { navController.popBackStack() },
                 )
-            }
+            },
         ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .padding(innerPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 lazyPagingItems.apply {
                     when (val it = loadState.refresh) {
@@ -83,7 +83,7 @@ fun HistoriesScreen(
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize(),
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.Center,
                             ) {
                                 CircularProgressIndicator()
                             }
@@ -91,23 +91,23 @@ fun HistoriesScreen(
                         is LoadState.Error -> {
                             ErrorContent(
                                 reason = it.error.message ?: "unknown",
-                                onClick = { lazyPagingItems.refresh() }
+                                onClick = { lazyPagingItems.refresh() },
                             )
                         }
                         is LoadState.NotLoading -> {
                             if (lazyPagingItems.itemCount == 0) {
                                 Box(
-                                    contentAlignment = Alignment.Center
+                                    contentAlignment = Alignment.Center,
                                 ) {
                                     Text(
                                         text = stringResource(R.string.histories_no_histories_found),
                                         modifier = Modifier
-                                            .semantics { contentDescription = "No histories found" }
+                                            .semantics { contentDescription = "No histories found" },
                                     )
                                 }
                             } else {
                                 HistoriesContent(
-                                    lazyPagingItems = lazyPagingItems
+                                    lazyPagingItems = lazyPagingItems,
                                 )
                             }
                         }
@@ -120,23 +120,23 @@ fun HistoriesScreen(
 
 @Composable
 private fun HistoriesContent(
-    lazyPagingItems: LazyPagingItems<HistoriesContract.Checkin>
+    lazyPagingItems: LazyPagingItems<HistoriesContract.Checkin>,
 ) {
     LazyColumn(
         contentPadding = PaddingValues(
             top = 8.dp,
             bottom = 16.dp,
             start = 12.dp,
-            end = 12.dp
+            end = 12.dp,
         ),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         items(lazyPagingItems) {
             it?.let { checkin ->
                 CheckinRow(
-                    checkin = checkin
+                    checkin = checkin,
                 )
             }
         }
@@ -146,7 +146,7 @@ private fun HistoriesContent(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     CircularProgressIndicator()
                 }
@@ -164,11 +164,11 @@ private fun HistoriesContent(
 
 @Composable
 private fun CheckinRow(
-    checkin: HistoriesContract.Checkin
+    checkin: HistoriesContract.Checkin,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         if (checkin.venue.icon == null) {
             Text("no icon")
@@ -178,30 +178,30 @@ private fun CheckinRow(
                     .size(40.dp)
                     .clip(RoundedCornerShape(percent = 100))
                     .background(Purple200),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Image(
                     painter = rememberAsyncImagePainter(checkin.venue.icon.url),
                     contentDescription = checkin.venue.icon.name,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(32.dp),
                 )
             }
         }
         Column {
             Text(checkin.venue.name)
             Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 checkin.venue.address?.let {
                     Text(
                         text = it,
-                        style = TextStyle.Default.copy(color = Color.Gray)
+                        style = TextStyle.Default.copy(color = Color.Gray),
                     )
                 }
                 checkin.score?.let {
                     Text(
                         text = "🪙 $it",
-                        style = TextStyle.Default.copy(color = Color.Gray)
+                        style = TextStyle.Default.copy(color = Color.Gray),
                     )
                 }
             }
@@ -210,7 +210,7 @@ private fun CheckinRow(
                     .ofEpochSecond(checkin.createdAt)
                     .atZone(ZoneId.systemDefault())
                     .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
-                style = TextStyle.Default.copy(color = Color.Gray)
+                style = TextStyle.Default.copy(color = Color.Gray),
             )
         }
     }
@@ -219,7 +219,7 @@ private fun CheckinRow(
 @Composable
 fun ErrorContent(
     reason: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Column {
         Text("An error occurred while loading check-ins")
@@ -232,7 +232,7 @@ fun ErrorContent(
 
 @Composable
 private fun HistoriesTopBar(
-    onNavigateToPreviousRoute: () -> Unit
+    onNavigateToPreviousRoute: () -> Unit,
 ) {
     TopAppBar(
         title = { Text(stringResource(R.string.histories_topbar_title)) },
@@ -242,7 +242,7 @@ private fun HistoriesTopBar(
             }
         },
         backgroundColor = MaterialTheme.colors.primary,
-        contentColor = Color.White
+        contentColor = Color.White,
     )
 }
 
@@ -250,7 +250,7 @@ private fun HistoriesTopBar(
 @Composable
 private fun PreviewHistoriesContent() {
     HistoriesContent(
-        lazyPagingItems = flowOf(PagingData.from(MutableList(5) { exampleCheckin })).collectAsLazyPagingItems()
+        lazyPagingItems = flowOf(PagingData.from(MutableList(5) { exampleCheckin })).collectAsLazyPagingItems(),
     )
 }
 
@@ -271,8 +271,8 @@ private val exampleCheckin = HistoriesContract.Checkin(
         address = "Somewhere",
         icon = HistoriesContract.Checkin.Venue.Icon(
             name = "Intersection",
-            url = "https://example.com/foo.png"
-        )
+            url = "https://example.com/foo.png",
+        ),
     ),
-    score = 20
+    score = 20,
 )

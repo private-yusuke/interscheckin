@@ -46,7 +46,7 @@ import pub.yusuke.interscheckin.ui.utils.isValidResourceId
 fun SettingsScreen(
     viewModel: SettingsContract.ViewModel = hiltViewModel<SettingsViewModel>(),
     navController: NavController,
-    onRecreateRequired: () -> Unit
+    onRecreateRequired: () -> Unit,
 ) {
     var foursquareOAuthToken by remember { mutableStateOf("") }
     var foursquareApiKey by remember { mutableStateOf("") }
@@ -60,37 +60,37 @@ fun SettingsScreen(
                 SettingsTopBar {
                     navController.popBackStack()
                 }
-            }
+            },
         ) { innerPadding ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier
-                    .padding(innerPadding.copy(top = 16.dp))
+                    .padding(innerPadding.copy(top = 16.dp)),
             ) {
                 CredentialSettingRow(
                     label = stringResource(R.string.settings_foursquare_oauth_token_label),
                     value = foursquareOAuthToken,
-                    onValueChange = { foursquareOAuthToken = it }
+                    onValueChange = { foursquareOAuthToken = it },
                 )
                 CredentialSettingRow(
                     label = stringResource(R.string.settings_foursquare_api_ken),
                     value = foursquareApiKey,
-                    onValueChange = { foursquareApiKey = it }
+                    onValueChange = { foursquareApiKey = it },
                 )
                 Button(
                     onClick = {
                         coroutineScope.launch {
                             viewModel.saveSettings(
                                 foursquareOAuthToken = foursquareOAuthToken,
-                                foursquareApiKey = foursquareApiKey
+                                foursquareApiKey = foursquareApiKey,
                             )
                             // Snackbar が表示されたままだとすぐにはリロードされないため、事前に dismiss する
                             scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                             onRecreateRequired()
                         }
                     },
-                    enabled = foursquareApiKey.isNotBlank() && foursquareOAuthToken.isNotBlank()
+                    enabled = foursquareApiKey.isNotBlank() && foursquareOAuthToken.isNotBlank(),
                 ) {
                     Text(stringResource(R.string.settings_save))
                 }
@@ -101,7 +101,7 @@ fun SettingsScreen(
                             scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                             onRecreateRequired()
                         }
-                    }
+                    },
                 ) {
                     Text(stringResource(R.string.settings_reset_cached_venues))
                 }
@@ -120,7 +120,7 @@ fun SettingsScreen(
         LaunchedEffect(Unit) {
             scaffoldState.snackbarHostState.showSnackbar(
                 message = reason,
-                duration = SnackbarDuration.Long
+                duration = SnackbarDuration.Long,
             )
         }
     }
@@ -128,7 +128,7 @@ fun SettingsScreen(
 
 @Composable
 private fun SettingsTopBar(
-    onNavigateToPreviousRoute: () -> Unit
+    onNavigateToPreviousRoute: () -> Unit,
 ) {
     TopAppBar(
         title = { Text(stringResource(R.string.settings_topbar_title)) },
@@ -138,7 +138,7 @@ private fun SettingsTopBar(
             }
         },
         backgroundColor = MaterialTheme.colors.primary,
-        contentColor = Color.White
+        contentColor = Color.White,
     )
 }
 
@@ -146,11 +146,11 @@ private fun SettingsTopBar(
 private fun CredentialSettingRow(
     label: String,
     value: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Text(text = label)
         TextField(
@@ -158,7 +158,7 @@ private fun CredentialSettingRow(
             onValueChange = onValueChange,
             modifier = Modifier
                 .heightIn(min = 150.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
     }
 }
@@ -169,7 +169,7 @@ private fun CredentialSettingRowPreview() =
     CredentialSettingRow(
         label = "setting1",
         value = "some long credentials being modified here",
-        onValueChange = {}
+        onValueChange = {},
     )
 
 @Preview
@@ -183,7 +183,7 @@ private fun SettingsScreenPreview() =
 
             override suspend fun saveSettings(
                 foursquareOAuthToken: String,
-                foursquareApiKey: String
+                foursquareApiKey: String,
             ) {
             }
 
@@ -191,5 +191,5 @@ private fun SettingsScreenPreview() =
             }
         },
         navController = rememberNavController(),
-        onRecreateRequired = {}
+        onRecreateRequired = {},
     )

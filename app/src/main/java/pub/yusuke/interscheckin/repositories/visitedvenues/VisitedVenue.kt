@@ -15,7 +15,7 @@ data class VisitedVenue(
     @ColumnInfo(name = "icon_name")
     val iconName: String?,
     @ColumnInfo(name = "icon_url")
-    val iconUrl: String?
+    val iconUrl: String?,
 ) {
     companion object {
         const val TABLE_NAME = "visited_venues"

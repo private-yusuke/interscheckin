@@ -15,7 +15,7 @@ import java.io.OutputStream
  * SettingsPreferences を暗号化して保存するための Serializer
  */
 class SettingsPreferencesSerializer(
-    private val aead: Aead
+    private val aead: Aead,
 ) : Serializer<SettingsPreferences> {
     @ExperimentalSerializationApi
     override suspend fun readFrom(input: InputStream): SettingsPreferences {

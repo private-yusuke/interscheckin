@@ -11,8 +11,8 @@ object HistoriesScreenTestData {
             address = "Ibaraki, Tsukuba-shi",
             icon = HistoriesContract.Checkin.Venue.Icon(
                 name = "icon name",
-                url = "https://example.com/test.icon"
-            )
+                url = "https://example.com/test.icon",
+            ),
         )
 
     val checkin = HistoriesContract.Checkin(
@@ -20,14 +20,14 @@ object HistoriesScreenTestData {
         shout = "最高！",
         createdAt = 1672841580,
         venue = venue,
-        score = 200
+        score = 200,
     )
 
     val checkins: List<HistoriesContract.Checkin> = MutableList(10) { n ->
         checkin.copy(
             venue = venue.copy(
-                name = "test venue $n"
-            )
+                name = "test venue $n",
+            ),
         )
     }
 }

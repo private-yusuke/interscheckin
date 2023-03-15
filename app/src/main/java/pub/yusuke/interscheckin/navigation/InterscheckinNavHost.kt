@@ -8,15 +8,15 @@ import androidx.navigation.compose.NavHost
 @Composable
 fun InterscheckinNavHost(
     navController: NavHostController,
-    activity: Activity
+    activity: Activity,
 ) {
     NavHost(
         navController = navController,
-        startDestination = InterscheckinScreens.Main.name
+        startDestination = InterscheckinScreens.Main.name,
     ) {
         InterscheckinNavigations(
             navController = navController,
-            activity = activity
+            activity = activity,
         )
     }
 }

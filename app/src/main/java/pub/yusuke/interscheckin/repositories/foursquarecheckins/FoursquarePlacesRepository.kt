@@ -8,6 +8,6 @@ interface FoursquarePlacesRepository {
         longitude: Double,
         hacc: Double?,
         limit: Int? = null,
-        query: String? = null
+        query: String? = null,
     ): List<Venue>
 }

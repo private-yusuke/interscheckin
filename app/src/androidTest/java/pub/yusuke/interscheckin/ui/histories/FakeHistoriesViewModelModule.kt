@@ -11,7 +11,7 @@ import io.mockk.spyk
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [HistoriesViewModelModule::class]
+    replaces = [HistoriesViewModelModule::class],
 )
 interface FakeHistoriesViewModelModule {
     @Binds
@@ -20,7 +20,7 @@ interface FakeHistoriesViewModelModule {
     companion object {
         @Provides
         fun provideViewModel(
-            paging: HistoriesContract.Paging
+            paging: HistoriesContract.Paging,
         ): HistoriesContract.ViewModel = spyk(HistoriesViewModel(SavedStateHandle(), paging))
     }
 }

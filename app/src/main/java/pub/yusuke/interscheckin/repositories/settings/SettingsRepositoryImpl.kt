@@ -11,7 +11,7 @@ import javax.inject.Inject
  * 保存する内容を暗号化した上で保持します。
  */
 class SettingsRepositoryImpl @Inject constructor(
-    private val dataStore: DataStore<SettingsPreferences>
+    private val dataStore: DataStore<SettingsPreferences>,
 ) : SettingsRepository {
     override val settingsFlow: Flow<SettingsPreferences> =
         dataStore.data

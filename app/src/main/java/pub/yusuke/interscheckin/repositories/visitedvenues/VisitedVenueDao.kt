@@ -22,14 +22,14 @@ interface VisitedVenueDao {
                 makepoint(:latitude, :longitude, ${VisitedVenue.SRID})
             ) asc
         limit :limit
-    """
+    """,
     )
     @SkipQueryVerification
     suspend fun findByLatLong(
         latitude: Double,
         longitude: Double,
         nameLike: String = "",
-        limit: Long = 10
+        limit: Long = 10,
     ): List<VisitedVenue>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

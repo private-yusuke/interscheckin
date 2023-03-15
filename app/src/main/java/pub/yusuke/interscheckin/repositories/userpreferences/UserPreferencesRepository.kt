@@ -3,7 +3,7 @@ package pub.yusuke.interscheckin.repositories
 import kotlinx.coroutines.flow.Flow
 
 data class UserPreferences(
-    val drivingMode: Boolean
+    val drivingMode: Boolean,
 )
 
 interface UserPreferencesRepository {

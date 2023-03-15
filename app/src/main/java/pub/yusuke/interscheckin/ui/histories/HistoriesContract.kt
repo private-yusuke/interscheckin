@@ -14,7 +14,7 @@ interface HistoriesContract {
             userId: Long? = null,
             beforeTimestamp: Long? = null,
             offset: Long? = null,
-            perPage: Long
+            perPage: Long,
         ): List<Checkin>
     }
 
@@ -25,18 +25,18 @@ interface HistoriesContract {
         val shout: String?,
         val createdAt: Long,
         val venue: Venue,
-        val score: Long?
+        val score: Long?,
     ) {
         data class Venue(
             val id: String,
             val categoriesString: String,
             val name: String,
             val address: String?,
-            val icon: Icon?
+            val icon: Icon?,
         ) {
             data class Icon(
                 val name: String,
-                val url: String
+                val url: String,
             )
         }
     }

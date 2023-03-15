@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class SettingsInteractor @Inject constructor(
     private val settingsRepository: SettingsRepository,
-    private val visitedVenueDao: VisitedVenueDao
+    private val visitedVenueDao: VisitedVenueDao,
 ) : SettingsContract.Interactor {
     override fun fetchFoursquareOAuthTokenFlow(): Flow<String> =
         settingsRepository

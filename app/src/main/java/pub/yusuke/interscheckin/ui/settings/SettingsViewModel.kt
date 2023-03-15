@@ -9,7 +9,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val interactor: SettingsContract.Interactor
+    private val interactor: SettingsContract.Interactor,
 ) : ViewModel(), SettingsContract.ViewModel {
     override val reasonId: Int? = savedStateHandle["reasonId"]
 

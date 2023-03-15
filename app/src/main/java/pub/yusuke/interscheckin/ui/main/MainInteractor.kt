@@ -25,26 +25,26 @@ class MainInteractor @Inject constructor(
     private val foursquareCheckinsRepository: FoursquareCheckinsRepository,
     private val vibratorManager: VibratorManager,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
-    private val visitedVenueDao: VisitedVenueDao
+    private val visitedVenueDao: VisitedVenueDao,
 ) : MainContract.Interactor {
     override suspend fun fetchVenues(
         latitude: Double,
         longitude: Double,
         hacc: Double?,
         limit: Int?,
-        query: String?
+        query: String?,
     ): List<MainContract.Venue> {
         val remoteVenues = foursquarePlacesRepository.searchPlacesNearby(
             latitude = latitude,
             longitude = longitude,
             hacc = hacc,
             limit = limit,
-            query = query
+            query = query,
         ).translateToMainContractVenues()
         val localVenues = visitedVenueDao.findByLatLong(
             latitude = latitude,
             longitude = longitude,
-            nameLike = query.orEmpty()
+            nameLike = query.orEmpty(),
         ).translateToMainContractVenues(latitude, longitude)
 
         return remoteVenues.plus(localVenues).toSet().distinctBy {
@@ -68,12 +68,12 @@ class MainInteractor @Inject constructor(
         venueId: String,
         shout: String,
         latitude: Double,
-        longitude: Double
+        longitude: Double,
     ): MainContract.Checkin = foursquareCheckinsRepository.createCheckin(
         venueId = venueId,
         shout = shout,
         latitude = latitude,
-        longitude = longitude
+        longitude = longitude,
     ).translateToMainContractCheckin()
 
     override fun vibrate(vibrationEffect: VibrationEffect) =
@@ -91,20 +91,20 @@ class MainInteractor @Inject constructor(
             icon = this.categories.firstOrNull()?.let { category ->
                 MainContract.Venue.Icon(
                     name = category.name,
-                    url = category.icon.url()
+                    url = category.icon.url(),
                 )
-            }
+            },
         )
 
     private fun List<VisitedVenue>.translateToMainContractVenues(
         latitude: Double,
-        longitude: Double
+        longitude: Double,
     ): List<MainContract.Venue> =
         map { it.translateToMainContractVenue(latitude, longitude) }
 
     private fun VisitedVenue.translateToMainContractVenue(
         latitude: Double,
-        longitude: Double
+        longitude: Double,
     ): MainContract.Venue =
         MainContract.Venue(
             id = this.id,
@@ -114,30 +114,30 @@ class MainInteractor @Inject constructor(
                 latitude,
                 longitude,
                 this.location.x,
-                this.location.y
+                this.location.y,
             ).roundToLong(),
 
             // If `iconName` is not null, `iconUrl` is not null too
             icon = this.iconName?.let {
                 MainContract.Venue.Icon(
                     name = it,
-                    url = this.iconUrl!!
+                    url = this.iconUrl!!,
                 )
-            }
+            },
         )
 
     private fun Checkin.translateToMainContractCheckin(): MainContract.Checkin =
         MainContract.Checkin(
             id = this.venue.id,
             venueName = this.venue.name,
-            shout = this.shout
+            shout = this.shout,
         )
 
     private fun calculateDistance(
         @FloatRange(from = -90.0, to = 90.0) startLatitude: Double,
         @FloatRange(from = -180.0, to = 180.0) startLongitude: Double,
         @FloatRange(from = -90.0, to = 90.0) endLatitude: Double,
-        @FloatRange(from = -180.0, to = 180.0) endLongitude: Double
+        @FloatRange(from = -180.0, to = 180.0) endLongitude: Double,
     ): Float {
         val results = FloatArray(3)
         Location.distanceBetween(
@@ -145,7 +145,7 @@ class MainInteractor @Inject constructor(
             startLongitude,
             endLatitude,
             endLongitude,
-            results
+            results,
         )
         return results.first()
     }

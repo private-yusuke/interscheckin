@@ -5,22 +5,22 @@ import pub.yusuke.foursquareclient.models.LatAndLong
 import pub.yusuke.foursquareclient.models.Venue
 
 class FoursquarePlacesRepositoryImpl(
-    private val foursquareClient: FoursquareClient
+    private val foursquareClient: FoursquareClient,
 ) : FoursquarePlacesRepository {
     override suspend fun searchPlacesNearby(
         latitude: Double,
         longitude: Double,
         hacc: Double?,
         limit: Int?,
-        query: String?
+        query: String?,
     ): List<Venue> =
         foursquareClient.searchPlacesNearby(
             ll = LatAndLong(
                 latitude = latitude,
-                longitude = longitude
+                longitude = longitude,
             ),
             hacc = hacc,
             limit = limit,
-            query = query
+            query = query,
         )
 }

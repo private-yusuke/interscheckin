@@ -7,13 +7,13 @@ interface FoursquareCheckinsRepository {
         venueId: String,
         shout: String,
         latitude: Double,
-        longitude: Double
+        longitude: Double,
     ): Checkin
 
     suspend fun getCheckins(
         userId: Long? = null,
         offset: Long? = null,
         beforeTimestamp: Long? = null,
-        limit: Long? = null
+        limit: Long? = null,
     ): List<Checkin>
 }

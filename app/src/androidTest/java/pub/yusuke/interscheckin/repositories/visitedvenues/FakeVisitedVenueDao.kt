@@ -8,7 +8,7 @@ class FakeVisitedVenueDao @Inject constructor() : VisitedVenueDao {
         latitude: Double,
         longitude: Double,
         nameLike: String,
-        limit: Long
+        limit: Long,
     ): List<VisitedVenue> = listOf(
         VisitedVenue(
             id = "venue_id",
@@ -16,8 +16,8 @@ class FakeVisitedVenueDao @Inject constructor() : VisitedVenueDao {
             categoriesString = "Intersection",
             location = Point(0.0, 0.0),
             iconName = "Intersection",
-            iconUrl = "https://example.com/visited_venue.png"
-        )
+            iconUrl = "https://example.com/visited_venue.png",
+        ),
     )
 
     override suspend fun insertVisitedVenues(visitedVenues: List<VisitedVenue>) {}

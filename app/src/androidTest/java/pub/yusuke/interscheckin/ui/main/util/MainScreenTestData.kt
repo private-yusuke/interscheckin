@@ -12,8 +12,8 @@ object MainScreenTestData {
             distance = 1,
             icon = MainContract.Venue.Icon(
                 name = "icon name",
-                url = "https://example.com/test.icon"
-            )
+                url = "https://example.com/test.icon",
+            ),
         )
 
     val venuesStateIdle = MainContract.VenuesState.Idle(listOf(venue))

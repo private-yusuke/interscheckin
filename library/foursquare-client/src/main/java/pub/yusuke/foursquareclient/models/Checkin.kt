@@ -9,19 +9,19 @@ data class Checkin(
     val editableUntil: Long?,
     val venue: V2Venue,
     val isMayor: Boolean,
-    val score: Score?
+    val score: Score?,
 ) {
     data class V2Venue(
         val id: String,
         val name: String,
         val location: Location,
-        val categories: List<Category>
+        val categories: List<Category>,
     ) {
         data class Location(
             val state: String?,
             val city: String?,
             val lat: Double,
-            val lng: Double
+            val lng: Double,
         )
 
         data class Category(
@@ -30,17 +30,17 @@ data class Checkin(
             val pluralName: String,
             val shortName: String,
             val icon: Icon,
-            val primary: Boolean
+            val primary: Boolean,
         ) {
             data class Icon(
                 val prefix: String,
-                val suffix: String
+                val suffix: String,
             )
         }
     }
 
     data class Score(
-        val total: Long
+        val total: Long,
     )
 }
 

@@ -12,16 +12,16 @@ import pub.yusuke.interscheckin.ui.settings.SettingsScreen
 
 fun NavGraphBuilder.InterscheckinNavigations(
     navController: NavController,
-    activity: Activity
+    activity: Activity,
 ) {
     composable(InterscheckinScreens.Main.route) {
         MainScreen(
-            navController = navController
+            navController = navController,
         )
     }
     composable(
         InterscheckinScreens.Settings.route,
-        arguments = InterscheckinScreens.Settings.navArguments
+        arguments = InterscheckinScreens.Settings.navArguments,
     ) {
         SettingsScreen(
             navController = navController,
@@ -29,12 +29,12 @@ fun NavGraphBuilder.InterscheckinNavigations(
                 val intent = Intent(activity.applicationContext, MainActivity::class.java)
                 activity.startActivity(intent)
                 activity.finishAffinity()
-            }
+            },
         )
     }
     composable(InterscheckinScreens.Histories.route) {
         HistoriesScreen(
-            navController = navController
+            navController = navController,
         )
     }
 }

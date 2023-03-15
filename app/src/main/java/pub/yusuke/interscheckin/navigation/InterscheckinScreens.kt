@@ -6,7 +6,7 @@ import androidx.navigation.navArgument
 
 sealed class InterscheckinScreens(
     val name: String,
-    val navArguments: List<NamedNavArgument> = emptyList()
+    val navArguments: List<NamedNavArgument> = emptyList(),
 ) {
     val route: String = name.withArguments(navArguments)
 
@@ -19,8 +19,8 @@ sealed class InterscheckinScreens(
             navArgument("reasonId") {
                 type = NavType.ReferenceType
                 defaultValue = 0
-            }
-        )
+            },
+        ),
     ) {
         fun createRoute(reasonId: Int? = null) =
             reasonId?.let {

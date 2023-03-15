@@ -9,8 +9,8 @@ class FakeSettingsRepository @Inject constructor() : SettingsRepository {
     private val _settingsFlow = MutableStateFlow(
         SettingsPreferences(
             foursquareOAuthToken = "fake_token",
-            foursquareApiKey = "fake_key"
-        )
+            foursquareApiKey = "fake_key",
+        ),
     )
 
     override val settingsFlow: Flow<SettingsPreferences>

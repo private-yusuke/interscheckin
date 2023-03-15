@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HistoriesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    paging: HistoriesContract.Paging
+    paging: HistoriesContract.Paging,
 ) : ViewModel(), HistoriesContract.ViewModel {
     override val userId: Long? = savedStateHandle["userId"]
 
@@ -22,12 +22,12 @@ class HistoriesViewModel @Inject constructor(
         Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
-                initialLoadSize = INITIAL_LOAD_SIZE
+                initialLoadSize = INITIAL_LOAD_SIZE,
             ),
             initialKey = null,
             pagingSourceFactory = {
                 HistoriesPagingSource(userId, paging)
-            }
+            },
         ).flow.cachedIn(viewModelScope)
 
     companion object {

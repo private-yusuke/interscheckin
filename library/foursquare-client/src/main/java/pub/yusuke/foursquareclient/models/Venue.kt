@@ -10,28 +10,28 @@ data class Venue(
     val location: Location,
     val name: String,
     val related_places: RelatedPlaces?,
-    val timezone: String?
+    val timezone: String?,
 )
 
 data class Category(
     val icon: Icon,
     val id: String,
-    val name: String
+    val name: String,
 )
 
 data class Chain(
     val id: String,
-    val name: String
+    val name: String,
 )
 
 data class Geocodes(
-    val main: LatAndLong
+    val main: LatAndLong,
 //    val roof: Roof?
 )
 
 data class Icon(
     val prefix: String,
-    val suffix: String
+    val suffix: String,
 )
 
 fun Icon.url() = "${prefix}88$suffix"
@@ -46,23 +46,23 @@ data class Location(
     val formatted_address: String?,
     val locality: String?,
     val postcode: String?,
-    val region: String?
+    val region: String?,
 )
 
 data class LatAndLong(
     val latitude: Double,
-    val longitude: Double
+    val longitude: Double,
 )
 
 fun LatAndLong.llString() = "${latitude.toBigDecimal().toPlainString()},${longitude.toBigDecimal().toPlainString()}"
 
 data class Parent(
     val fsq_id: String,
-    val name: String
+    val name: String,
 )
 
 data class RelatedPlaces(
-    val parent: Parent?
+    val parent: Parent?,
 )
 
 // data class Roof(

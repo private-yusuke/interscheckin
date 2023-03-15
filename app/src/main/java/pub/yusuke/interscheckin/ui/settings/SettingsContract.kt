@@ -10,7 +10,7 @@ interface SettingsContract {
 
         suspend fun saveSettings(
             foursquareOAuthToken: String,
-            foursquareApiKey: String
+            foursquareApiKey: String,
         )
 
         suspend fun resetCachedVenues()

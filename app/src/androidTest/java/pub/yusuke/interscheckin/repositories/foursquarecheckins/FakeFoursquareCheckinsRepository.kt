@@ -11,7 +11,7 @@ class FakeFoursquareCheckinsRepository @Inject constructor() : FoursquareCheckin
             state = "茨城県",
             city = "つくば市",
             lat = 36.107565,
-            lng = 140.104733
+            lng = 140.104733,
         ),
         categories = listOf(
             Checkin.V2Venue.Category(
@@ -21,11 +21,11 @@ class FakeFoursquareCheckinsRepository @Inject constructor() : FoursquareCheckin
                 shortName = "Intersection",
                 icon = Checkin.V2Venue.Category.Icon(
                     prefix = "https://example.com/",
-                    suffix = "foo.png"
+                    suffix = "foo.png",
                 ),
-                primary = true
-            )
-        )
+                primary = true,
+            ),
+        ),
     )
 
     private val exampleCheckin = Checkin(
@@ -37,34 +37,34 @@ class FakeFoursquareCheckinsRepository @Inject constructor() : FoursquareCheckin
         editableUntil = null,
         isMayor = false,
         score = Checkin.Score(
-            total = 1
+            total = 1,
         ),
-        venue = exampleVenue
+        venue = exampleVenue,
     )
 
     override suspend fun createCheckin(
         venueId: String,
         shout: String,
         latitude: Double,
-        longitude: Double
+        longitude: Double,
     ): Checkin = exampleCheckin.copy(
         shout = shout,
         venue = exampleCheckin.venue.copy(
-            id = venueId
-        )
+            id = venueId,
+        ),
     )
 
     override suspend fun getCheckins(
         userId: Long?,
         offset: Long?,
         beforeTimestamp: Long?,
-        limit: Long?
+        limit: Long?,
     ): List<Checkin> =
         MutableList(100) { n ->
             exampleCheckin.copy(
                 venue = exampleVenue.copy(
-                    name = "test venue $n"
-                )
+                    name = "test venue $n",
+                ),
             )
         }
 }

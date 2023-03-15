@@ -5,7 +5,7 @@ import androidx.paging.PagingState
 
 class HistoriesPagingSource(
     private val userId: Long?,
-    private val paging: HistoriesContract.Paging
+    private val paging: HistoriesContract.Paging,
 ) : PagingSource<Long, HistoriesContract.Checkin>() {
 
     override suspend fun load(params: LoadParams<Long>): LoadResult<Long, HistoriesContract.Checkin> {
@@ -15,7 +15,7 @@ class HistoriesPagingSource(
             paging.load(
                 userId = userId,
                 offset = offset,
-                perPage = params.loadSize.toLong()
+                perPage = params.loadSize.toLong(),
             )
         }.fold(
             onSuccess = {
@@ -23,12 +23,12 @@ class HistoriesPagingSource(
                 LoadResult.Page(
                     data = it,
                     prevKey = if (offset - pageSize > 0) offset - pageSize else null,
-                    nextKey = if (it.isNotEmpty()) offset + pageSize else null
+                    nextKey = if (it.isNotEmpty()) offset + pageSize else null,
                 )
             },
             onFailure = {
                 LoadResult.Error(it)
-            }
+            },
         )
     }
 

@@ -21,6 +21,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.rememberScaffoldState
@@ -55,15 +57,18 @@ import pub.yusuke.fusedlocationktx.toFormattedString
 import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.navigation.InterscheckinScreens
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
-import pub.yusuke.interscheckin.ui.utils.isValidResourceId
 
 @Composable
 fun MainScreen(
     viewModel: MainContract.ViewModel = hiltViewModel<MainViewModel>(),
     navController: NavController,
 ) {
-    val drivingModeState = viewModel.drivingModeFlow
+    val drivingModeState by viewModel.drivingModeFlow
         .collectAsState(initial = false)
+    val venuesState by viewModel.venuesState
+    val locationState by viewModel.locationState
+    val checkinState by viewModel.checkinState
+    val snackbarState by viewModel.snackbarMessageState
 
     var shout by remember { mutableStateOf("") }
     var selectedVenueIdState by remember { mutableStateOf("") }
@@ -81,8 +86,8 @@ fun MainScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 VenueList(
-                    venuesState = viewModel.venuesState,
-                    locationState = viewModel.locationState,
+                    venuesState = venuesState,
+                    locationState = locationState,
                     selectedVenueIdState = selectedVenueIdState,
                     onClickVenue = { selectedVenueIdState = it },
                     modifier = Modifier
@@ -97,7 +102,7 @@ fun MainScreen(
                     },
                 )
                 Text(
-                    text = when (val it = viewModel.locationState.value) {
+                    text = when (val it = locationState) {
                         is MainContract.LocationState.Loading -> stringResource(R.string.main_location_loading)
                         is MainContract.LocationState.Loaded -> stringResource(
                             R.string.main_location_loaded,
@@ -125,8 +130,8 @@ fun MainScreen(
                                 shout = ""
                             }
                         },
-                        enabled = viewModel.locationState.value is MainContract.LocationState.Loaded &&
-                            viewModel.checkinState.value !is MainContract.CheckinState.Loading &&
+                        enabled = locationState is MainContract.LocationState.Loaded &&
+                            checkinState !is MainContract.CheckinState.Loading &&
                             selectedVenueIdState != "",
                         modifier = Modifier
                             .semantics { contentDescription = "Button for creating a Checkin" },
@@ -136,12 +141,12 @@ fun MainScreen(
                     Row(
                         modifier = Modifier
                             .toggleable(
-                                value = drivingModeState.value,
+                                value = drivingModeState,
                                 role = Role.Checkbox,
                                 onValueChange = {
                                     coroutineScope.launch {
                                         viewModel.onDrivingModeStateChanged(
-                                            !drivingModeState.value,
+                                            !drivingModeState,
                                         )
                                     }
                                 },
@@ -151,7 +156,7 @@ fun MainScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Checkbox(
-                            checked = drivingModeState.value,
+                            checked = drivingModeState,
                             onCheckedChange = null,
                         )
                         Text(
@@ -160,7 +165,7 @@ fun MainScreen(
                     }
                 }
                 Text(
-                    text = when (val it = viewModel.checkinState.value) {
+                    text = when (val it = checkinState) {
                         MainContract.CheckinState.InitialIdle ->
                             stringResource(R.string.main_message_lets_checkin_today)
                         MainContract.CheckinState.Loading ->
@@ -176,7 +181,7 @@ fun MainScreen(
                 )
                 Button(
                     onClick = { coroutineScope.launch { viewModel.onLocationUpdateRequested() } },
-                    enabled = viewModel.locationState.value is MainContract.LocationState.Loaded,
+                    enabled = locationState is MainContract.LocationState.Loaded,
                 ) {
                     Text(
                         text = stringResource(id = R.string.main_request_venue_list_update),
@@ -200,7 +205,7 @@ fun MainScreen(
                     Button(
                         onClick = {
                             navController.navigate(
-                                InterscheckinScreens.Settings.createRoute(),
+                                InterscheckinScreens.Settings.route,
                             )
                         },
                     ) {
@@ -211,25 +216,62 @@ fun MainScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.onLocationUpdateRequested()
-    }
+    SnackbarStateHandler(
+        snackbarState = snackbarState,
+        snackbarHostState = scaffoldState.snackbarHostState,
+        navController = navController,
+        onSnackbarDismissed = viewModel::onSnackbarDismissed,
+    )
+}
 
-    viewModel.navigationRequiredState.value?.let {
-        LaunchedEffect(it) {
-            navController.navigate(it)
-            viewModel.onNavigationFinished()
+@Composable
+private fun SnackbarStateHandler(
+    snackbarState: MainContract.SnackbarState,
+    snackbarHostState: SnackbarHostState,
+    navController: NavController,
+    onSnackbarDismissed: () -> Unit,
+) {
+    val snackbarMessage = snackbarState.message()
+    val snackbarActionLabel = snackbarState.actionLabel()
+
+    LaunchedEffect(snackbarState) {
+        snackbarMessage?.let { message ->
+            when (snackbarHostState.showSnackbar(message, snackbarActionLabel)) {
+                SnackbarResult.Dismissed -> onSnackbarDismissed.invoke()
+                SnackbarResult.ActionPerformed -> {
+                    snackbarState.navigation()?.let { navigation ->
+                        navController.navigate(navigation)
+                    }
+                }
+            }
         }
     }
+}
 
-    if (viewModel.snackbarMessageState.value.isValidResourceId()) {
-        val resId = viewModel.snackbarMessageState.value!!
-        val message = stringResource(resId)
-        LaunchedEffect(resId) {
-            scaffoldState.snackbarHostState.showSnackbar(message)
-            viewModel.onSnackbarDisplayed()
-        }
-    }
+@Composable
+private fun MainContract.SnackbarState.actionLabel() = when (this) {
+    MainContract.SnackbarState.None -> null
+    MainContract.SnackbarState.CredentialsNotSet -> stringResource(R.string.main_settings)
+    MainContract.SnackbarState.InvalidCredentials -> stringResource(R.string.main_settings)
+    MainContract.SnackbarState.SkipUpdatingVenueList -> null
+    is MainContract.SnackbarState.UnexpectedError -> null
+}
+
+@Composable
+private fun MainContract.SnackbarState.message() = when (this) {
+    MainContract.SnackbarState.None -> null
+    MainContract.SnackbarState.CredentialsNotSet -> stringResource(R.string.settings_reason_credentials_not_set)
+    MainContract.SnackbarState.InvalidCredentials -> stringResource(R.string.settings_reason_invalid_credentials)
+    MainContract.SnackbarState.SkipUpdatingVenueList -> stringResource(R.string.main_venues_not_updated_as_location_is_not_changed)
+    is MainContract.SnackbarState.UnexpectedError -> stringResource(R.string.main_unexpected_error_happened, this.throwable)
+}
+
+private fun MainContract.SnackbarState.navigation() = when (this) {
+    MainContract.SnackbarState.None -> null
+    MainContract.SnackbarState.CredentialsNotSet -> InterscheckinScreens.Settings.route
+    MainContract.SnackbarState.InvalidCredentials -> InterscheckinScreens.Settings.route
+    MainContract.SnackbarState.SkipUpdatingVenueList -> null
+    is MainContract.SnackbarState.UnexpectedError -> null
 }
 
 @Composable
@@ -253,8 +295,8 @@ fun VenueColumn(
 
 @Composable
 fun VenueList(
-    venuesState: State<MainContract.VenuesState>,
-    locationState: State<MainContract.LocationState>,
+    venuesState: MainContract.VenuesState,
+    locationState: MainContract.LocationState,
     selectedVenueIdState: String,
     onClickVenue: (String) -> Unit,
     onLongClickVenue: (String) -> Unit,
@@ -264,30 +306,30 @@ fun VenueList(
         modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
-        when (val it = venuesState.value) {
+        when (venuesState) {
             is MainContract.VenuesState.Error ->
                 Text(
                     modifier = modifier,
-                    text = "Error: ${(venuesState.value as MainContract.VenuesState.Error).throwable.stackTraceToString()}",
+                    text = "Error: ${venuesState.throwable.stackTraceToString()}",
                 )
             is MainContract.VenuesState.Idle ->
                 VenueColumn(
-                    venues = it.venues,
+                    venues = venuesState.venues,
                     selectedVenueIdState = selectedVenueIdState,
                     onClickVenue = onClickVenue,
                     onLongClickVenue = onLongClickVenue,
                 )
             is MainContract.VenuesState.Loading ->
                 VenueColumn(
-                    venues = it.lastVenues,
+                    venues = venuesState.lastVenues,
                     selectedVenueIdState = selectedVenueIdState,
                     onClickVenue = onClickVenue,
                     onLongClickVenue = onLongClickVenue,
                 )
         }
         if (
-            locationState.value is MainContract.LocationState.Loading ||
-            venuesState.value is MainContract.VenuesState.Loading
+            locationState is MainContract.LocationState.Loading ||
+            venuesState is MainContract.VenuesState.Loading
         ) {
             CircularProgressIndicator()
         }
@@ -365,16 +407,14 @@ private fun MainActivityScreenPreview() {
         viewModel = object : MainContract.ViewModel {
             override var venuesState: State<MainContract.VenuesState> =
                 mutableStateOf(MainContract.VenuesState.Idle(listOf(previewVenue)))
-            override val navigationRequiredState = mutableStateOf(null)
-            override val snackbarMessageState: State<Int?> = mutableStateOf(null)
+            override val snackbarMessageState: State<MainContract.SnackbarState> = mutableStateOf(MainContract.SnackbarState.None)
 
             override suspend fun onDrivingModeStateChanged(enabled: Boolean) {}
             override suspend fun checkIn(venueId: String, shout: String?) {}
 
             override fun onVibrationRequested() {}
             override suspend fun onLocationUpdateRequested() {}
-            override fun onNavigationFinished() {}
-            override fun onSnackbarDisplayed() {}
+            override fun onSnackbarDismissed() {}
 
             override val checkinState: MutableState<MainContract.CheckinState> =
                 mutableStateOf(MainContract.CheckinState.InitialIdle)

@@ -12,11 +12,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pub.yusuke.foursquareclient.FoursquareClient
 import pub.yusuke.foursquareclient.FoursquareClientImpl
-import pub.yusuke.interscheckin.R
-import pub.yusuke.interscheckin.navigation.InterscheckinScreens
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,11 +42,15 @@ class MainViewModel @Inject constructor(
         mutableStateOf(MainContract.LocationState.Loading())
     override val locationState: State<MainContract.LocationState> = _locationState
 
-    private var _navigationRequiredState: MutableState<String?> = mutableStateOf(null)
-    override val navigationRequiredState: State<String?> = _navigationRequiredState
+    private var _snackbarMessageState: MutableState<MainContract.SnackbarState> =
+        mutableStateOf(MainContract.SnackbarState.None)
+    override val snackbarMessageState: State<MainContract.SnackbarState> = _snackbarMessageState
 
-    private var _snackbarMessageState: MutableState<Int?> = mutableStateOf(null)
-    override val snackbarMessageState: State<Int?> = _snackbarMessageState
+    init {
+        viewModelScope.launch {
+            onLocationUpdateRequested()
+        }
+    }
 
     /**
      * `venuesState` の値に応じて `venuesState` を更新します。
@@ -57,8 +60,10 @@ class MainViewModel @Inject constructor(
         val lastVenues = when (val it = venuesState.value) {
             is MainContract.VenuesState.Idle ->
                 it.venues
+
             is MainContract.VenuesState.Loading ->
                 it.lastVenues
+
             is MainContract.VenuesState.Error ->
                 emptyList()
         }
@@ -66,33 +71,32 @@ class MainViewModel @Inject constructor(
             lastVenues = lastVenues,
         )
 
-        _venuesState.value = when (val it = locationState.value) {
+        when (val it = locationState.value) {
             is MainContract.LocationState.Loading ->
                 MainContract.VenuesState.Idle(emptyList())
+
             is MainContract.LocationState.Error ->
                 MainContract.VenuesState.Error(it.throwable)
+
             is MainContract.LocationState.Loaded ->
-                MainContract.VenuesState.Idle(
-                    try {
-                        interactor.fetchVenues(
-                            latitude = it.location.latitude,
-                            longitude = it.location.longitude,
-                            hacc = it.location.accuracy.toDouble(),
-                            limit = 50,
-                            query = if (drivingModeFlow.firstOrNull() == true) "交差" else "",
-                        ).sortedBy { it.distance }
-                    } catch (e: FoursquareClient.InvalidRequestTokenException) {
-                        // 認証情報を更新してもらうために画面を遷移させる
-                        _navigationRequiredState.value =
-                            InterscheckinScreens.Settings.createRoute(R.string.settings_reason_invalid_credentials)
-                        emptyList()
-                    } catch (e: FoursquareClientImpl.EmptyAPIKeyException) {
-                        // 認証情報を設定してもらうために画面を遷移させる（おそらく初回起動時）
-                        _navigationRequiredState.value =
-                            InterscheckinScreens.Settings.createRoute(R.string.settings_reason_credentials_not_set)
-                        emptyList()
-                    },
-                )
+                runCatching {
+                    fetchSortedVenues(it.location)
+                }.onSuccess {
+                    _venuesState.value = MainContract.VenuesState.Idle(it)
+                }.onFailure {
+                    _snackbarMessageState.value =
+                        when (it) {
+                            is FoursquareClient.InvalidRequestTokenException ->
+                                MainContract.SnackbarState.InvalidCredentials
+
+                            is FoursquareClientImpl.EmptyAPIKeyException ->
+                                MainContract.SnackbarState.CredentialsNotSet
+
+                            else ->
+                                MainContract.SnackbarState.UnexpectedError(it)
+                        }
+                    _venuesState.value = MainContract.VenuesState.Idle(emptyList())
+                }
         }
 
         // Venue の更新が完了したので、以降は他の要因がなければ更新の必要がない
@@ -156,8 +160,10 @@ class MainViewModel @Inject constructor(
         val lastLocation = when (val it = locationState.value) {
             is MainContract.LocationState.Loading ->
                 it.lastLocation
+
             is MainContract.LocationState.Loaded ->
                 it.location
+
             is MainContract.LocationState.Error ->
                 null
         }
@@ -175,16 +181,20 @@ class MainViewModel @Inject constructor(
         if (requireVenueUpdate) {
             updateVenuesState()
         } else {
-            _snackbarMessageState.value =
-                R.string.main_venues_not_updated_as_location_is_not_changed
+            _snackbarMessageState.value = MainContract.SnackbarState.SkipUpdatingVenueList
         }
     }
 
-    override fun onNavigationFinished() {
-        _navigationRequiredState.value = null
+    override fun onSnackbarDismissed() {
+        _snackbarMessageState.value = MainContract.SnackbarState.None
     }
 
-    override fun onSnackbarDisplayed() {
-        _snackbarMessageState.value = null
-    }
+    private suspend fun fetchSortedVenues(location: Location) =
+        interactor.fetchVenues(
+            latitude = location.latitude,
+            longitude = location.longitude,
+            hacc = location.accuracy.toDouble(),
+            limit = 50,
+            query = if (drivingModeFlow.firstOrNull() == true) "交差" else "",
+        ).sortedBy { it.distance }
 }

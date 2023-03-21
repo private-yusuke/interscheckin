@@ -1,8 +1,6 @@
 package pub.yusuke.interscheckin.navigation
 
 import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 
 sealed class InterscheckinScreens(
     val name: String,
@@ -12,22 +10,7 @@ sealed class InterscheckinScreens(
 
     // / Screen for creating checkin
     object Main : InterscheckinScreens("main")
-
-    object Settings : InterscheckinScreens(
-        name = "settings",
-        navArguments = listOf(
-            navArgument("reasonId") {
-                type = NavType.ReferenceType
-                defaultValue = 0
-            },
-        ),
-    ) {
-        fun createRoute(reasonId: Int? = null) =
-            reasonId?.let {
-                route.replace("{reasonId}", it.toString())
-            } ?: name
-    }
-
+    object Settings : InterscheckinScreens("settings")
     object Histories : InterscheckinScreens("histories")
 }
 

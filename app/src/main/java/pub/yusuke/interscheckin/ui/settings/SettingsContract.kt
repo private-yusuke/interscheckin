@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface SettingsContract {
     interface ViewModel {
-        val reasonId: Int?
         val foursquareOAuthTokenFlow: Flow<String>
         val foursquareApiKeyFlow: Flow<String>
 

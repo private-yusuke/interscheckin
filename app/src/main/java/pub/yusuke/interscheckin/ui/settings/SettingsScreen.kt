@@ -10,13 +10,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,7 +38,6 @@ import kotlinx.coroutines.launch
 import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
 import pub.yusuke.interscheckin.ui.utils.copy
-import pub.yusuke.interscheckin.ui.utils.isValidResourceId
 
 @Composable
 fun SettingsScreen(
@@ -51,11 +48,9 @@ fun SettingsScreen(
     var foursquareOAuthToken by remember { mutableStateOf("") }
     var foursquareApiKey by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState()
 
     InterscheckinTheme {
         Scaffold(
-            scaffoldState = scaffoldState,
             topBar = {
                 SettingsTopBar {
                     navController.popBackStack()
@@ -85,8 +80,6 @@ fun SettingsScreen(
                                 foursquareOAuthToken = foursquareOAuthToken,
                                 foursquareApiKey = foursquareApiKey,
                             )
-                            // Snackbar が表示されたままだとすぐにはリロードされないため、事前に dismiss する
-                            scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                             onRecreateRequired()
                         }
                     },
@@ -98,7 +91,6 @@ fun SettingsScreen(
                     onClick = {
                         coroutineScope.launch {
                             viewModel.resetCachedVenues()
-                            scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                             onRecreateRequired()
                         }
                     },
@@ -112,17 +104,6 @@ fun SettingsScreen(
     LaunchedEffect(Unit) {
         foursquareOAuthToken = viewModel.foursquareOAuthTokenFlow.first()
         foursquareApiKey = viewModel.foursquareApiKeyFlow.first()
-    }
-
-    // 遷移した理由が存在するならば Snackbar に表示
-    if (viewModel.reasonId.isValidResourceId()) {
-        val reason = stringResource(viewModel.reasonId!!)
-        LaunchedEffect(Unit) {
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = reason,
-                duration = SnackbarDuration.Long,
-            )
-        }
     }
 }
 
@@ -177,18 +158,14 @@ private fun CredentialSettingRowPreview() =
 private fun SettingsScreenPreview() =
     SettingsScreen(
         viewModel = object : SettingsContract.ViewModel {
-            override val reasonId: Int? = null
             override val foursquareOAuthTokenFlow: Flow<String> = flowOf("oauth_token")
             override val foursquareApiKeyFlow: Flow<String> = flowOf("api_key")
 
             override suspend fun saveSettings(
                 foursquareOAuthToken: String,
                 foursquareApiKey: String,
-            ) {
-            }
-
-            override suspend fun resetCachedVenues() {
-            }
+            ) {}
+            override suspend fun resetCachedVenues() {}
         },
         navController = rememberNavController(),
         onRecreateRequired = {},

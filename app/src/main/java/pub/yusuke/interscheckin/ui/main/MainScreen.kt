@@ -62,8 +62,11 @@ fun MainScreen(
     viewModel: MainContract.ViewModel = hiltViewModel<MainViewModel>(),
     navController: NavController,
 ) {
-    val drivingModeState = viewModel.drivingModeFlow
+    val drivingModeState by viewModel.drivingModeFlow
         .collectAsState(initial = false)
+    val venuesState by viewModel.venuesState
+    val locationState by viewModel.locationState
+    val checkinState by viewModel.checkinState
 
     var shout by remember { mutableStateOf("") }
     var selectedVenueIdState by remember { mutableStateOf("") }
@@ -81,8 +84,8 @@ fun MainScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 VenueList(
-                    venuesState = viewModel.venuesState,
-                    locationState = viewModel.locationState,
+                    venuesState = venuesState,
+                    locationState = locationState,
                     selectedVenueIdState = selectedVenueIdState,
                     onClickVenue = { selectedVenueIdState = it },
                     modifier = Modifier
@@ -97,7 +100,7 @@ fun MainScreen(
                     },
                 )
                 Text(
-                    text = when (val it = viewModel.locationState.value) {
+                    text = when (val it = locationState) {
                         is MainContract.LocationState.Loading -> stringResource(R.string.main_location_loading)
                         is MainContract.LocationState.Loaded -> stringResource(
                             R.string.main_location_loaded,
@@ -125,8 +128,8 @@ fun MainScreen(
                                 shout = ""
                             }
                         },
-                        enabled = viewModel.locationState.value is MainContract.LocationState.Loaded &&
-                            viewModel.checkinState.value !is MainContract.CheckinState.Loading &&
+                        enabled = locationState is MainContract.LocationState.Loaded &&
+                            checkinState !is MainContract.CheckinState.Loading &&
                             selectedVenueIdState != "",
                         modifier = Modifier
                             .semantics { contentDescription = "Button for creating a Checkin" },
@@ -136,12 +139,12 @@ fun MainScreen(
                     Row(
                         modifier = Modifier
                             .toggleable(
-                                value = drivingModeState.value,
+                                value = drivingModeState,
                                 role = Role.Checkbox,
                                 onValueChange = {
                                     coroutineScope.launch {
                                         viewModel.onDrivingModeStateChanged(
-                                            !drivingModeState.value,
+                                            !drivingModeState,
                                         )
                                     }
                                 },
@@ -151,7 +154,7 @@ fun MainScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Checkbox(
-                            checked = drivingModeState.value,
+                            checked = drivingModeState,
                             onCheckedChange = null,
                         )
                         Text(
@@ -160,7 +163,7 @@ fun MainScreen(
                     }
                 }
                 Text(
-                    text = when (val it = viewModel.checkinState.value) {
+                    text = when (val it = checkinState) {
                         MainContract.CheckinState.InitialIdle ->
                             stringResource(R.string.main_message_lets_checkin_today)
                         MainContract.CheckinState.Loading ->
@@ -176,7 +179,7 @@ fun MainScreen(
                 )
                 Button(
                     onClick = { coroutineScope.launch { viewModel.onLocationUpdateRequested() } },
-                    enabled = viewModel.locationState.value is MainContract.LocationState.Loaded,
+                    enabled = locationState is MainContract.LocationState.Loaded,
                 ) {
                     Text(
                         text = stringResource(id = R.string.main_request_venue_list_update),
@@ -253,8 +256,8 @@ fun VenueColumn(
 
 @Composable
 fun VenueList(
-    venuesState: State<MainContract.VenuesState>,
-    locationState: State<MainContract.LocationState>,
+    venuesState: MainContract.VenuesState,
+    locationState: MainContract.LocationState,
     selectedVenueIdState: String,
     onClickVenue: (String) -> Unit,
     onLongClickVenue: (String) -> Unit,
@@ -264,30 +267,30 @@ fun VenueList(
         modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
-        when (val it = venuesState.value) {
+        when (venuesState) {
             is MainContract.VenuesState.Error ->
                 Text(
                     modifier = modifier,
-                    text = "Error: ${(venuesState.value as MainContract.VenuesState.Error).throwable.stackTraceToString()}",
+                    text = "Error: ${venuesState.throwable.stackTraceToString()}",
                 )
             is MainContract.VenuesState.Idle ->
                 VenueColumn(
-                    venues = it.venues,
+                    venues = venuesState.venues,
                     selectedVenueIdState = selectedVenueIdState,
                     onClickVenue = onClickVenue,
                     onLongClickVenue = onLongClickVenue,
                 )
             is MainContract.VenuesState.Loading ->
                 VenueColumn(
-                    venues = it.lastVenues,
+                    venues = venuesState.lastVenues,
                     selectedVenueIdState = selectedVenueIdState,
                     onClickVenue = onClickVenue,
                     onLongClickVenue = onLongClickVenue,
                 )
         }
         if (
-            locationState.value is MainContract.LocationState.Loading ||
-            venuesState.value is MainContract.VenuesState.Loading
+            locationState is MainContract.LocationState.Loading ||
+            venuesState is MainContract.VenuesState.Loading
         ) {
             CircularProgressIndicator()
         }

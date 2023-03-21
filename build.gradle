@@ -17,9 +17,11 @@ buildscript {
         paging_version = '3.1.1'
         room_version = '2.5.0'
         detekt_version = '1.22.0'
+        twitter_compose_rules_version = '0.0.26'
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+        classpath "com.twitter.compose.rules:detekt:$twitter_compose_rules_version"
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
@@ -39,6 +41,7 @@ subprojects {
 
     dependencies {
         detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version"
+        detektPlugins "com.twitter.compose.rules:detekt:$twitter_compose_rules_version"
     }
 
     detekt {

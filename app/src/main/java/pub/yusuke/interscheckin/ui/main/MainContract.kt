@@ -3,6 +3,7 @@ package pub.yusuke.interscheckin.ui.main
 import android.location.Location
 import android.os.VibrationEffect
 import androidx.compose.runtime.State
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 
 interface MainContract {
@@ -78,8 +79,8 @@ interface MainContract {
         /**
          * @param lastVenues 最後に保持していた Venue たち
          */
-        class Loading(val lastVenues: List<Venue>) : VenuesState()
-        class Idle(val venues: List<Venue>) : VenuesState()
+        class Loading(val lastVenues: ImmutableList<Venue>) : VenuesState()
+        class Idle(val venues: ImmutableList<Venue>) : VenuesState()
         class Error(val throwable: Throwable) : VenuesState()
     }
 

@@ -1,0 +1,11 @@
+style:
+  active: true
+
+formatting:
+  active: true
+  autoCorrect: true
+
+  ArgumentListWrapping:
+    maxLineLength: 150
+  ParameterListWrapping:
+    maxLineLength: 150

@@ -11,6 +11,18 @@ complexity:
     # 関数に渡す引数の個数が多くなってしまっても仕方がない
     active: false
 
+coroutines:
+  active: true
+
+exceptions:
+  active: true
+
+performance:
+  active: true
+
+potential-bugs:
+  active: true
+
 style:
   active: true
   MaxLineLength:
@@ -25,12 +37,14 @@ style:
       - 'Preview'
 
 naming:
+  active: true
   FunctionNaming:
     # Composable 関連の関数は大文字で始まるという原則と衝突するので無視する
     ignoreAnnotated:
       - 'Composable'
 
 empty-blocks:
+  active: true
   EmptyFunctionBlock:
     # override された関数で空なものはプレビュー用に設定している場合があるため無視
     ignoreOverridden: true

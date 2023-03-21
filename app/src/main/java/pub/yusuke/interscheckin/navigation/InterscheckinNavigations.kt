@@ -10,6 +10,8 @@ import pub.yusuke.interscheckin.ui.histories.HistoriesScreen
 import pub.yusuke.interscheckin.ui.main.MainScreen
 import pub.yusuke.interscheckin.ui.settings.SettingsScreen
 
+// Composable な関数の中で Composable な関数っぽく呼び出されているので Supress
+@Suppress("FunctionNaming")
 fun NavGraphBuilder.InterscheckinNavigations(
     navController: NavController,
     activity: Activity,

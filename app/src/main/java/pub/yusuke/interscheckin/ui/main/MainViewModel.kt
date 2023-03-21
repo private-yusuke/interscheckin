@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pub.yusuke.foursquareclient.FoursquareClient
 import pub.yusuke.foursquareclient.FoursquareClientImpl
+import pub.yusuke.interscheckin.ui.utils.emptyImmutableList
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,7 +37,7 @@ class MainViewModel @Inject constructor(
     override val checkinState: State<MainContract.CheckinState> = _checkinState
 
     private var _venuesState: MutableState<MainContract.VenuesState> =
-        mutableStateOf(MainContract.VenuesState.Idle(emptyList()))
+        mutableStateOf(MainContract.VenuesState.Idle(emptyImmutableList()))
     override var venuesState: State<MainContract.VenuesState> = _venuesState
 
     private var _locationState: MutableState<MainContract.LocationState> =
@@ -68,19 +70,19 @@ class MainViewModel @Inject constructor(
                 emptyList()
         }
         _venuesState.value = MainContract.VenuesState.Loading(
-            lastVenues = lastVenues,
+            lastVenues = lastVenues.toImmutableList(),
         )
 
         when (val it = locationState.value) {
             is MainContract.LocationState.Loading ->
-                MainContract.VenuesState.Idle(emptyList())
+                MainContract.VenuesState.Idle(emptyImmutableList())
 
             is MainContract.LocationState.Error ->
                 MainContract.VenuesState.Error(it.throwable)
 
             is MainContract.LocationState.Loaded ->
                 runCatching {
-                    fetchSortedVenues(it.location)
+                    fetchSortedVenues(it.location).toImmutableList()
                 }.onSuccess {
                     _venuesState.value = MainContract.VenuesState.Idle(it)
                 }.onFailure {
@@ -95,7 +97,7 @@ class MainViewModel @Inject constructor(
                             else ->
                                 MainContract.SnackbarState.UnexpectedError(it)
                         }
-                    _venuesState.value = MainContract.VenuesState.Idle(emptyList())
+                    _venuesState.value = MainContract.VenuesState.Idle(emptyImmutableList())
                 }
         }
 
@@ -113,23 +115,26 @@ class MainViewModel @Inject constructor(
         val location: Location = when (val it = _locationState.value) {
             is MainContract.LocationState.Loading -> requireNotNull(it.lastLocation)
             is MainContract.LocationState.Loaded -> it.location
-            else -> throw IllegalStateException("checkIn called while location is unavailable")
+            is MainContract.LocationState.Error -> error("checkIn called while location is unavailable")
         }
 
         _checkinState.value = MainContract.CheckinState.Loading
 
-        _checkinState.value = try {
-            val checkIn = createCheckin(
+        _checkinState.value = runCatching {
+            createCheckin(
                 venueId = venueId,
                 shout = shout ?: "",
                 latitude = location.latitude,
                 longitude = location.longitude,
             )
-
-            MainContract.CheckinState.Idle(checkIn)
-        } catch (e: Exception) {
-            MainContract.CheckinState.Error(e)
-        }
+        }.fold(
+            onSuccess = {
+                MainContract.CheckinState.Idle(it)
+            },
+            onFailure = {
+                MainContract.CheckinState.Error(it)
+            }
+        )
     }
 
     override suspend fun onDrivingModeStateChanged(enabled: Boolean) {

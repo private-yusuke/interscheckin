@@ -1,15 +1,19 @@
 package pub.yusuke.foursquareclient.models
 
+import com.squareup.moshi.Json
+
 data class Venue(
     val categories: List<Category>,
     val chains: List<Chain>?,
     val distance: Long?,
-    val fsq_id: String,
+    @Json(name = "fsq_id")
+    val fsqId: String,
     val geocodes: Geocodes,
     val link: String?,
     val location: Location,
     val name: String,
-    val related_places: RelatedPlaces?,
+    @Json(name = "related_places")
+    val relatedPlaces: RelatedPlaces?,
     val timezone: String?,
 )
 
@@ -38,12 +42,16 @@ fun Icon.url() = "${prefix}88$suffix"
 
 data class Location(
     val address: String?,
-    val address_extended: String?,
-    val census_block: String?,
+    @Json(name = "address_extended")
+    val addressExtended: String?,
+    @Json(name = "census_block")
+    val censusBlock: String?,
     val country: String,
-    val cross_street: String?,
+    @Json(name = "cross_street")
+    val crossStreet: String?,
     val dma: String?,
-    val formatted_address: String?,
+    @Json(name = "formatted_address")
+    val formattedAddress: String?,
     val locality: String?,
     val postcode: String?,
     val region: String?,
@@ -57,7 +65,8 @@ data class LatAndLong(
 fun LatAndLong.llString() = "${latitude.toBigDecimal().toPlainString()},${longitude.toBigDecimal().toPlainString()}"
 
 data class Parent(
-    val fsq_id: String,
+    @Json(name = "fsq_id")
+    val fsqId: String,
     val name: String,
 )
 

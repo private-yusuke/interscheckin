@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import pub.yusuke.interscheckin.repositories.UserPreferencesRepository
+import pub.yusuke.interscheckin.repositories.userpreferences.UserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FakeFoursquareCheckinsRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FakeFoursquarePlacesRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareCheckinsRepository

@@ -51,6 +51,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import pub.yusuke.fusedlocationktx.toFormattedString
@@ -60,8 +62,9 @@ import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
 
 @Composable
 fun MainScreen(
-    viewModel: MainContract.ViewModel = hiltViewModel<MainViewModel>(),
     navController: NavController,
+    modifier: Modifier = Modifier,
+    viewModel: MainContract.ViewModel = hiltViewModel<MainViewModel>(),
 ) {
     val drivingModeState by viewModel.drivingModeFlow
         .collectAsState(initial = false)
@@ -77,11 +80,13 @@ fun MainScreen(
 
     InterscheckinTheme {
         Scaffold(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier,
             scaffoldState = scaffoldState,
         ) { innerPadding ->
             Column(
-                modifier = Modifier.padding(innerPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
@@ -90,9 +95,6 @@ fun MainScreen(
                     locationState = locationState,
                     selectedVenueIdState = selectedVenueIdState,
                     onClickVenue = { selectedVenueIdState = it },
-                    modifier = Modifier
-                        .height(225.dp)
-                        .fillMaxWidth(),
                     onLongClickVenue = { venueId ->
                         viewModel.onVibrationRequested()
                         coroutineScope.launch {
@@ -275,8 +277,8 @@ private fun MainContract.SnackbarState.navigation() = when (this) {
 }
 
 @Composable
-fun VenueColumn(
-    venues: List<MainContract.Venue>,
+private fun VenueColumn(
+    venues: ImmutableList<MainContract.Venue>,
     selectedVenueIdState: String,
     onClickVenue: (String) -> Unit,
     onLongClickVenue: (String) -> Unit,
@@ -309,7 +311,9 @@ fun VenueList(
         when (venuesState) {
             is MainContract.VenuesState.Error ->
                 Text(
-                    modifier = modifier,
+                    modifier = Modifier
+                        .height(225.dp)
+                        .fillMaxWidth(),
                     text = "Error: ${venuesState.throwable.stackTraceToString()}",
                 )
             is MainContract.VenuesState.Idle ->
@@ -338,7 +342,7 @@ fun VenueList(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun VenueRow(
+private fun VenueRow(
     selected: Boolean,
     onClick: (String) -> Unit,
     onLongClick: (String) -> Unit,
@@ -406,8 +410,8 @@ private fun MainActivityScreenPreview() {
     MainScreen(
         viewModel = object : MainContract.ViewModel {
             override var venuesState: State<MainContract.VenuesState> =
-                mutableStateOf(MainContract.VenuesState.Idle(listOf(previewVenue)))
-            override val snackbarMessageState: State<MainContract.SnackbarState> = mutableStateOf(MainContract.SnackbarState.None)
+                remember { mutableStateOf(MainContract.VenuesState.Idle(listOf(previewVenue).toImmutableList())) }
+            override val snackbarMessageState: State<MainContract.SnackbarState> = remember { mutableStateOf(MainContract.SnackbarState.None) }
 
             override suspend fun onDrivingModeStateChanged(enabled: Boolean) {}
             override suspend fun checkIn(venueId: String, shout: String?) {}
@@ -417,10 +421,10 @@ private fun MainActivityScreenPreview() {
             override fun onSnackbarDismissed() {}
 
             override val checkinState: MutableState<MainContract.CheckinState> =
-                mutableStateOf(MainContract.CheckinState.InitialIdle)
+                remember { mutableStateOf(MainContract.CheckinState.InitialIdle) }
             override val drivingModeFlow = flowOf(false)
             override val locationState: State<MainContract.LocationState> =
-                mutableStateOf(MainContract.LocationState.Loading())
+                remember { mutableStateOf(MainContract.LocationState.Loading()) }
         },
         navController = rememberNavController(),
     )

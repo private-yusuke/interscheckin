@@ -1,6 +1,7 @@
 package pub.yusuke.interscheckin.ui.main.util
 
 import android.location.Location
+import kotlinx.collections.immutable.toImmutableList
 import pub.yusuke.interscheckin.ui.main.MainContract
 
 object MainScreenTestData {
@@ -16,8 +17,8 @@ object MainScreenTestData {
             ),
         )
 
-    val venuesStateIdle = MainContract.VenuesState.Idle(listOf(venue))
-    val venuesStateLoading = MainContract.VenuesState.Loading(listOf(venue))
+    val venuesStateIdle = MainContract.VenuesState.Idle(listOf(venue).toImmutableList())
+    val venuesStateLoading = MainContract.VenuesState.Loading(listOf(venue).toImmutableList())
 
     val location = Location("")
 

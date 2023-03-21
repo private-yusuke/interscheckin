@@ -54,16 +54,16 @@ import java.time.format.FormatStyle
 
 @Composable
 fun HistoriesScreen(
-    viewModel: HistoriesContract.ViewModel = hiltViewModel<HistoriesViewModel>(),
     navController: NavController,
+    modifier: Modifier = Modifier,
+    viewModel: HistoriesContract.ViewModel = hiltViewModel<HistoriesViewModel>(),
 ) {
     val lazyPagingItems = viewModel.checkinsFlow.collectAsLazyPagingItems()
     val scaffoldState = rememberScaffoldState()
 
     InterscheckinTheme {
         Scaffold(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = modifier,
             scaffoldState = scaffoldState,
             topBar = {
                 HistoriesTopBar(
@@ -217,7 +217,7 @@ private fun CheckinRow(
 }
 
 @Composable
-fun ErrorContent(
+private fun ErrorContent(
     reason: String,
     onClick: () -> Unit,
 ) {

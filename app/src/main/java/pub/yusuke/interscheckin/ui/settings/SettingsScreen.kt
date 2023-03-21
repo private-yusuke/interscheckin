@@ -41,9 +41,10 @@ import pub.yusuke.interscheckin.ui.utils.copy
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsContract.ViewModel = hiltViewModel<SettingsViewModel>(),
     navController: NavController,
     onRecreateRequired: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: SettingsContract.ViewModel = hiltViewModel<SettingsViewModel>(),
 ) {
     var foursquareOAuthToken by remember { mutableStateOf("") }
     var foursquareApiKey by remember { mutableStateOf("") }
@@ -56,6 +57,7 @@ fun SettingsScreen(
                     navController.popBackStack()
                 }
             },
+            modifier = modifier
         ) { innerPadding ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

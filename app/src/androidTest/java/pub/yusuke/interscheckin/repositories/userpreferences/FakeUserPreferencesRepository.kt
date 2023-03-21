@@ -3,8 +3,6 @@ package pub.yusuke.interscheckin.repositories.userpreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
-import pub.yusuke.interscheckin.repositories.UserPreferences
-import pub.yusuke.interscheckin.repositories.UserPreferencesRepository
 import javax.inject.Inject
 
 class FakeUserPreferencesRepository @Inject constructor() : UserPreferencesRepository {

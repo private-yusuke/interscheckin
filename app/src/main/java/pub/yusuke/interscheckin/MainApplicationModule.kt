@@ -21,7 +21,6 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.runBlocking
 import pub.yusuke.foursquareclient.FoursquareClient
 import pub.yusuke.foursquareclient.FoursquareClientImpl
-import pub.yusuke.interscheckin.repositories.UserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareCheckinsRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareCheckinsRepositoryImpl
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlacesRepository
@@ -30,6 +29,7 @@ import pub.yusuke.interscheckin.repositories.settings.SettingsPreferences
 import pub.yusuke.interscheckin.repositories.settings.SettingsPreferencesSerializer
 import pub.yusuke.interscheckin.repositories.settings.SettingsRepository
 import pub.yusuke.interscheckin.repositories.settings.SettingsRepositoryImpl
+import pub.yusuke.interscheckin.repositories.userpreferences.UserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.userpreferences.UserPreferencesRepositoryImpl
 import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenue
 import java.io.File
@@ -47,8 +47,8 @@ class MainApplicationModule {
         val apiKey = settings.foursquareApiKey
 
         return FoursquareClientImpl(
-            oauth_token = oauthToken,
-            api_key = apiKey,
+            oauthToken = oauthToken,
+            apiKey = apiKey,
         )
     }
 

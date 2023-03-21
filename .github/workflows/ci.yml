@@ -18,7 +18,7 @@ jobs:
         java-version: '17'
         cache: 'gradle'
     - name: Lint
-      run: ./gradlew lintKotlin lint
+      run: ./gradlew detekt lint
   test:
     runs-on: ubuntu-22.04
     timeout-minutes: 30

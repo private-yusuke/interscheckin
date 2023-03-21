@@ -1,4 +1,4 @@
-package pub.yusuke.interscheckin.repositories
+package pub.yusuke.interscheckin.repositories.userpreferences
 
 import kotlinx.coroutines.flow.Flow
 

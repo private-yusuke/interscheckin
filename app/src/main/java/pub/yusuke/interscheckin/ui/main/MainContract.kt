@@ -11,8 +11,7 @@ interface MainContract {
         val locationState: State<LocationState>
         val checkinState: State<CheckinState>
         val venuesState: State<VenuesState>
-        val navigationRequiredState: State<String?>
-        val snackbarMessageState: State<Int?>
+        val snackbarMessageState: State<SnackbarState>
 
         suspend fun onDrivingModeStateChanged(enabled: Boolean)
         suspend fun checkIn(
@@ -22,8 +21,7 @@ interface MainContract {
 
         fun onVibrationRequested()
         suspend fun onLocationUpdateRequested()
-        fun onNavigationFinished()
-        fun onSnackbarDisplayed()
+        fun onSnackbarDismissed()
     }
 
     interface Interactor {
@@ -90,5 +88,13 @@ interface MainContract {
         object Loading : CheckinState()
         class Idle(val lastCheckin: Checkin) : CheckinState()
         class Error(val throwable: Throwable) : CheckinState()
+    }
+
+    sealed interface SnackbarState {
+        object None : SnackbarState
+        object SkipUpdatingVenueList : SnackbarState
+        object InvalidCredentials : SnackbarState
+        object CredentialsNotSet : SnackbarState
+        data class UnexpectedError(val throwable: Throwable) : SnackbarState
     }
 }

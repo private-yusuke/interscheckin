@@ -21,6 +21,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.rememberScaffoldState
@@ -55,7 +57,6 @@ import pub.yusuke.fusedlocationktx.toFormattedString
 import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.navigation.InterscheckinScreens
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
-import pub.yusuke.interscheckin.ui.utils.isValidResourceId
 
 @Composable
 fun MainScreen(
@@ -67,6 +68,7 @@ fun MainScreen(
     val venuesState by viewModel.venuesState
     val locationState by viewModel.locationState
     val checkinState by viewModel.checkinState
+    val snackbarState by viewModel.snackbarMessageState
 
     var shout by remember { mutableStateOf("") }
     var selectedVenueIdState by remember { mutableStateOf("") }
@@ -203,7 +205,7 @@ fun MainScreen(
                     Button(
                         onClick = {
                             navController.navigate(
-                                InterscheckinScreens.Settings.createRoute(),
+                                InterscheckinScreens.Settings.route,
                             )
                         },
                     ) {
@@ -214,25 +216,62 @@ fun MainScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.onLocationUpdateRequested()
-    }
+    SnackbarStateHandler(
+        snackbarState = snackbarState,
+        snackbarHostState = scaffoldState.snackbarHostState,
+        navController = navController,
+        onSnackbarDismissed = viewModel::onSnackbarDismissed,
+    )
+}
 
-    viewModel.navigationRequiredState.value?.let {
-        LaunchedEffect(it) {
-            navController.navigate(it)
-            viewModel.onNavigationFinished()
+@Composable
+private fun SnackbarStateHandler(
+    snackbarState: MainContract.SnackbarState,
+    snackbarHostState: SnackbarHostState,
+    navController: NavController,
+    onSnackbarDismissed: () -> Unit,
+) {
+    val snackbarMessage = snackbarState.message()
+    val snackbarActionLabel = snackbarState.actionLabel()
+
+    LaunchedEffect(snackbarState) {
+        snackbarMessage?.let { message ->
+            when (snackbarHostState.showSnackbar(message, snackbarActionLabel)) {
+                SnackbarResult.Dismissed -> onSnackbarDismissed.invoke()
+                SnackbarResult.ActionPerformed -> {
+                    snackbarState.navigation()?.let { navigation ->
+                        navController.navigate(navigation)
+                    }
+                }
+            }
         }
     }
+}
 
-    if (viewModel.snackbarMessageState.value.isValidResourceId()) {
-        val resId = viewModel.snackbarMessageState.value!!
-        val message = stringResource(resId)
-        LaunchedEffect(resId) {
-            scaffoldState.snackbarHostState.showSnackbar(message)
-            viewModel.onSnackbarDisplayed()
-        }
-    }
+@Composable
+private fun MainContract.SnackbarState.actionLabel() = when (this) {
+    MainContract.SnackbarState.None -> null
+    MainContract.SnackbarState.CredentialsNotSet -> stringResource(R.string.main_settings)
+    MainContract.SnackbarState.InvalidCredentials -> stringResource(R.string.main_settings)
+    MainContract.SnackbarState.SkipUpdatingVenueList -> null
+    is MainContract.SnackbarState.UnexpectedError -> null
+}
+
+@Composable
+private fun MainContract.SnackbarState.message() = when (this) {
+    MainContract.SnackbarState.None -> null
+    MainContract.SnackbarState.CredentialsNotSet -> stringResource(R.string.settings_reason_credentials_not_set)
+    MainContract.SnackbarState.InvalidCredentials -> stringResource(R.string.settings_reason_invalid_credentials)
+    MainContract.SnackbarState.SkipUpdatingVenueList -> stringResource(R.string.main_venues_not_updated_as_location_is_not_changed)
+    is MainContract.SnackbarState.UnexpectedError -> stringResource(R.string.main_unexpected_error_happened, this.throwable)
+}
+
+private fun MainContract.SnackbarState.navigation() = when (this) {
+    MainContract.SnackbarState.None -> null
+    MainContract.SnackbarState.CredentialsNotSet -> InterscheckinScreens.Settings.route
+    MainContract.SnackbarState.InvalidCredentials -> InterscheckinScreens.Settings.route
+    MainContract.SnackbarState.SkipUpdatingVenueList -> null
+    is MainContract.SnackbarState.UnexpectedError -> null
 }
 
 @Composable
@@ -368,16 +407,14 @@ private fun MainActivityScreenPreview() {
         viewModel = object : MainContract.ViewModel {
             override var venuesState: State<MainContract.VenuesState> =
                 mutableStateOf(MainContract.VenuesState.Idle(listOf(previewVenue)))
-            override val navigationRequiredState = mutableStateOf(null)
-            override val snackbarMessageState: State<Int?> = mutableStateOf(null)
+            override val snackbarMessageState: State<MainContract.SnackbarState> = mutableStateOf(MainContract.SnackbarState.None)
 
             override suspend fun onDrivingModeStateChanged(enabled: Boolean) {}
             override suspend fun checkIn(venueId: String, shout: String?) {}
 
             override fun onVibrationRequested() {}
             override suspend fun onLocationUpdateRequested() {}
-            override fun onNavigationFinished() {}
-            override fun onSnackbarDisplayed() {}
+            override fun onSnackbarDismissed() {}
 
             override val checkinState: MutableState<MainContract.CheckinState> =
                 mutableStateOf(MainContract.CheckinState.InitialIdle)

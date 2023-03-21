@@ -84,7 +84,7 @@ class MainInteractor @Inject constructor(
 
     private fun Venue.translateToMainContractVenue(): MainContract.Venue =
         MainContract.Venue(
-            id = this.fsq_id,
+            id = this.fsqId,
             name = this.name,
             categoriesString = this.categories.joinToString(", ") { it.name },
             distance = this.distance,

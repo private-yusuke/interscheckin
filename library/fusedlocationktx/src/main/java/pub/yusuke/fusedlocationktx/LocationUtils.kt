@@ -8,8 +8,6 @@ import com.google.android.gms.location.Priority
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-private const val LOG_TAG = "LocationUtils"
-
 fun Location.toFormattedString() = "$latitude, $longitude"
 
 @SuppressLint("MissingPermission")

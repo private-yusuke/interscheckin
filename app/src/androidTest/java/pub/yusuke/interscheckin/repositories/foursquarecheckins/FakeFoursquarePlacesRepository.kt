@@ -27,7 +27,7 @@ class FakeFoursquarePlacesRepository @Inject constructor() : FoursquarePlacesRep
                 ),
                 chains = listOf(),
                 distance = -1,
-                fsq_id = "fsq_id",
+                fsqId = "fsq_id",
                 geocodes = Geocodes(
                     LatAndLong(
                         latitude = 0.0,
@@ -37,18 +37,18 @@ class FakeFoursquarePlacesRepository @Inject constructor() : FoursquarePlacesRep
                 link = "https://example.com/",
                 location = Location(
                     address = "210 S King St",
-                    address_extended = null,
-                    census_block = "511076105052013",
+                    addressExtended = null,
+                    censusBlock = "511076105052013",
                     country = "US",
-                    cross_street = null,
+                    crossStreet = null,
                     dma = "Washington, Dc-Hagrstwn",
-                    formatted_address = "210 S King St, Leesburg, VA 20175",
+                    formattedAddress = "210 S King St, Leesburg, VA 20175",
                     locality = "Leesburg",
                     postcode = "20175",
                     region = "バージニア州",
                 ),
                 name = "Black Walnut Brewery",
-                related_places = null,
+                relatedPlaces = null,
                 timezone = "America/New_York",
             ),
         )

@@ -47,8 +47,8 @@ class MainApplicationModule {
         val apiKey = settings.foursquareApiKey
 
         return FoursquareClientImpl(
-            oauth_token = oauthToken,
-            api_key = apiKey,
+            oauthToken = oauthToken,
+            apiKey = apiKey,
         )
     }
 

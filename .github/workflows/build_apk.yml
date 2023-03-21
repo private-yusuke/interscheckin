@@ -15,7 +15,7 @@ jobs:
         java-version: '17'
         cache: 'gradle'
     - name: Lint
-      run: ./gradlew lintKotlin lint
+      run: ./gradlew detekt lint
     - name: Run tests
       run: ./gradlew testDebug --continue
     - name: Build

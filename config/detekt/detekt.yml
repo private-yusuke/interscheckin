@@ -1,11 +1,47 @@
+complexity:
+  LongMethod:
+    active: true
+    # Composable 関連は得てして長くなってしまうので無視する
+    ignoreAnnotated:
+      - 'Composable'
+  TooManyFunctions:
+    # 関数の個数が多くなってしまっても仕方がない
+    active: false
+  LongParameterList:
+    # 関数に渡す引数の個数が多くなってしまっても仕方がない
+    active: false
+
 style:
   active: true
+  MaxLineLength:
+    # formatting の MaximumLineLength と衝突するためこちらを無効にする
+    active: false
+  MagicNumber:
+    # Jetpack Compose 関連のコードでマジックナンバーを用いる機会が通常のものとして増えたため無視する
+    active: false
+  UnusedPrivateMember:
+    # @Preview が付与されているものは Android Studio のみが使ってくれるため除外
+    ignoreAnnotated:
+      - 'Preview'
+
+naming:
+  FunctionNaming:
+    # Composable 関連の関数は大文字で始まるという原則と衝突するので無視する
+    ignoreAnnotated:
+      - 'Composable'
+
+empty-blocks:
+  EmptyFunctionBlock:
+    # override された関数で空なものはプレビュー用に設定している場合があるため無視
+    ignoreOverridden: true
 
 formatting:
   active: true
   autoCorrect: true
 
+  MaximumLineLength:
+    maxLineLength: 200
   ArgumentListWrapping:
-    maxLineLength: 150
+    maxLineLength: 500
   ParameterListWrapping:
-    maxLineLength: 150
+    maxLineLength: 500

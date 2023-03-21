@@ -12,8 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import pub.yusuke.interscheckin.repositories.UserPreferences
-import pub.yusuke.interscheckin.repositories.UserPreferencesRepository
 import java.io.IOException
 
 private const val USER_PREFERENCES_NAME = "user_preferences"

@@ -11,9 +11,9 @@ import pub.yusuke.foursquareclient.models.Checkin
 import pub.yusuke.foursquareclient.models.Venue
 import pub.yusuke.foursquareclient.models.url
 import pub.yusuke.fusedlocationktx.currentLocation
-import pub.yusuke.interscheckin.repositories.UserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareCheckinsRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlacesRepository
+import pub.yusuke.interscheckin.repositories.userpreferences.UserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenue
 import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenueDao
 import javax.inject.Inject

@@ -113,23 +113,26 @@ class MainViewModel @Inject constructor(
         val location: Location = when (val it = _locationState.value) {
             is MainContract.LocationState.Loading -> requireNotNull(it.lastLocation)
             is MainContract.LocationState.Loaded -> it.location
-            else -> throw IllegalStateException("checkIn called while location is unavailable")
+            is MainContract.LocationState.Error -> error("checkIn called while location is unavailable")
         }
 
         _checkinState.value = MainContract.CheckinState.Loading
 
-        _checkinState.value = try {
-            val checkIn = createCheckin(
+        _checkinState.value = runCatching {
+            createCheckin(
                 venueId = venueId,
                 shout = shout ?: "",
                 latitude = location.latitude,
                 longitude = location.longitude,
             )
-
-            MainContract.CheckinState.Idle(checkIn)
-        } catch (e: Exception) {
-            MainContract.CheckinState.Error(e)
-        }
+        }.fold(
+            onSuccess = {
+                MainContract.CheckinState.Idle(it)
+            },
+            onFailure = {
+                MainContract.CheckinState.Error(it)
+            }
+        )
     }
 
     override suspend fun onDrivingModeStateChanged(enabled: Boolean) {

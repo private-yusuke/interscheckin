@@ -136,18 +136,20 @@ class MainApplicationModule {
         context,
         AppDatabase::class.java,
         "interscheckin",
-    ).addCallback(object : RoomDatabase.Callback() {
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            db.query(
-                """
+    ).addCallback(
+        object : RoomDatabase.Callback() {
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                super.onCreate(db)
+                db.query(
+                    """
                 select
                     RecoverGeometryColumn('visited_venues', 'location', ${VisitedVenue.SRID}, 'POINT', 'XY');
             """,
-            ).moveToNext()
-            db.query("select CreateSpatialIndex('visited_venues', 'location');").moveToNext()
-        }
-    }).build()
+                ).moveToNext()
+                db.query("select CreateSpatialIndex('visited_venues', 'location');").moveToNext()
+            }
+        },
+    ).build()
 
     @Singleton
     @Provides

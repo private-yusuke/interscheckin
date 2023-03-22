@@ -74,7 +74,7 @@ class FoursquareClientImpl(
                 }
             }
             throw it
-        }
+        },
     )
 
     override suspend fun searchPlacesNearby(
@@ -103,7 +103,7 @@ class FoursquareClientImpl(
                     }
                 }
                 throw it
-            }
+            },
         )
 
     @Deprecated(
@@ -144,7 +144,7 @@ class FoursquareClientImpl(
                 }
             }
             throw it
-        }
+        },
     )
 
     override suspend fun getAutocompleteResults(
@@ -176,7 +176,7 @@ class FoursquareClientImpl(
                 }
             }
             throw it
-        }
+        },
     )
 
     override suspend fun createCheckin(
@@ -204,7 +204,7 @@ class FoursquareClientImpl(
                 }
             }
             throw it
-        }
+        },
     )
 
     override suspend fun getUserCheckins(
@@ -230,7 +230,7 @@ class FoursquareClientImpl(
                 }
             }
             throw it
-        }
+        },
     )
 
     class EmptyOAuthTokenException(message: String) : Exception(message)

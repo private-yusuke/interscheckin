@@ -61,6 +61,8 @@ formatting:
     maxLineLength: 500
   TrailingCommaOnDeclarationSite:
     active: true
+  TrailingCommaOnCallSite:
+    active: true
 
 TwitterCompose:
   active: true

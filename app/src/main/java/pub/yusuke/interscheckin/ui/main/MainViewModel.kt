@@ -133,7 +133,7 @@ class MainViewModel @Inject constructor(
             },
             onFailure = {
                 MainContract.CheckinState.Error(it)
-            }
+            },
         )
     }
 

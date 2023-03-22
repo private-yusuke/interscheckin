@@ -57,7 +57,7 @@ fun SettingsScreen(
                     navController.popBackStack()
                 }
             },
-            modifier = modifier
+            modifier = modifier,
         ) { innerPadding ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

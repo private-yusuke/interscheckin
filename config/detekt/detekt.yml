@@ -59,6 +59,8 @@ formatting:
     maxLineLength: 500
   ParameterListWrapping:
     maxLineLength: 500
+  TrailingCommaOnDeclarationSite:
+    active: true
 
 TwitterCompose:
   active: true

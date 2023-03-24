@@ -9,6 +9,8 @@ import pub.yusuke.interscheckin.repositories.foursquarecheckins.FakeFoursquareCh
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FakeFoursquarePlacesRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareCheckinsRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlacesRepository
+import pub.yusuke.interscheckin.repositories.locationaccessacquirementscreendisplayedonce.LocationAccessAcquirementScreenDisplayedOnceRepository
+import pub.yusuke.interscheckin.repositories.locationaccessacquirementscreendisplayedonce.LocationAccessAcquirementScreenDisplayedOnceRepositoryImpl
 import pub.yusuke.interscheckin.repositories.settings.FakeSettingsRepository
 import pub.yusuke.interscheckin.repositories.settings.SettingsRepository
 import pub.yusuke.interscheckin.repositories.userpreferences.FakeUserPreferencesRepository
@@ -49,4 +51,10 @@ interface FakeMainApplicationModule {
     fun bindVisitedVenueDao(
         visitedVenueDao: FakeVisitedVenueDao,
     ): VisitedVenueDao
+
+    @Singleton
+    @Binds
+    fun bindLocationAccessAcquirementScreenDisplayedOnceRepository(
+        locationAccessAcquirementScreenDisplayedOnceRepository: LocationAccessAcquirementScreenDisplayedOnceRepositoryImpl,
+    ): LocationAccessAcquirementScreenDisplayedOnceRepository
 }

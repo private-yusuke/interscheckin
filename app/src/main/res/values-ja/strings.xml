@@ -2,6 +2,17 @@
 <resources>
     <string name="app_name">Interscheckin</string>
     <string name="main_driving_mode_checkbox_label">運転モード</string>
+    <string name="splash_interscheckin_title">Interscheckin</string>
+    <string name="location_access_acquirement_no_location_access_acquired_content_title">位置情報へのアクセスを有効化する</string>
+    <string name="location_access_acquirement_no_location_access_acquired_content_description">このアプリは venue の検索とチェックインの作成のために位置情報を利用します。アクセス許可が無い場合、チェックイン履歴の閲覧だけができます。</string>
+    <string name="location_access_acquirement_no_location_access_acquired_content_allow">許可</string>
+    <string name="location_access_acquirement_no_location_access_acquired_content_deny">拒否</string>
+    <string name="location_access_acquirement_only_coarse_location_access_acquired_content_title">正確な位置情報へのアクセスを許可する</string>
+    <string name="location_access_acquirement_only_coarse_location_access_acquired_content_description">正確な位置情報へのアクセスが許可されると Interscheckin の全体的な体験が十分に良くなるでしょう。</string>
+    <string name="location_access_acquirement_only_coarse_location_access_acquired_content_allow">許可</string>
+    <string name="location_access_acquirement_only_coarse_location_access_acquired_content_deny">拒否</string>
+    <string name="location_access_acquirement_precise_location_access_acquired_content_title">正確な位置情報へのアクセスが既に可能です</string>
+    <string name="location_access_acquirement_precise_location_access_acquired_content_description">すでに Interscheckin にあなたの正確な位置情報の取得を許可しています。やった〜！</string>
     <string name="main_request_venue_list_update">情報更新</string>
     <string name="main_unexpected_error_happened">予期しないエラーが発生しました：%1$s</string>
     <string name="settings_topbar_title">設定</string>
@@ -25,4 +36,15 @@
     <string name="main_button_histories">履歴一覧</string>
     <string name="histories_no_histories_found">履歴はありません</string>
     <string name="main_settings">設定</string>
+    <string name="location_access_acquirement_precise_location_access_acquired_content_close">閉じる</string>
+    <string name="settings_enable_location_access">位置情報へのアクセスを許可</string>
+    <string name="splash_interscheckin_loading">読み込み中……</string>
+    <string name="location_access_acquirement_precise_location_access_not_acquirable_content_title">詳細な位置情報は利用できません</string>
+    <string name="location_access_acquirement_precise_location_access_not_acquirable_content_description">詳細な位置情報へのアクセスが拒否されています。許可するためには設定を開いてください。</string>
+    <string name="location_access_acquirement_precise_location_access_not_acquirable_content_settings">設定</string>
+    <string name="location_access_acquirement_precise_location_access_not_acquirable_content_close">閉じる</string>
+    <string name="location_access_acquirement_location_access_not_acquirable_content_title">位置情報は利用できません</string>
+    <string name="location_access_acquirement_location_access_not_acquirable_content_description">位置情報へのアクセスが拒否されました。許可するためには設定を開いてください。</string>
+    <string name="location_access_acquirement_location_access_not_acquirable_content_settings">設定</string>
+    <string name="location_access_acquirement_location_access_not_acquirable_content_close">閉じる</string>
 </resources>

@@ -7,8 +7,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import pub.yusuke.interscheckin.MainActivity
 import pub.yusuke.interscheckin.ui.histories.HistoriesScreen
+import pub.yusuke.interscheckin.ui.locationaccessacquirement.LocationAccessAcquirementScreen
 import pub.yusuke.interscheckin.ui.main.MainScreen
 import pub.yusuke.interscheckin.ui.settings.SettingsScreen
+import pub.yusuke.interscheckin.ui.splash.SplashScreen
 
 // Composable な関数の中で Composable な関数っぽく呼び出されているので Supress
 @Suppress("FunctionNaming")
@@ -16,6 +18,14 @@ fun NavGraphBuilder.InterscheckinNavigations(
     navController: NavController,
     activity: Activity,
 ) {
+    composable(InterscheckinScreens.Splash.route) {
+        SplashScreen(navController = navController)
+    }
+
+    composable(InterscheckinScreens.LocationAccessAcquirement.route) {
+        LocationAccessAcquirementScreen(navController = navController)
+    }
+
     composable(InterscheckinScreens.Main.route) {
         MainScreen(
             navController = navController,

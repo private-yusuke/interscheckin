@@ -25,6 +25,8 @@ import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareChecki
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareCheckinsRepositoryImpl
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlacesRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlacesRepositoryImpl
+import pub.yusuke.interscheckin.repositories.locationaccessacquirementscreendisplayedonce.LocationAccessAcquirementScreenDisplayedOnceRepository
+import pub.yusuke.interscheckin.repositories.locationaccessacquirementscreendisplayedonce.LocationAccessAcquirementScreenDisplayedOnceRepositoryImpl
 import pub.yusuke.interscheckin.repositories.settings.SettingsPreferences
 import pub.yusuke.interscheckin.repositories.settings.SettingsPreferencesSerializer
 import pub.yusuke.interscheckin.repositories.settings.SettingsRepository
@@ -80,14 +82,6 @@ class MainApplicationModule {
         foursquareClient: FoursquareClient,
     ): FoursquarePlacesRepository {
         return FoursquarePlacesRepositoryImpl(foursquareClient)
-    }
-
-    companion object {
-        private const val KEYSET_NAME = "master_keyset"
-        private const val PREFERENCE_FILE = "master_key_preference"
-        private const val MASTER_KEY_URI = "android-keystore://master_key"
-
-        private const val DATASTORE_FILE = "settings.pb"
     }
 
     @Singleton
@@ -156,4 +150,19 @@ class MainApplicationModule {
     fun provideVisitedVenueDao(
         appDatabase: AppDatabase,
     ) = appDatabase.visitedVenueDao()
+
+    @Singleton
+    @Provides
+    fun provideLocationAccessAcquirementScreenDisplayedOnceRepository(
+        locationAccessAcquirementScreenDisplayedOnceRepository: LocationAccessAcquirementScreenDisplayedOnceRepositoryImpl,
+    ): LocationAccessAcquirementScreenDisplayedOnceRepository =
+        locationAccessAcquirementScreenDisplayedOnceRepository
+
+    companion object {
+        private const val KEYSET_NAME = "master_keyset"
+        private const val PREFERENCE_FILE = "master_key_preference"
+        private const val MASTER_KEY_URI = "android-keystore://master_key"
+
+        private const val DATASTORE_FILE = "settings.pb"
+    }
 }

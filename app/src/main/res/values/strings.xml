@@ -1,6 +1,31 @@
 <resources>
     <string name="app_name">Interscheckin</string>
 
+    <!-- SplashScreen -->
+    <string name="splash_interscheckin_title">Interscheckin</string>
+    <string name="splash_interscheckin_loading">Loading…</string>
+
+    <!-- LocationAccessAcquirementScreen -->
+    <string name="location_access_acquirement_no_location_access_acquired_content_title">Enable location access</string>
+    <string name="location_access_acquirement_no_location_access_acquired_content_description">This app uses locations for searching venues and creating checkins.\nWithout the access, you can only access to the histories of your checkins.</string>
+    <string name="location_access_acquirement_no_location_access_acquired_content_allow">Allow</string>
+    <string name="location_access_acquirement_no_location_access_acquired_content_deny">Deny</string>
+    <string name="location_access_acquirement_only_coarse_location_access_acquired_content_title">Allow access to precise location</string>
+    <string name="location_access_acquirement_only_coarse_location_access_acquired_content_description">The overall experience of Interscheckin would be sufficiently nice if you give this app the access to your precise location.</string>
+    <string name="location_access_acquirement_only_coarse_location_access_acquired_content_allow">Allow</string>
+    <string name="location_access_acquirement_only_coarse_location_access_acquired_content_deny">Deny</string>
+    <string name="location_access_acquirement_precise_location_access_acquired_content_title">Access already acquired to precise locations</string>
+    <string name="location_access_acquirement_precise_location_access_acquired_content_description">You\'ve already allowed Interscheckin to access to your precise locations. Hooray!</string>
+    <string name="location_access_acquirement_precise_location_access_acquired_content_close">close</string>
+    <string name="location_access_acquirement_precise_location_access_not_acquirable_content_title">Precise location is unavailable</string>
+    <string name="location_access_acquirement_precise_location_access_not_acquirable_content_description">You\'ve chosen not to display a dialog for precise location request anymore.\nTo enable precise location access, go to App settings.</string>
+    <string name="location_access_acquirement_precise_location_access_not_acquirable_content_settings">Settings</string>
+    <string name="location_access_acquirement_precise_location_access_not_acquirable_content_close">close</string>
+    <string name="location_access_acquirement_location_access_not_acquirable_content_title">Location access is unavailable</string>
+    <string name="location_access_acquirement_location_access_not_acquirable_content_description">You\'ve chosen not to display a dialog for location access anymore.\nTo enable location access, go to App settings.</string>
+    <string name="location_access_acquirement_location_access_not_acquirable_content_settings">Settings</string>
+    <string name="location_access_acquirement_location_access_not_acquirable_content_close">close</string>
+
     <!-- MainScreen -->
     <string name="main_request_venue_list_update">Update Venue list</string>
     <string name="main_go_to_settings_button_label">Settings</string>
@@ -26,6 +51,7 @@
     <string name="settings_reason_credentials_not_set">Please set credentials first to use Interscheckin.</string>
     <string name="settings_reason_invalid_credentials">Invalid credentials.\nConsider generating new OAuth token, or check typos.</string>
     <string name="settings_reset_cached_venues">Reset cached venues</string>
+    <string name="settings_enable_location_access">Enable location access</string>
 
     <!-- HistoriesScreen -->
     <string name="histories_topbar_title">Histories</string>

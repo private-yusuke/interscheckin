@@ -19,6 +19,7 @@
         android:theme="@style/Theme.Interscheckin"
         android:name=".MainApplication"
         android:localeConfig="@xml/locales_config"
+        android:enableOnBackInvokedCallback="true"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"

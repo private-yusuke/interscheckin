@@ -8,6 +8,9 @@ sealed class InterscheckinScreens(
 ) {
     val route: String = name.withArguments(navArguments)
 
+    object Splash : InterscheckinScreens("splash")
+    object LocationAccessAcquirement : InterscheckinScreens("locationAccessAcquirement")
+
     // / Screen for creating checkin
     object Main : InterscheckinScreens("main")
     object Settings : InterscheckinScreens("settings")

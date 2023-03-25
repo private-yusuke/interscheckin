@@ -36,6 +36,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import pub.yusuke.interscheckin.R
+import pub.yusuke.interscheckin.navigation.InterscheckinScreens
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
 import pub.yusuke.interscheckin.ui.utils.copy
 
@@ -98,6 +99,13 @@ fun SettingsScreen(
                     },
                 ) {
                     Text(stringResource(R.string.settings_reset_cached_venues))
+                }
+                Button(
+                    onClick = {
+                        navController.navigate(InterscheckinScreens.LocationAccessAcquirement.route)
+                    },
+                ) {
+                    Text(stringResource(R.string.settings_enable_location_access))
                 }
             }
         }

@@ -12,7 +12,7 @@ fun InterscheckinNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = InterscheckinScreens.Main.name,
+        startDestination = InterscheckinScreens.Splash.route,
     ) {
         InterscheckinNavigations(
             navController = navController,

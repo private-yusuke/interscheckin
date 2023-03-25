@@ -20,6 +20,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
@@ -113,6 +114,7 @@ fun MainScreen(
                             it.location.accuracy,
                         )
                         is MainContract.LocationState.Error -> it.throwable.stackTraceToString()
+                        MainContract.LocationState.Unavailable -> stringResource(R.string.main_location_unavailable)
                     },
                 )
                 TextField(
@@ -236,10 +238,17 @@ private fun SnackbarStateHandler(
 ) {
     val snackbarMessage = snackbarState.message()
     val snackbarActionLabel = snackbarState.actionLabel()
+    val snackbarDuration = snackbarState.duration()
 
     LaunchedEffect(snackbarState) {
         snackbarMessage?.let { message ->
-            when (snackbarHostState.showSnackbar(message, snackbarActionLabel)) {
+            when (
+                snackbarHostState.showSnackbar(
+                    message,
+                    snackbarActionLabel,
+                    snackbarDuration,
+                )
+            ) {
                 SnackbarResult.Dismissed -> onSnackbarDismissed.invoke()
                 SnackbarResult.ActionPerformed -> {
                     snackbarState.navigation()?.let { navigation ->
@@ -257,6 +266,8 @@ private fun MainContract.SnackbarState.actionLabel() = when (this) {
     MainContract.SnackbarState.CredentialsNotSet -> stringResource(R.string.main_settings)
     MainContract.SnackbarState.InvalidCredentials -> stringResource(R.string.main_settings)
     MainContract.SnackbarState.SkipUpdatingVenueList -> null
+    MainContract.SnackbarState.LocationProvidersNotAvailable -> stringResource(R.string.main_snackbar_location_providers_not_available_action)
+    MainContract.SnackbarState.PreciseLocationNotAvailable -> stringResource(R.string.main_snackbar_location_providers_not_available_action)
     is MainContract.SnackbarState.UnexpectedError -> null
 }
 
@@ -266,15 +277,39 @@ private fun MainContract.SnackbarState.message() = when (this) {
     MainContract.SnackbarState.CredentialsNotSet -> stringResource(R.string.settings_reason_credentials_not_set)
     MainContract.SnackbarState.InvalidCredentials -> stringResource(R.string.settings_reason_invalid_credentials)
     MainContract.SnackbarState.SkipUpdatingVenueList -> stringResource(R.string.main_venues_not_updated_as_location_is_not_changed)
+    MainContract.SnackbarState.LocationProvidersNotAvailable -> stringResource(R.string.main_snackbar_location_providers_not_available_message)
+    MainContract.SnackbarState.PreciseLocationNotAvailable -> stringResource(R.string.main_snackbar_precise_location_not_available_message)
     is MainContract.SnackbarState.UnexpectedError -> stringResource(R.string.main_unexpected_error_happened, this.throwable)
 }
 
+private fun MainContract.SnackbarState.duration() = when (this) {
+    MainContract.SnackbarState.CredentialsNotSet,
+    MainContract.SnackbarState.InvalidCredentials,
+    MainContract.SnackbarState.LocationProvidersNotAvailable,
+    MainContract.SnackbarState.PreciseLocationNotAvailable,
+    ->
+        SnackbarDuration.Indefinite
+    MainContract.SnackbarState.None,
+    MainContract.SnackbarState.SkipUpdatingVenueList,
+    is MainContract.SnackbarState.UnexpectedError,
+    ->
+        SnackbarDuration.Short
+}
+
 private fun MainContract.SnackbarState.navigation() = when (this) {
-    MainContract.SnackbarState.None -> null
-    MainContract.SnackbarState.CredentialsNotSet -> InterscheckinScreens.Settings.route
-    MainContract.SnackbarState.InvalidCredentials -> InterscheckinScreens.Settings.route
-    MainContract.SnackbarState.SkipUpdatingVenueList -> null
-    is MainContract.SnackbarState.UnexpectedError -> null
+    MainContract.SnackbarState.None,
+    MainContract.SnackbarState.SkipUpdatingVenueList,
+    is MainContract.SnackbarState.UnexpectedError,
+    ->
+        null
+    MainContract.SnackbarState.CredentialsNotSet,
+    MainContract.SnackbarState.InvalidCredentials,
+    ->
+        InterscheckinScreens.Settings.route
+    MainContract.SnackbarState.LocationProvidersNotAvailable,
+    MainContract.SnackbarState.PreciseLocationNotAvailable,
+    ->
+        InterscheckinScreens.LocationAccessAcquirement.route
 }
 
 @Composable

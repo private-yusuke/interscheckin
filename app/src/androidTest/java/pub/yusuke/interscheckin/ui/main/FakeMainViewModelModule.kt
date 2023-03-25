@@ -4,7 +4,6 @@ import android.os.VibratorManager
 import androidx.compose.runtime.mutableStateOf
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -22,10 +21,20 @@ import pub.yusuke.interscheckin.ui.main.util.MainScreenTestData
     replaces = [MainViewModelModule::class],
 )
 interface FakeMainViewModelModule {
-    @Binds
-    fun bindInteractor(interactor: MainInteractor): MainContract.Interactor
-
     companion object {
+        @Provides
+        fun provideInteractor(
+            mainInteractor: MainInteractor
+        ): MainContract.Interactor {
+            val interactor = spyk(mainInteractor)
+
+            // Assume that the access to precise locations is available
+            every { interactor.locationProvidersAvailable() } returns true
+            every { interactor.preciseLocationAccessAvailable() } returns true
+
+            return interactor
+        }
+
         @Provides
         fun provideViewModel(
             interactor: MainContract.Interactor,

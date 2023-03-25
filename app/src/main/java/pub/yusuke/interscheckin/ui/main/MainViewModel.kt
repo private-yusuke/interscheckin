@@ -49,8 +49,10 @@ class MainViewModel @Inject constructor(
     override val snackbarMessageState: State<MainContract.SnackbarState> = _snackbarMessageState
 
     init {
-        viewModelScope.launch {
-            onLocationUpdateRequested()
+        if (checkLocationAccessAvailable()) {
+            viewModelScope.launch {
+                onLocationUpdateRequested()
+            }
         }
     }
 
@@ -99,6 +101,8 @@ class MainViewModel @Inject constructor(
                         }
                     _venuesState.value = MainContract.VenuesState.Idle(emptyImmutableList())
                 }
+
+            MainContract.LocationState.Unavailable -> error("Venues cannot be loaded while locationState is Unavailable")
         }
 
         // Venue の更新が完了したので、以降は他の要因がなければ更新の必要がない
@@ -115,7 +119,10 @@ class MainViewModel @Inject constructor(
         val location: Location = when (val it = _locationState.value) {
             is MainContract.LocationState.Loading -> requireNotNull(it.lastLocation)
             is MainContract.LocationState.Loaded -> it.location
-            is MainContract.LocationState.Error -> error("checkIn called while location is unavailable")
+            is MainContract.LocationState.Error,
+            MainContract.LocationState.Unavailable,
+            ->
+                error("checkIn called while location is unavailable")
         }
 
         _checkinState.value = MainContract.CheckinState.Loading
@@ -169,7 +176,9 @@ class MainViewModel @Inject constructor(
             is MainContract.LocationState.Loaded ->
                 it.location
 
-            is MainContract.LocationState.Error ->
+            is MainContract.LocationState.Error,
+            MainContract.LocationState.Unavailable,
+            ->
                 null
         }
         _locationState.value = MainContract.LocationState.Loading(lastLocation)
@@ -202,4 +211,20 @@ class MainViewModel @Inject constructor(
             limit = 50,
             query = if (drivingModeFlow.firstOrNull() == true) "交差" else "",
         ).sortedBy { it.distance }
+
+    /**
+     * 位置情報へのアクセスが可能であるならば true を、そうでなければ false を返します。
+     * 副作用として、位置情報へのアクセスの状況に基づいて SnackbarState や {Location,Venues}State を変更します。
+     */
+    private fun checkLocationAccessAvailable(): Boolean {
+        if (!interactor.locationProvidersAvailable()) {
+            _snackbarMessageState.value = MainContract.SnackbarState.LocationProvidersNotAvailable
+            _locationState.value = MainContract.LocationState.Unavailable
+            _venuesState.value = MainContract.VenuesState.Idle(emptyImmutableList())
+            return false
+        } else if (!interactor.preciseLocationAccessAvailable()) {
+            _snackbarMessageState.value = MainContract.SnackbarState.PreciseLocationNotAvailable
+        }
+        return true
+    }
 }

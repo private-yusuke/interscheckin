@@ -50,4 +50,9 @@
     <string name="settings_location_access_already_acquired">位置情報へのアクセスがすでに可能</string>
     <string name="settings_acquire_precise_location_access">正確な位置情報へのアクセスを許可</string>
     <string name="settings_acquire_location_access">位置情報へのアクセスを許可</string>
+    <string name="main_snackbar_location_providers_not_available_action">設定</string>
+    <string name="main_snackbar_location_providers_not_available_message">位置情報が利用できません</string>
+    <string name="main_snackbar_precise_location_not_available_action">設定</string>
+    <string name="main_snackbar_precise_location_not_available_message">正確な位置情報を取得できません。お望みの venue が見つからない可能性があります</string>
+    <string name="main_location_unavailable">位置情報が利用できません</string>
 </resources>

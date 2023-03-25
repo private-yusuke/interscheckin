@@ -1,10 +1,16 @@
 package pub.yusuke.interscheckin.ui.main
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager
 import android.os.VibrationEffect
 import android.os.VibratorManager
 import androidx.annotation.FloatRange
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import pub.yusuke.foursquareclient.models.Checkin
@@ -26,6 +32,7 @@ class MainInteractor @Inject constructor(
     private val vibratorManager: VibratorManager,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val visitedVenueDao: VisitedVenueDao,
+    @ApplicationContext private val context: Context,
 ) : MainContract.Interactor {
     override suspend fun fetchVenues(
         latitude: Double,
@@ -75,6 +82,18 @@ class MainInteractor @Inject constructor(
         latitude = latitude,
         longitude = longitude,
     ).translateToMainContractCheckin()
+
+    override fun locationProvidersAvailable(): Boolean =
+        (context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager)
+            ?.let { locationManager ->
+                locationManager.getProviders(true).size > 0
+            } ?: false
+
+    override fun preciseLocationAccessAvailable(): Boolean =
+        (
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+            )
 
     override fun vibrate(vibrationEffect: VibrationEffect) =
         vibratorManager.defaultVibrator.vibrate(vibrationEffect)

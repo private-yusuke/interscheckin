@@ -43,6 +43,8 @@ interface MainContract {
             latitude: Double,
             longitude: Double,
         ): Checkin
+        fun locationProvidersAvailable(): Boolean
+        fun preciseLocationAccessAvailable(): Boolean
 
         fun vibrate(vibrationEffect: VibrationEffect)
     }
@@ -73,6 +75,7 @@ interface MainContract {
         class Loading(val lastLocation: Location? = null) : LocationState()
         class Loaded(val location: Location) : LocationState()
         class Error(val throwable: Throwable) : LocationState()
+        object Unavailable : LocationState()
     }
 
     sealed class VenuesState {
@@ -96,6 +99,8 @@ interface MainContract {
         object SkipUpdatingVenueList : SnackbarState
         object InvalidCredentials : SnackbarState
         object CredentialsNotSet : SnackbarState
+        object LocationProvidersNotAvailable : SnackbarState
+        object PreciseLocationNotAvailable : SnackbarState
         data class UnexpectedError(val throwable: Throwable) : SnackbarState
     }
 }

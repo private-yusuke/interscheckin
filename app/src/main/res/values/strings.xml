@@ -31,6 +31,7 @@
     <string name="main_go_to_settings_button_label">Settings</string>
     <string name="main_location_loading">Retrieving location…</string>
     <string name="main_location_loaded">You are at %1$s (± %2$s m)</string>
+    <string name="main_location_unavailable">Location unavailable</string>
     <string name="main_shout_placeholder">What are you up to?</string>
     <string name="main_button_checkin">Check-in</string>
     <string name="main_driving_mode_checkbox_label">driving mode</string>
@@ -42,6 +43,10 @@
     <string name="main_button_histories">Histories</string>
     <string name="main_unexpected_error_happened">An unexpected error happened: %1$s</string>
     <string name="main_settings">settings</string>
+    <string name="main_snackbar_location_providers_not_available_message">Location access is not available</string>
+    <string name="main_snackbar_location_providers_not_available_action">settings</string>
+    <string name="main_snackbar_precise_location_not_available_message">Precise location access is not available. The venue you want may not be found</string>
+    <string name="main_snackbar_precise_location_not_available_action">settings</string>
 
     <!-- SettingsScreen -->
     <string name="settings_topbar_title">Settings</string>

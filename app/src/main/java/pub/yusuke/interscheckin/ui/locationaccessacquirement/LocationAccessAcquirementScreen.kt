@@ -33,14 +33,15 @@ import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionStatus
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.navigation.InterscheckinScreens
 import pub.yusuke.interscheckin.ui.theme.InterscheckinPrimaryButton
 import pub.yusuke.interscheckin.ui.theme.InterscheckinSecondaryButton
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTextStyle
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
+import pub.yusuke.interscheckin.ui.utils.locationAccessAcquired
+import pub.yusuke.interscheckin.ui.utils.preciseLocationAccessAcquired
+import pub.yusuke.interscheckin.ui.utils.rememberLocationAccessAcquirementState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -57,12 +58,7 @@ fun LocationAccessAcquirementScreen(
             LocationAccessAcquirementContract.ScreenState.Loading,
         )
     }
-    val locationPermissionState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-        ),
-    ) {
+    val locationPermissionState = rememberLocationAccessAcquirementState {
         screenState = computeScreenState(
             it.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false),
             it.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false),
@@ -71,13 +67,9 @@ fun LocationAccessAcquirementScreen(
         )
     }
     val locationAccessAcquired = locationPermissionState
-        .permissions
-        .any {
-            it.permission == Manifest.permission.ACCESS_COARSE_LOCATION &&
-                it.status == PermissionStatus.Granted
-        }
+        .locationAccessAcquired()
     val preciseLocationAccessAcquired = locationPermissionState
-        .allPermissionsGranted
+        .preciseLocationAccessAcquired()
     val shouldShowRationaleForPreciseLocationAcquirement =
         ActivityCompat.shouldShowRequestPermissionRationale(
             activity,

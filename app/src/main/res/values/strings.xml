@@ -52,6 +52,9 @@
     <string name="settings_reason_invalid_credentials">Invalid credentials.\nConsider generating new OAuth token, or check typos.</string>
     <string name="settings_reset_cached_venues">Reset cached venues</string>
     <string name="settings_enable_location_access">Enable location access</string>
+    <string name="settings_location_access_already_acquired">Location access already acquired</string>
+    <string name="settings_acquire_precise_location_access">Acquire precise location access</string>
+    <string name="settings_acquire_location_access">Acquire location access</string>
 
     <!-- HistoriesScreen -->
     <string name="histories_topbar_title">Histories</string>

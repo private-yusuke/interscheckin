@@ -47,4 +47,7 @@
     <string name="location_access_acquirement_location_access_not_acquirable_content_description">位置情報へのアクセスが拒否されました。許可するためには設定を開いてください。</string>
     <string name="location_access_acquirement_location_access_not_acquirable_content_settings">設定</string>
     <string name="location_access_acquirement_location_access_not_acquirable_content_close">閉じる</string>
+    <string name="settings_location_access_already_acquired">位置情報へのアクセスがすでに可能</string>
+    <string name="settings_acquire_precise_location_access">正確な位置情報へのアクセスを許可</string>
+    <string name="settings_acquire_location_access">位置情報へのアクセスを許可</string>
 </resources>

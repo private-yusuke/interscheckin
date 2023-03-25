@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -39,7 +40,11 @@ import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.navigation.InterscheckinScreens
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
 import pub.yusuke.interscheckin.ui.utils.copy
+import pub.yusuke.interscheckin.ui.utils.locationAccessAcquired
+import pub.yusuke.interscheckin.ui.utils.preciseLocationAccessAcquired
+import pub.yusuke.interscheckin.ui.utils.rememberLocationAccessAcquirementState
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SettingsScreen(
     navController: NavController,
@@ -50,6 +55,7 @@ fun SettingsScreen(
     var foursquareOAuthToken by remember { mutableStateOf("") }
     var foursquareApiKey by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
+    val locationPermissionState = rememberLocationAccessAcquirementState()
 
     InterscheckinTheme {
         Scaffold(
@@ -100,13 +106,13 @@ fun SettingsScreen(
                 ) {
                     Text(stringResource(R.string.settings_reset_cached_venues))
                 }
-                Button(
+                LocationAccessAcquirementScreenButton(
+                    locationAccessAcquired = locationPermissionState.locationAccessAcquired(),
+                    preciseLocationAccessAcquired = locationPermissionState.preciseLocationAccessAcquired(),
                     onClick = {
                         navController.navigate(InterscheckinScreens.LocationAccessAcquirement.route)
                     },
-                ) {
-                    Text(stringResource(R.string.settings_enable_location_access))
-                }
+                )
             }
         }
     }
@@ -154,6 +160,25 @@ private fun CredentialSettingRow(
     }
 }
 
+@Composable
+private fun LocationAccessAcquirementScreenButton(
+    locationAccessAcquired: Boolean,
+    preciseLocationAccessAcquired: Boolean,
+    onClick: () -> Unit,
+) {
+    val buttonText = when {
+        preciseLocationAccessAcquired -> stringResource(R.string.settings_location_access_already_acquired)
+        locationAccessAcquired -> stringResource(R.string.settings_acquire_precise_location_access)
+        else -> stringResource(R.string.settings_acquire_location_access)
+    }
+    Button(
+        onClick = onClick,
+        enabled = !preciseLocationAccessAcquired,
+    ) {
+        Text(buttonText)
+    }
+}
+
 @Preview
 @Composable
 private fun CredentialSettingRowPreview() =
@@ -174,7 +199,9 @@ private fun SettingsScreenPreview() =
             override suspend fun saveSettings(
                 foursquareOAuthToken: String,
                 foursquareApiKey: String,
-            ) {}
+            ) {
+            }
+
             override suspend fun resetCachedVenues() {}
         },
         navController = rememberNavController(),

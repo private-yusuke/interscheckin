@@ -101,7 +101,7 @@ dependencies {
     implementation 'androidx.paging:paging-compose:1.0.0-alpha18'
 
     // For loading remote images with Jetpack Compose
-    implementation "io.coil-kt:coil-compose:2.2.2"
+    implementation "io.coil-kt:coil-compose:2.3.0"
 
     implementation project(path: ':library:foursquare-client')
     kapt "com.google.dagger:hilt-compiler:$hilt_version"

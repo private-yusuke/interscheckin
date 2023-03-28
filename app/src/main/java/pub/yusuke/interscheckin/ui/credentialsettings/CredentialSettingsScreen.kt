@@ -91,16 +91,6 @@ fun CredentialSettingsScreen(
                 ) {
                     Text(stringResource(R.string.credential_settings_save))
                 }
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            viewModel.resetCachedVenues()
-                            onRecreateRequired()
-                        }
-                    },
-                ) {
-                    Text(stringResource(R.string.credential_settings_reset_cached_venues))
-                }
                 LocationAccessAcquirementScreenButton(
                     locationAccessAcquired = locationPermissionState.locationAccessAcquired(),
                     preciseLocationAccessAcquired = locationPermissionState.preciseLocationAccessAcquired(),
@@ -180,8 +170,6 @@ private fun CredentialSettingsScreenPreview() =
                 foursquareApiKey: String,
             ) {
             }
-
-            override suspend fun resetCachedVenues() {}
         },
         navController = rememberNavController(),
         onRecreateRequired = {},

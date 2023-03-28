@@ -11,8 +11,6 @@ interface CredentialSettingsContract {
             foursquareOAuthToken: String,
             foursquareApiKey: String,
         )
-
-        suspend fun resetCachedVenues()
     }
 
     interface Interactor {
@@ -21,7 +19,5 @@ interface CredentialSettingsContract {
 
         suspend fun setFoursquareOAuthToken(foursquareOAuthToken: String)
         suspend fun setFoursquareApiKey(foursquareApiKey: String)
-
-        suspend fun resetCachedVenuesDatabase()
     }
 }

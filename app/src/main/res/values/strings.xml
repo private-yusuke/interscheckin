@@ -56,12 +56,19 @@
     <string name="settings_location_settings">Locations</string>
     <string name="settings_reset_settings">Reset</string>
 
+    <!-- LocationSettingsScreen -->
+    <string name="location_settings_topbar_title">Locations</string>
+
+    <!-- ResetSettingsScreen -->
+    <string name="reset_settings_topbar_title">Reset</string>
+    <string name="reset_settings_reset_cached_venues">Reset cached venues</string>
+    <string name="reset_settings_successfully_reset_cached_venues">Successfully reset cached venues</string>
+
     <!-- CredentialSettingsScreen -->
     <string name="credential_settings_topbar_title">Credentials</string>
     <string name="credential_settings_foursquare_oauth_token_label">Foursquare OAuth token</string>
     <string name="credential_settings_foursquare_api_ken">Foursquare API key</string>
     <string name="credential_settings_save">Save settings</string>
-    <string name="credential_settings_reset_cached_venues">Reset cached venues</string>
     <string name="credential_settings_enable_location_access">Enable location access</string>
     <string name="credential_settings_location_access_already_acquired">Location access already acquired</string>
     <string name="credential_settings_acquire_precise_location_access">Acquire precise location access</string>

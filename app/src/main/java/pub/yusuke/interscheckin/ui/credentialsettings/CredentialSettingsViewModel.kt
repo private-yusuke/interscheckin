@@ -18,6 +18,4 @@ class CredentialSettingsViewModel @Inject constructor(
         interactor.setFoursquareOAuthToken(foursquareOAuthToken)
         interactor.setFoursquareApiKey(foursquareApiKey)
     }
-
-    override suspend fun resetCachedVenues() = interactor.resetCachedVenuesDatabase()
 }

@@ -2,7 +2,6 @@ package pub.yusuke.foursquareclient.network
 
 import pub.yusuke.foursquareclient.models.Checkin
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -26,8 +25,6 @@ interface CheckinApiService {
         broadcast: String?,
         @Query("v")
         v: String? = "20221002",
-        @Header("Authorization")
-        authorization: String,
     ): CreateCheckinResponse
 
     data class CreateCheckinResponse(
@@ -59,8 +56,6 @@ interface CheckinApiService {
         oauthToken: String,
         @Query("v")
         v: String? = "20221002",
-        @Header("Authorization")
-        authorization: String,
     ): GetCheckinHistoriesResponse
 
     data class GetCheckinHistoriesResponse(

@@ -11,8 +11,8 @@ import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareChecki
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlacesRepository
 import pub.yusuke.interscheckin.repositories.locationaccessacquirementscreendisplayedonce.LocationAccessAcquirementScreenDisplayedOnceRepository
 import pub.yusuke.interscheckin.repositories.locationaccessacquirementscreendisplayedonce.LocationAccessAcquirementScreenDisplayedOnceRepositoryImpl
-import pub.yusuke.interscheckin.repositories.settings.FakeSettingsRepository
-import pub.yusuke.interscheckin.repositories.settings.SettingsRepository
+import pub.yusuke.interscheckin.repositories.credentialsettings.FakeCredentialSettingsRepository
+import pub.yusuke.interscheckin.repositories.credentialsettings.CredentialSettingsRepository
 import pub.yusuke.interscheckin.repositories.userpreferences.FakeUserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.visitedvenues.FakeVisitedVenueDao
 import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenueDao
@@ -33,8 +33,8 @@ interface FakeMainApplicationModule {
     @Singleton
     @Binds
     fun bindSettingsRepository(
-        settingsRepository: FakeSettingsRepository,
-    ): SettingsRepository
+        settingsRepository: FakeCredentialSettingsRepository,
+    ): CredentialSettingsRepository
 
     @Binds
     fun bindFoursquareCheckinsRepository(

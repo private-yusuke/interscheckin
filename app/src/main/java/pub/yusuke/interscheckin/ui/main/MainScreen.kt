@@ -274,8 +274,8 @@ private fun MainContract.SnackbarState.actionLabel() = when (this) {
 @Composable
 private fun MainContract.SnackbarState.message() = when (this) {
     MainContract.SnackbarState.None -> null
-    MainContract.SnackbarState.CredentialsNotSet -> stringResource(R.string.settings_reason_credentials_not_set)
-    MainContract.SnackbarState.InvalidCredentials -> stringResource(R.string.settings_reason_invalid_credentials)
+    MainContract.SnackbarState.CredentialsNotSet -> stringResource(R.string.main_snackbar_credentials_not_set)
+    MainContract.SnackbarState.InvalidCredentials -> stringResource(R.string.main_snackbar_invalid_credentials)
     MainContract.SnackbarState.SkipUpdatingVenueList -> stringResource(R.string.main_venues_not_updated_as_location_is_not_changed)
     MainContract.SnackbarState.LocationProvidersNotAvailable -> stringResource(R.string.main_snackbar_location_providers_not_available_message)
     MainContract.SnackbarState.PreciseLocationNotAvailable -> stringResource(R.string.main_snackbar_precise_location_not_available_message)
@@ -305,7 +305,7 @@ private fun MainContract.SnackbarState.navigation() = when (this) {
     MainContract.SnackbarState.CredentialsNotSet,
     MainContract.SnackbarState.InvalidCredentials,
     ->
-        InterscheckinScreens.Settings.route
+        InterscheckinScreens.CredentialSettings.route
     MainContract.SnackbarState.LocationProvidersNotAvailable,
     MainContract.SnackbarState.PreciseLocationNotAvailable,
     ->

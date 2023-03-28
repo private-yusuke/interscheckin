@@ -1,18 +1,18 @@
-package pub.yusuke.interscheckin.repositories.settings
+package pub.yusuke.interscheckin.repositories.credentialsettings
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SettingsPreferences(
+data class CredentialSettingsPreferences(
     val foursquareOAuthToken: String = "",
     val foursquareApiKey: String = "",
 )
 
-interface SettingsRepository {
-    val settingsFlow: Flow<SettingsPreferences>
+interface CredentialSettingsRepository {
+    val credentialSettingsFlow: Flow<CredentialSettingsPreferences>
 
     suspend fun setFoursquareOAuthToken(foursquareOAuthToken: String)
     suspend fun setFoursquareApiKey(foursquareApiKey: String)
-    suspend fun fetchSettings(): SettingsPreferences
+    suspend fun fetchCredentialSettings(): CredentialSettingsPreferences
 }

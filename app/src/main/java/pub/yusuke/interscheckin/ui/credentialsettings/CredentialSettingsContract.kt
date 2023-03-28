@@ -1,8 +1,8 @@
-package pub.yusuke.interscheckin.ui.settings
+package pub.yusuke.interscheckin.ui.credentialsettings
 
 import kotlinx.coroutines.flow.Flow
 
-interface SettingsContract {
+interface CredentialSettingsContract {
     interface ViewModel {
         val foursquareOAuthTokenFlow: Flow<String>
         val foursquareApiKeyFlow: Flow<String>
@@ -11,8 +11,6 @@ interface SettingsContract {
             foursquareOAuthToken: String,
             foursquareApiKey: String,
         )
-
-        suspend fun resetCachedVenues()
     }
 
     interface Interactor {
@@ -21,7 +19,5 @@ interface SettingsContract {
 
         suspend fun setFoursquareOAuthToken(foursquareOAuthToken: String)
         suspend fun setFoursquareApiKey(foursquareApiKey: String)
-
-        suspend fun resetCachedVenuesDatabase()
     }
 }

@@ -1,4 +1,4 @@
-package pub.yusuke.interscheckin.repositories.settings
+package pub.yusuke.interscheckin.repositories.credentialsettings
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
@@ -12,13 +12,13 @@ import java.io.InputStream
 import java.io.OutputStream
 
 /**
- * SettingsPreferences を暗号化して保存するための Serializer
+ * [CredentialSettingsPreferences] を暗号化して保存するための Serializer
  */
-class SettingsPreferencesSerializer(
+class CredentialSettingsPreferencesSerializer(
     private val aead: Aead,
-) : Serializer<SettingsPreferences> {
+) : Serializer<CredentialSettingsPreferences> {
     @ExperimentalSerializationApi
-    override suspend fun readFrom(input: InputStream): SettingsPreferences {
+    override suspend fun readFrom(input: InputStream): CredentialSettingsPreferences {
         return try {
             val encryptedInput = input.readBytes()
 
@@ -28,15 +28,15 @@ class SettingsPreferencesSerializer(
                 encryptedInput
             }
 
-            ProtoBuf.decodeFromByteArray(SettingsPreferences.serializer(), decryptedInput)
+            ProtoBuf.decodeFromByteArray(CredentialSettingsPreferences.serializer(), decryptedInput)
         } catch (e: SerializationException) {
             throw CorruptionException("", e)
         }
     }
 
     @ExperimentalSerializationApi
-    override suspend fun writeTo(t: SettingsPreferences, output: OutputStream) {
-        val byteArray = ProtoBuf.encodeToByteArray(SettingsPreferences.serializer(), t)
+    override suspend fun writeTo(t: CredentialSettingsPreferences, output: OutputStream) {
+        val byteArray = ProtoBuf.encodeToByteArray(CredentialSettingsPreferences.serializer(), t)
         val encryptedBytes = aead.encrypt(byteArray, null)
 
         withContext(Dispatchers.IO) {
@@ -44,6 +44,6 @@ class SettingsPreferencesSerializer(
         }
     }
 
-    override val defaultValue: SettingsPreferences =
-        SettingsPreferences()
+    override val defaultValue: CredentialSettingsPreferences =
+        CredentialSettingsPreferences()
 }

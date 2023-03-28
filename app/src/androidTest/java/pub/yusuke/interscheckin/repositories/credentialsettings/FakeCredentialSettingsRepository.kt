@@ -1,19 +1,19 @@
-package pub.yusuke.interscheckin.repositories.settings
+package pub.yusuke.interscheckin.repositories.credentialsettings
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class FakeSettingsRepository @Inject constructor() : SettingsRepository {
+class FakeCredentialSettingsRepository @Inject constructor() : CredentialSettingsRepository {
     private val _settingsFlow = MutableStateFlow(
-        SettingsPreferences(
+        CredentialSettingsPreferences(
             foursquareOAuthToken = "fake_token",
             foursquareApiKey = "fake_key",
         ),
     )
 
-    override val settingsFlow: Flow<SettingsPreferences>
+    override val credentialSettingsFlow: Flow<CredentialSettingsPreferences>
         get() = _settingsFlow
 
     override suspend fun setFoursquareOAuthToken(foursquareOAuthToken: String) {
@@ -26,6 +26,6 @@ class FakeSettingsRepository @Inject constructor() : SettingsRepository {
         _settingsFlow.tryEmit(pref.copy(foursquareApiKey = foursquareApiKey))
     }
 
-    override suspend fun fetchSettings(): SettingsPreferences =
+    override suspend fun fetchCredentialSettings(): CredentialSettingsPreferences =
         _settingsFlow.first()
 }

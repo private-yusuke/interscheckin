@@ -1,4 +1,4 @@
-package pub.yusuke.interscheckin.ui.settings
+package pub.yusuke.interscheckin.ui.credentialsettings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -46,11 +46,11 @@ import pub.yusuke.interscheckin.ui.utils.rememberLocationAccessAcquirementState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun SettingsScreen(
+fun CredentialSettingsScreen(
     navController: NavController,
     onRecreateRequired: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SettingsContract.ViewModel = hiltViewModel<SettingsViewModel>(),
+    viewModel: CredentialSettingsContract.ViewModel = hiltViewModel<CredentialSettingsViewModel>(),
 ) {
     var foursquareOAuthToken by remember { mutableStateOf("") }
     var foursquareApiKey by remember { mutableStateOf("") }
@@ -60,7 +60,7 @@ fun SettingsScreen(
     InterscheckinTheme {
         Scaffold(
             topBar = {
-                SettingsTopBar {
+                CredentialSettingsTopBar {
                     navController.popBackStack()
                 }
             },
@@ -73,12 +73,12 @@ fun SettingsScreen(
                     .padding(innerPadding.copy(top = 16.dp)),
             ) {
                 CredentialSettingRow(
-                    label = stringResource(R.string.settings_foursquare_oauth_token_label),
+                    label = stringResource(R.string.credential_settings_foursquare_oauth_token_label),
                     value = foursquareOAuthToken,
                     onValueChange = { foursquareOAuthToken = it },
                 )
                 CredentialSettingRow(
-                    label = stringResource(R.string.settings_foursquare_api_ken),
+                    label = stringResource(R.string.credential_settings_foursquare_api_ken),
                     value = foursquareApiKey,
                     onValueChange = { foursquareApiKey = it },
                 )
@@ -94,7 +94,7 @@ fun SettingsScreen(
                     },
                     enabled = foursquareApiKey.isNotBlank() && foursquareOAuthToken.isNotBlank(),
                 ) {
-                    Text(stringResource(R.string.settings_save))
+                    Text(stringResource(R.string.credential_settings_save))
                 }
                 Button(
                     onClick = {
@@ -104,7 +104,7 @@ fun SettingsScreen(
                         }
                     },
                 ) {
-                    Text(stringResource(R.string.settings_reset_cached_venues))
+                    Text(stringResource(R.string.credential_settings_reset_cached_venues))
                 }
                 LocationAccessAcquirementScreenButton(
                     locationAccessAcquired = locationPermissionState.locationAccessAcquired(),
@@ -124,11 +124,11 @@ fun SettingsScreen(
 }
 
 @Composable
-private fun SettingsTopBar(
+private fun CredentialSettingsTopBar(
     onNavigateToPreviousRoute: () -> Unit,
 ) {
     TopAppBar(
-        title = { Text(stringResource(R.string.settings_topbar_title)) },
+        title = { Text(stringResource(R.string.credential_settings_topbar_title)) },
         navigationIcon = {
             IconButton(onClick = onNavigateToPreviousRoute) {
                 Icon(Icons.Filled.ArrowBack, "backIcon")
@@ -167,9 +167,9 @@ private fun LocationAccessAcquirementScreenButton(
     onClick: () -> Unit,
 ) {
     val buttonText = when {
-        preciseLocationAccessAcquired -> stringResource(R.string.settings_location_access_already_acquired)
-        locationAccessAcquired -> stringResource(R.string.settings_acquire_precise_location_access)
-        else -> stringResource(R.string.settings_acquire_location_access)
+        preciseLocationAccessAcquired -> stringResource(R.string.credential_settings_location_access_already_acquired)
+        locationAccessAcquired -> stringResource(R.string.credential_settings_acquire_precise_location_access)
+        else -> stringResource(R.string.credential_settings_acquire_location_access)
     }
     Button(
         onClick = onClick,
@@ -190,9 +190,9 @@ private fun CredentialSettingRowPreview() =
 
 @Preview
 @Composable
-private fun SettingsScreenPreview() =
-    SettingsScreen(
-        viewModel = object : SettingsContract.ViewModel {
+private fun CredentialSettingsScreenPreview() =
+    CredentialSettingsScreen(
+        viewModel = object : CredentialSettingsContract.ViewModel {
             override val foursquareOAuthTokenFlow: Flow<String> = flowOf("oauth_token")
             override val foursquareApiKeyFlow: Flow<String> = flowOf("api_key")
 

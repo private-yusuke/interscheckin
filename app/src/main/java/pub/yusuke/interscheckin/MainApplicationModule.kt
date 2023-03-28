@@ -21,16 +21,16 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.runBlocking
 import pub.yusuke.foursquareclient.FoursquareClient
 import pub.yusuke.foursquareclient.FoursquareClientImpl
+import pub.yusuke.interscheckin.repositories.credentialsettings.CredentialCredentialSettingsRepositoryImpl
+import pub.yusuke.interscheckin.repositories.credentialsettings.CredentialSettingsPreferences
+import pub.yusuke.interscheckin.repositories.credentialsettings.CredentialSettingsPreferencesSerializer
+import pub.yusuke.interscheckin.repositories.credentialsettings.CredentialSettingsRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareCheckinsRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareCheckinsRepositoryImpl
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlacesRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlacesRepositoryImpl
 import pub.yusuke.interscheckin.repositories.locationaccessacquirementscreendisplayedonce.LocationAccessAcquirementScreenDisplayedOnceRepository
 import pub.yusuke.interscheckin.repositories.locationaccessacquirementscreendisplayedonce.LocationAccessAcquirementScreenDisplayedOnceRepositoryImpl
-import pub.yusuke.interscheckin.repositories.settings.SettingsPreferences
-import pub.yusuke.interscheckin.repositories.settings.SettingsPreferencesSerializer
-import pub.yusuke.interscheckin.repositories.settings.SettingsRepository
-import pub.yusuke.interscheckin.repositories.settings.SettingsRepositoryImpl
 import pub.yusuke.interscheckin.repositories.userpreferences.UserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.userpreferences.UserPreferencesRepositoryImpl
 import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenue
@@ -42,9 +42,9 @@ import javax.inject.Singleton
 class MainApplicationModule {
     @Provides
     fun provideFoursquareClient(
-        settingsRepository: SettingsRepository,
+        credentialSettingsRepository: CredentialSettingsRepository,
     ): FoursquareClient {
-        val settings = runBlocking { settingsRepository.fetchSettings() }
+        val settings = runBlocking { credentialSettingsRepository.fetchCredentialSettings() }
         val oauthToken = settings.foursquareOAuthToken
         val apiKey = settings.foursquareApiKey
 
@@ -65,9 +65,9 @@ class MainApplicationModule {
     @Singleton
     @Provides
     fun provideSettingsRepository(
-        dataStore: DataStore<SettingsPreferences>,
-    ): SettingsRepository {
-        return SettingsRepositoryImpl(dataStore)
+        dataStore: DataStore<CredentialSettingsPreferences>,
+    ): CredentialSettingsRepository {
+        return CredentialCredentialSettingsRepositoryImpl(dataStore)
     }
 
     @Provides
@@ -105,10 +105,10 @@ class MainApplicationModule {
     fun provideSettingsDataStore(
         application: Application,
         aead: Aead,
-    ): DataStore<SettingsPreferences> {
+    ): DataStore<CredentialSettingsPreferences> {
         return DataStoreFactory.create(
             produceFile = { File(application.filesDir, "datastore/$DATASTORE_FILE") },
-            serializer = SettingsPreferencesSerializer(aead),
+            serializer = CredentialSettingsPreferencesSerializer(aead),
         )
     }
 

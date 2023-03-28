@@ -1,8 +1,8 @@
-package pub.yusuke.interscheckin.ui.settings
+package pub.yusuke.interscheckin.ui.credentialsettings
 
 import kotlinx.coroutines.flow.Flow
 
-interface SettingsContract {
+interface CredentialSettingsContract {
     interface ViewModel {
         val foursquareOAuthTokenFlow: Flow<String>
         val foursquareApiKeyFlow: Flow<String>

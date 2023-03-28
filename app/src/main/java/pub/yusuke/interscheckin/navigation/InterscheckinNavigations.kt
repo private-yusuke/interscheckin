@@ -6,10 +6,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import pub.yusuke.interscheckin.MainActivity
+import pub.yusuke.interscheckin.ui.credentialsettings.CredentialSettingsScreen
 import pub.yusuke.interscheckin.ui.histories.HistoriesScreen
 import pub.yusuke.interscheckin.ui.locationaccessacquirement.LocationAccessAcquirementScreen
 import pub.yusuke.interscheckin.ui.main.MainScreen
-import pub.yusuke.interscheckin.ui.settings.SettingsScreen
 import pub.yusuke.interscheckin.ui.splash.SplashScreen
 
 // Composable な関数の中で Composable な関数っぽく呼び出されているので Supress
@@ -31,11 +31,8 @@ fun NavGraphBuilder.InterscheckinNavigations(
             navController = navController,
         )
     }
-    composable(
-        InterscheckinScreens.Settings.route,
-        arguments = InterscheckinScreens.Settings.navArguments,
-    ) {
-        SettingsScreen(
+    composable(InterscheckinScreens.CredentialSettings.route) {
+        CredentialSettingsScreen(
             navController = navController,
             onRecreateRequired = {
                 val intent = Intent(activity.applicationContext, MainActivity::class.java)

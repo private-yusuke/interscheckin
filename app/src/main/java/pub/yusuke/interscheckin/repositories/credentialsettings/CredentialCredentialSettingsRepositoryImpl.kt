@@ -1,4 +1,4 @@
-package pub.yusuke.interscheckin.repositories.settings
+package pub.yusuke.interscheckin.repositories.credentialsettings
 
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.Flow
@@ -10,14 +10,14 @@ import javax.inject.Inject
 /**
  * 保存する内容を暗号化した上で保持します。
  */
-class SettingsRepositoryImpl @Inject constructor(
-    private val dataStore: DataStore<SettingsPreferences>,
-) : SettingsRepository {
-    override val settingsFlow: Flow<SettingsPreferences> =
+class CredentialCredentialSettingsRepositoryImpl @Inject constructor(
+    private val dataStore: DataStore<CredentialSettingsPreferences>,
+) : CredentialSettingsRepository {
+    override val credentialSettingsFlow: Flow<CredentialSettingsPreferences> =
         dataStore.data
             .catch {
                 if (it is IOException) {
-                    emit(SettingsPreferences())
+                    emit(CredentialSettingsPreferences())
                 } else {
                     throw it
                 }
@@ -35,6 +35,6 @@ class SettingsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchSettings(): SettingsPreferences =
+    override suspend fun fetchCredentialSettings(): CredentialSettingsPreferences =
         dataStore.data.first()
 }

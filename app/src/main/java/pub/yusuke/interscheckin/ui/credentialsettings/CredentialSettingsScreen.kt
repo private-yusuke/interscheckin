@@ -24,21 +24,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import pub.yusuke.interscheckin.R
-import pub.yusuke.interscheckin.navigation.InterscheckinScreens
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
 import pub.yusuke.interscheckin.ui.utils.InterscheckinTopBar
 import pub.yusuke.interscheckin.ui.utils.copy
-import pub.yusuke.interscheckin.ui.utils.locationAccessAcquired
-import pub.yusuke.interscheckin.ui.utils.preciseLocationAccessAcquired
-import pub.yusuke.interscheckin.ui.utils.rememberLocationAccessAcquirementState
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CredentialSettingsScreen(
     navController: NavController,
@@ -49,7 +43,6 @@ fun CredentialSettingsScreen(
     var foursquareOAuthToken by remember { mutableStateOf("") }
     var foursquareApiKey by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
-    val locationPermissionState = rememberLocationAccessAcquirementState()
 
     InterscheckinTheme {
         Scaffold(
@@ -91,13 +84,6 @@ fun CredentialSettingsScreen(
                 ) {
                     Text(stringResource(R.string.credential_settings_save))
                 }
-                LocationAccessAcquirementScreenButton(
-                    locationAccessAcquired = locationPermissionState.locationAccessAcquired(),
-                    preciseLocationAccessAcquired = locationPermissionState.preciseLocationAccessAcquired(),
-                    onClick = {
-                        navController.navigate(InterscheckinScreens.LocationAccessAcquirement.route)
-                    },
-                )
             }
         }
     }
@@ -126,25 +112,6 @@ private fun CredentialSettingRow(
                 .heightIn(min = 150.dp)
                 .fillMaxWidth(),
         )
-    }
-}
-
-@Composable
-private fun LocationAccessAcquirementScreenButton(
-    locationAccessAcquired: Boolean,
-    preciseLocationAccessAcquired: Boolean,
-    onClick: () -> Unit,
-) {
-    val buttonText = when {
-        preciseLocationAccessAcquired -> stringResource(R.string.credential_settings_location_access_already_acquired)
-        locationAccessAcquired -> stringResource(R.string.credential_settings_acquire_precise_location_access)
-        else -> stringResource(R.string.credential_settings_acquire_location_access)
-    }
-    Button(
-        onClick = onClick,
-        enabled = !preciseLocationAccessAcquired,
-    ) {
-        Text(buttonText)
     }
 }
 

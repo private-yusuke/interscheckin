@@ -9,6 +9,7 @@ import pub.yusuke.interscheckin.MainActivity
 import pub.yusuke.interscheckin.ui.credentialsettings.CredentialSettingsScreen
 import pub.yusuke.interscheckin.ui.histories.HistoriesScreen
 import pub.yusuke.interscheckin.ui.locationaccessacquirement.LocationAccessAcquirementScreen
+import pub.yusuke.interscheckin.ui.locationsettings.LocationSettingsScreen
 import pub.yusuke.interscheckin.ui.main.MainScreen
 import pub.yusuke.interscheckin.ui.resetsettings.ResetSettingsScreen
 import pub.yusuke.interscheckin.ui.settings.SettingsScreen
@@ -47,6 +48,7 @@ fun NavGraphBuilder.InterscheckinNavigations(
         )
     }
     composable(InterscheckinScreens.LocationSettings.route) {
+        LocationSettingsScreen(navController = navController)
     }
     composable(InterscheckinScreens.ResetSettings.route) {
         ResetSettingsScreen(navController = navController)

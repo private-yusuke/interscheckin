@@ -193,7 +193,6 @@ class FoursquareClientImpl(
             broadcast = broadcast,
             ll = ll,
             oauthToken = oauthToken,
-            authorization = apiKey,
         ).response.checkin
     }.fold(
         onSuccess = { it },
@@ -219,7 +218,6 @@ class FoursquareClientImpl(
             limit = limit,
             beforeTimestamp = beforeTimestamp,
             oauthToken = oauthToken,
-            authorization = apiKey,
         ).response.checkins.items
     }.fold(
         onSuccess = { it },

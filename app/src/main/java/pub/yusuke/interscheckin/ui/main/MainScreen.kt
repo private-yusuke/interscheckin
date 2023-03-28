@@ -210,7 +210,7 @@ fun MainScreen(
                     Button(
                         onClick = {
                             navController.navigate(
-                                InterscheckinScreens.CredentialSettings.route,
+                                InterscheckinScreens.Settings.route,
                             )
                         },
                     ) {

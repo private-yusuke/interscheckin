@@ -13,7 +13,10 @@ sealed class InterscheckinScreens(
 
     // / Screen for creating checkin
     object Main : InterscheckinScreens("main")
+    object Settings : InterscheckinScreens("settings")
     object CredentialSettings : InterscheckinScreens("credentialSettings")
+    object LocationSettings : InterscheckinScreens("locationSettings")
+    object ResetSettings : InterscheckinScreens("resetSettings")
     object Histories : InterscheckinScreens("histories")
 }
 

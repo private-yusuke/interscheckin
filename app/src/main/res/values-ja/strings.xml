@@ -15,7 +15,7 @@
     <string name="location_access_acquirement_precise_location_access_acquired_content_description">すでに Interscheckin にあなたの正確な位置情報の取得を許可しています。やった〜！</string>
     <string name="main_request_venue_list_update">情報更新</string>
     <string name="main_unexpected_error_happened">予期しないエラーが発生しました：%1$s</string>
-    <string name="credential_settings_topbar_title">設定</string>
+    <string name="credential_settings_topbar_title">認証情報</string>
     <string name="main_go_to_settings_button_label">設定</string>
     <string name="credential_settings_foursquare_oauth_token_label">Foursquare OAuth トークン</string>
     <string name="credential_settings_foursquare_api_ken">Foursquare API キー</string>
@@ -55,4 +55,8 @@
     <string name="main_snackbar_precise_location_not_available_action">設定</string>
     <string name="main_snackbar_precise_location_not_available_message">正確な位置情報を取得できません。お望みの venue が見つからない可能性があります</string>
     <string name="main_location_unavailable">位置情報が利用できません</string>
+    <string name="settings_credential_settings">認証情報</string>
+    <string name="settings_topbar_title">設定</string>
+    <string name="settings_location_settings">位置情報</string>
+    <string name="settings_reset_settings">リセット</string>
 </resources>

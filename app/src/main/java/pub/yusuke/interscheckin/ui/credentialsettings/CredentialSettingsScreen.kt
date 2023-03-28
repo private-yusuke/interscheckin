@@ -6,15 +6,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,7 +18,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,6 +32,7 @@ import kotlinx.coroutines.launch
 import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.navigation.InterscheckinScreens
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
+import pub.yusuke.interscheckin.ui.utils.InterscheckinTopBar
 import pub.yusuke.interscheckin.ui.utils.copy
 import pub.yusuke.interscheckin.ui.utils.locationAccessAcquired
 import pub.yusuke.interscheckin.ui.utils.preciseLocationAccessAcquired
@@ -60,9 +54,10 @@ fun CredentialSettingsScreen(
     InterscheckinTheme {
         Scaffold(
             topBar = {
-                CredentialSettingsTopBar {
-                    navController.popBackStack()
-                }
+                InterscheckinTopBar(
+                    titleText = stringResource(R.string.credential_settings_topbar_title),
+                    onClickNavigationIcon = { navController.popBackStack() },
+                )
             },
             modifier = modifier,
         ) { innerPadding ->
@@ -121,22 +116,6 @@ fun CredentialSettingsScreen(
         foursquareOAuthToken = viewModel.foursquareOAuthTokenFlow.first()
         foursquareApiKey = viewModel.foursquareApiKeyFlow.first()
     }
-}
-
-@Composable
-private fun CredentialSettingsTopBar(
-    onNavigateToPreviousRoute: () -> Unit,
-) {
-    TopAppBar(
-        title = { Text(stringResource(R.string.credential_settings_topbar_title)) },
-        navigationIcon = {
-            IconButton(onClick = onNavigateToPreviousRoute) {
-                Icon(Icons.Filled.ArrowBack, "backIcon")
-            }
-        },
-        backgroundColor = MaterialTheme.colors.primary,
-        contentColor = Color.White,
-    )
 }
 
 @Composable

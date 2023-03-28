@@ -4,7 +4,7 @@
     <string name="main_driving_mode_checkbox_label">運転モード</string>
     <string name="splash_interscheckin_title">Interscheckin</string>
     <string name="location_access_acquirement_no_location_access_acquired_content_title">位置情報へのアクセスを有効化する</string>
-    <string name="location_access_acquirement_no_location_access_acquired_content_description">このアプリは venue の検索とチェックインの作成のために位置情報を利用します。アクセス許可が無い場合、チェックイン履歴の閲覧だけができます。</string>
+    <string name="location_access_acquirement_no_location_access_acquired_content_description">このアプリは Venue の検索とチェックインの作成のために位置情報を利用します。アクセス許可が無い場合、チェックイン履歴の閲覧だけができます。</string>
     <string name="location_access_acquirement_no_location_access_acquired_content_allow">許可</string>
     <string name="location_access_acquirement_no_location_access_acquired_content_deny">拒否</string>
     <string name="location_access_acquirement_only_coarse_location_access_acquired_content_title">正確な位置情報へのアクセスを許可する</string>
@@ -53,7 +53,7 @@
     <string name="main_snackbar_location_providers_not_available_action">設定</string>
     <string name="main_snackbar_location_providers_not_available_message">位置情報が利用できません</string>
     <string name="main_snackbar_precise_location_not_available_action">設定</string>
-    <string name="main_snackbar_precise_location_not_available_message">正確な位置情報を取得できません。お望みの venue が見つからない可能性があります</string>
+    <string name="main_snackbar_precise_location_not_available_message">正確な位置情報を取得できません。お望みの Venue が見つからない可能性があります</string>
     <string name="main_location_unavailable">位置情報が利用できません</string>
     <string name="settings_credential_settings">認証情報</string>
     <string name="settings_topbar_title">設定</string>
@@ -61,5 +61,5 @@
     <string name="settings_reset_settings">リセット</string>
     <string name="location_settings_topbar_title">位置情報</string>
     <string name="reset_settings_topbar_title">リセット</string>
-    <string name="reset_settings_successfully_reset_cached_venues">キャッシュされた venue を正常にリセットしました</string>
+    <string name="reset_settings_successfully_reset_cached_venues">キャッシュされた Venue を正常にリセットしました</string>
 </resources>

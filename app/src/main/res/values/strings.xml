@@ -45,7 +45,7 @@
     <string name="main_settings">settings</string>
     <string name="main_snackbar_location_providers_not_available_message">Location access is not available</string>
     <string name="main_snackbar_location_providers_not_available_action">settings</string>
-    <string name="main_snackbar_precise_location_not_available_message">Precise location access is not available. The venue you want may not be found</string>
+    <string name="main_snackbar_precise_location_not_available_message">Precise location access is not available. The Venue you want may not be found</string>
     <string name="main_snackbar_precise_location_not_available_action">settings</string>
     <string name="main_snackbar_credentials_not_set">Please set credentials first to use Interscheckin.</string>
     <string name="main_snackbar_invalid_credentials">Invalid credentials.\nConsider generating new OAuth token, or check typos.</string>

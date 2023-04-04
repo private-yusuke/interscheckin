@@ -134,5 +134,5 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
 
     // Requesting the permission for location access within screens written with Jetpack Compose
-    implementation "com.google.accompanist:accompanist-permissions:0.30.0"
+    implementation "com.google.accompanist:accompanist-permissions:0.30.1"
 }

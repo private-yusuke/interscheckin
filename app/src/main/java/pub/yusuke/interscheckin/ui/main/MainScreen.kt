@@ -24,6 +24,7 @@ import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -220,10 +221,17 @@ fun MainScreen(
                     }
                 }
                 (periodicLocationRetrievalEnabledState as? MainContract.PeriodicLocationRetrievalState.Enabled)?.let {
-                    Text(
-                        text = stringResource(R.string.main_periodic_location_retrieval_enabled, it.interval),
-                        style = InterscheckinTextStyle.Large,
-                    )
+                    TextButton(
+                        onClick = { navController.navigate(InterscheckinScreens.LocationSettings.route) },
+                    ) {
+                        Text(
+                            text = stringResource(
+                                R.string.main_periodic_location_retrieval_enabled,
+                                it.interval,
+                            ),
+                            style = InterscheckinTextStyle.Large,
+                        )
+                    }
                 }
             }
         }

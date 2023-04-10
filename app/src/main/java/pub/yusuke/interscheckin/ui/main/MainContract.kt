@@ -3,8 +3,10 @@ package pub.yusuke.interscheckin.ui.main
 import android.location.Location
 import android.os.VibrationEffect
 import androidx.compose.runtime.State
+import com.google.android.gms.location.LocationRequest
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
+import pub.yusuke.interscheckin.repositories.periodiclocationretrieval.PeriodicLocationRetrievalPreferences
 
 interface MainContract {
     interface ViewModel {
@@ -13,6 +15,7 @@ interface MainContract {
         val checkinState: State<CheckinState>
         val venuesState: State<VenuesState>
         val snackbarMessageState: State<SnackbarState>
+        val periodicLocationRetrievalEnabledState: State<PeriodicLocationRetrievalState>
 
         suspend fun onDrivingModeStateChanged(enabled: Boolean)
         suspend fun checkIn(
@@ -35,6 +38,9 @@ interface MainContract {
         ): List<Venue>
 
         suspend fun fetchLocation(): Location
+        fun fetchLocationFlow(
+            locationRequest: LocationRequest,
+        ): Flow<Location>
         fun fetchDrivingModeFlow(): Flow<Boolean>
         suspend fun enableDrivingMode(enabled: Boolean)
         suspend fun createCheckin(
@@ -45,6 +51,8 @@ interface MainContract {
         ): Checkin
         fun locationProvidersAvailable(): Boolean
         fun preciseLocationAccessAvailable(): Boolean
+
+        fun fetchPeriodicLocationRetrievalPreferencesFlow(): Flow<PeriodicLocationRetrievalPreferences>
 
         fun vibrate(vibrationEffect: VibrationEffect)
     }
@@ -102,5 +110,12 @@ interface MainContract {
         object LocationProvidersNotAvailable : SnackbarState
         object PreciseLocationNotAvailable : SnackbarState
         data class UnexpectedError(val throwable: Throwable) : SnackbarState
+    }
+
+    sealed interface PeriodicLocationRetrievalState {
+        object Disabled : PeriodicLocationRetrievalState
+        data class Enabled(
+            val interval: Long,
+        ) : PeriodicLocationRetrievalState
     }
 }

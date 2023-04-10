@@ -31,6 +31,8 @@ import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlaces
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlacesRepositoryImpl
 import pub.yusuke.interscheckin.repositories.locationaccessacquirementscreendisplayedonce.LocationAccessAcquirementScreenDisplayedOnceRepository
 import pub.yusuke.interscheckin.repositories.locationaccessacquirementscreendisplayedonce.LocationAccessAcquirementScreenDisplayedOnceRepositoryImpl
+import pub.yusuke.interscheckin.repositories.periodiclocationretrieval.PeriodicLocationRetrievalRepository
+import pub.yusuke.interscheckin.repositories.periodiclocationretrieval.PreferencesDataStorePeriodicLocationRetrievalRepository
 import pub.yusuke.interscheckin.repositories.userpreferences.UserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.userpreferences.UserPreferencesRepositoryImpl
 import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenue
@@ -157,6 +159,13 @@ class MainApplicationModule {
         locationAccessAcquirementScreenDisplayedOnceRepository: LocationAccessAcquirementScreenDisplayedOnceRepositoryImpl,
     ): LocationAccessAcquirementScreenDisplayedOnceRepository =
         locationAccessAcquirementScreenDisplayedOnceRepository
+
+    @Singleton
+    @Provides
+    fun providePeriodicLocationRetrievalRepository(
+        @ApplicationContext context: Context,
+    ): PeriodicLocationRetrievalRepository =
+        PreferencesDataStorePeriodicLocationRetrievalRepository(context)
 
     companion object {
         private const val KEYSET_NAME = "master_keyset"

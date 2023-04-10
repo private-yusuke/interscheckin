@@ -60,6 +60,14 @@
     <string name="settings_location_settings">位置情報</string>
     <string name="settings_reset_settings">リセット</string>
     <string name="location_settings_topbar_title">位置情報</string>
+    <string name="location_settings_periodic_location_retrieval_enabled">有効</string>
     <string name="reset_settings_topbar_title">リセット</string>
     <string name="reset_settings_successfully_reset_cached_venues">キャッシュされた Venue を正常にリセットしました</string>
+    <string name="location_settings_periodic_location_retrieval_column_title">定期的な位置情報の取得</string>
+    <string name="location_settings_location_access_acquirement_screen_column_title">位置情報へのアクセス取得</string>
+    <string name="location_settings_periodic_location_retrieval_interval_preset_low">低（%1$d 秒毎）</string>
+    <string name="location_settings_periodic_location_retrieval_interval_preset_medium">中（%1$d 秒毎）</string>
+    <string name="location_settings_periodic_location_retrieval_interval_preset_high">高（%1$d 秒毎）</string>
+    <string name="location_settings_periodic_location_retrieval_interval_preset_column_title">間隔プリセット</string>
+    <string name="main_periodic_location_retrieval_enabled">%1$s 秒毎に自動更新されています</string>
 </resources>

@@ -43,6 +43,7 @@
     <string name="main_button_histories">Histories</string>
     <string name="main_unexpected_error_happened">An unexpected error happened: %1$s</string>
     <string name="main_settings">settings</string>
+    <string name="main_periodic_location_retrieval_enabled">Automatically updating every %1$s second(s)</string>
     <string name="main_snackbar_location_providers_not_available_message">Location access is not available</string>
     <string name="main_snackbar_location_providers_not_available_action">settings</string>
     <string name="main_snackbar_precise_location_not_available_message">Precise location access is not available. The Venue you want may not be found</string>
@@ -58,6 +59,13 @@
 
     <!-- LocationSettingsScreen -->
     <string name="location_settings_topbar_title">Locations</string>
+    <string name="location_settings_location_access_acquirement_screen_column_title">Location access acquirement</string>
+    <string name="location_settings_periodic_location_retrieval_enabled">enabled</string>
+    <string name="location_settings_periodic_location_retrieval_column_title">periodic location retrieval</string>
+    <string name="location_settings_periodic_location_retrieval_interval_preset_column_title">interval preset</string>
+    <string name="location_settings_periodic_location_retrieval_interval_preset_low">Low (every %1$d seconds)</string>
+    <string name="location_settings_periodic_location_retrieval_interval_preset_medium">Medium (every %1$d seconds)</string>
+    <string name="location_settings_periodic_location_retrieval_interval_preset_high">High (every %1$d second)</string>
 
     <!-- ResetSettingsScreen -->
     <string name="reset_settings_topbar_title">Reset</string>

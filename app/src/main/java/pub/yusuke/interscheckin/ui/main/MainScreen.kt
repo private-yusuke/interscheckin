@@ -24,6 +24,7 @@ import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -58,6 +59,7 @@ import kotlinx.coroutines.launch
 import pub.yusuke.fusedlocationktx.toFormattedString
 import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.navigation.InterscheckinScreens
+import pub.yusuke.interscheckin.ui.theme.InterscheckinTextStyle
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
 
 @Composable
@@ -72,6 +74,7 @@ fun MainScreen(
     val locationState by viewModel.locationState
     val checkinState by viewModel.checkinState
     val snackbarState by viewModel.snackbarMessageState
+    val periodicLocationRetrievalEnabledState by viewModel.periodicLocationRetrievalEnabledState
 
     var shout by remember { mutableStateOf("") }
     var selectedVenueIdState by remember { mutableStateOf("") }
@@ -215,6 +218,19 @@ fun MainScreen(
                         },
                     ) {
                         Text(stringResource(R.string.main_go_to_settings_button_label))
+                    }
+                }
+                (periodicLocationRetrievalEnabledState as? MainContract.PeriodicLocationRetrievalState.Enabled)?.let {
+                    TextButton(
+                        onClick = { navController.navigate(InterscheckinScreens.LocationSettings.route) },
+                    ) {
+                        Text(
+                            text = stringResource(
+                                R.string.main_periodic_location_retrieval_enabled,
+                                it.interval,
+                            ),
+                            style = InterscheckinTextStyle.Large,
+                        )
                     }
                 }
             }
@@ -448,6 +464,7 @@ private fun MainActivityScreenPreview() {
             override var venuesState: State<MainContract.VenuesState> =
                 remember { mutableStateOf(MainContract.VenuesState.Idle(listOf(previewVenue).toImmutableList())) }
             override val snackbarMessageState: State<MainContract.SnackbarState> = remember { mutableStateOf(MainContract.SnackbarState.None) }
+            override val periodicLocationRetrievalEnabledState: State<MainContract.PeriodicLocationRetrievalState> = remember { mutableStateOf(MainContract.PeriodicLocationRetrievalState.Disabled) }
 
             override suspend fun onDrivingModeStateChanged(enabled: Boolean) {}
             override suspend fun checkIn(venueId: String, shout: String?) {}

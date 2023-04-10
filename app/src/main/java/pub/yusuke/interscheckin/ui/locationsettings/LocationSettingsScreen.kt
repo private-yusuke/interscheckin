@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.navigation.InterscheckinScreens
+import pub.yusuke.interscheckin.navigation.entity.PeriodicLocationRetrievalIntervalPreset
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTextStyle
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
 import pub.yusuke.interscheckin.ui.utils.InterscheckinTopBar
@@ -152,8 +153,8 @@ private fun PeriodicLocationRetrievalSettingsColumn(
     enabled: Boolean,
     periodicLocationRetrievalEnabled: Boolean,
     onPeriodicLocationRetrievalEnabledCheckedChange: (Boolean) -> Unit,
-    periodicLocationRetrievalIntervalPreset: LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset,
-    onPeriodicLocationRetrievalIntervalPresetChanged: (LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset) -> Unit,
+    periodicLocationRetrievalIntervalPreset: PeriodicLocationRetrievalIntervalPreset,
+    onPeriodicLocationRetrievalIntervalPresetChanged: (PeriodicLocationRetrievalIntervalPreset) -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -209,8 +210,8 @@ private fun PeriodicLocationRetrievalEnabledSettingsRow(
 @Composable
 private fun PeriodicLocationRetrievalIntervalPresetSettingsColumn(
     enabled: Boolean,
-    periodicLocationRetrievalIntervalPreset: LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset,
-    onPeriodicLocationRetrievalIntervalPresetChanged: (LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset) -> Unit,
+    periodicLocationRetrievalIntervalPreset: PeriodicLocationRetrievalIntervalPreset,
+    onPeriodicLocationRetrievalIntervalPresetChanged: (PeriodicLocationRetrievalIntervalPreset) -> Unit,
 ) {
     Column {
         Text(
@@ -219,9 +220,9 @@ private fun PeriodicLocationRetrievalIntervalPresetSettingsColumn(
             color = Color.Black.copy(LocalContentAlpha.current),
         )
         listOf(
-            LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.High,
-            LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.Medium,
-            LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.Low,
+            PeriodicLocationRetrievalIntervalPreset.High,
+            PeriodicLocationRetrievalIntervalPreset.Medium,
+            PeriodicLocationRetrievalIntervalPreset.Low,
         ).forEach {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -246,8 +247,8 @@ private fun PeriodicLocationRetrievalIntervalPresetSettingsColumn(
 }
 
 @Composable
-private fun LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.name(): String = when (this) {
-    LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.Low -> stringResource(R.string.location_settings_periodic_location_retrieval_interval_preset_low, interval)
-    LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.Medium -> stringResource(R.string.location_settings_periodic_location_retrieval_interval_preset_medium, interval)
-    LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.High -> stringResource(R.string.location_settings_periodic_location_retrieval_interval_preset_high, interval)
+private fun PeriodicLocationRetrievalIntervalPreset.name(): String = when (this) {
+    PeriodicLocationRetrievalIntervalPreset.Low -> stringResource(R.string.location_settings_periodic_location_retrieval_interval_preset_low, interval)
+    PeriodicLocationRetrievalIntervalPreset.Medium -> stringResource(R.string.location_settings_periodic_location_retrieval_interval_preset_medium, interval)
+    PeriodicLocationRetrievalIntervalPreset.High -> stringResource(R.string.location_settings_periodic_location_retrieval_interval_preset_high, interval)
 }

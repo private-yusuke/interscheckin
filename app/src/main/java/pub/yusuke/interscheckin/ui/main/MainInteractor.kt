@@ -10,6 +10,7 @@ import android.os.VibratorManager
 import androidx.annotation.FloatRange
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -17,8 +18,11 @@ import pub.yusuke.foursquareclient.models.Checkin
 import pub.yusuke.foursquareclient.models.Venue
 import pub.yusuke.foursquareclient.models.url
 import pub.yusuke.fusedlocationktx.currentLocation
+import pub.yusuke.fusedlocationktx.locationFlow
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquareCheckinsRepository
 import pub.yusuke.interscheckin.repositories.foursquarecheckins.FoursquarePlacesRepository
+import pub.yusuke.interscheckin.repositories.periodiclocationretrieval.PeriodicLocationRetrievalPreferences
+import pub.yusuke.interscheckin.repositories.periodiclocationretrieval.PeriodicLocationRetrievalRepository
 import pub.yusuke.interscheckin.repositories.userpreferences.UserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenue
 import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenueDao
@@ -32,6 +36,7 @@ class MainInteractor @Inject constructor(
     private val vibratorManager: VibratorManager,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val visitedVenueDao: VisitedVenueDao,
+    private val periodicLocationRetrievalRepository: PeriodicLocationRetrievalRepository,
     @ApplicationContext private val context: Context,
 ) : MainContract.Interactor {
     override suspend fun fetchVenues(
@@ -62,6 +67,10 @@ class MainInteractor @Inject constructor(
     override suspend fun fetchLocation(): Location =
         fusedLocationProviderClient
             .currentLocation()
+
+    override fun fetchLocationFlow(locationRequest: LocationRequest): Flow<Location> =
+        fusedLocationProviderClient
+            .locationFlow(locationRequest)
 
     override fun fetchDrivingModeFlow(): Flow<Boolean> =
         userPreferencesRepository
@@ -94,6 +103,9 @@ class MainInteractor @Inject constructor(
             ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED
             )
+
+    override fun fetchPeriodicLocationRetrievalPreferencesFlow(): Flow<PeriodicLocationRetrievalPreferences> =
+        periodicLocationRetrievalRepository.periodicLocationRetrievalPreferencesFlow
 
     override fun vibrate(vibrationEffect: VibrationEffect) =
         vibratorManager.defaultVibrator.vibrate(vibrationEffect)

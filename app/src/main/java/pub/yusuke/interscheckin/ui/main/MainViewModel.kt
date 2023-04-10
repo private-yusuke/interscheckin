@@ -3,20 +3,25 @@ package pub.yusuke.interscheckin.ui.main
 import android.annotation.SuppressLint
 import android.location.Location
 import android.os.VibrationEffect
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.Priority
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pub.yusuke.foursquareclient.FoursquareClient
 import pub.yusuke.foursquareclient.FoursquareClientImpl
+import pub.yusuke.interscheckin.navigation.entity.translate
 import pub.yusuke.interscheckin.ui.utils.emptyImmutableList
 import javax.inject.Inject
 
@@ -49,10 +54,29 @@ class MainViewModel @Inject constructor(
     override val snackbarMessageState: State<MainContract.SnackbarState> = _snackbarMessageState
 
     init {
+        viewModelScope.launch {
+            fetchContents()
+        }
+    }
+
+    private suspend fun fetchContents() {
         if (checkLocationAccessAvailable()) {
-            viewModelScope.launch {
-                onLocationUpdateRequested()
-            }
+            interactor.fetchPeriodicLocationRetrievalPreferencesFlow()
+                .collectLatest {
+                    Log.i("PeriodicLocationRetrievalPreferencesFlow", "$it")
+                    if (it.enabled) {
+                        interactor.fetchLocationFlow(
+                            LocationRequest.Builder(it.intervalPreset.translate().interval * 1000)
+                                .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                                .build(),
+                        ).collectLatest { location ->
+                            Log.i("LocationAccess", "location: $location")
+                            updateLocation(location)
+                        }
+                    } else {
+                        onLocationUpdateRequested()
+                    }
+                }
         }
     }
 
@@ -169,22 +193,17 @@ class MainViewModel @Inject constructor(
 
     @SuppressLint("MissingPermission")
     override suspend fun onLocationUpdateRequested() {
-        val lastLocation = when (val it = locationState.value) {
-            is MainContract.LocationState.Loading ->
-                it.lastLocation
-
-            is MainContract.LocationState.Loaded ->
-                it.location
-
-            is MainContract.LocationState.Error,
-            MainContract.LocationState.Unavailable,
-            ->
-                null
-        }
+        val lastLocation = locationState.value.location()
         _locationState.value = MainContract.LocationState.Loading(lastLocation)
 
         val location =
             withContext(viewModelScope.coroutineContext + Dispatchers.IO) { interactor.fetchLocation() }
+
+        updateLocation(location)
+    }
+
+    private suspend fun updateLocation(location: Location) {
+        val lastLocation = locationState.value.location()
         _locationState.value = MainContract.LocationState.Loaded(
             location = location,
         )
@@ -226,5 +245,13 @@ class MainViewModel @Inject constructor(
             _snackbarMessageState.value = MainContract.SnackbarState.PreciseLocationNotAvailable
         }
         return true
+    }
+
+    private fun MainContract.LocationState.location(): Location? = when (this) {
+        is MainContract.LocationState.Loaded -> location
+        is MainContract.LocationState.Loading -> lastLocation
+        is MainContract.LocationState.Error,
+        MainContract.LocationState.Unavailable,
+        -> null
     }
 }

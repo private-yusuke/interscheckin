@@ -1,6 +1,7 @@
 package pub.yusuke.interscheckin.ui.locationsettings
 
 import kotlinx.coroutines.flow.StateFlow
+import pub.yusuke.interscheckin.navigation.entity.PeriodicLocationRetrievalIntervalPreset
 
 interface LocationSettingsContract {
     interface ViewModel {
@@ -10,29 +11,10 @@ interface LocationSettingsContract {
     }
 
     interface Interactor {
-        fun setPeriodicLocationRetrievalEnabled(enabled: Boolean)
-        fun getPeriodicLocationRetrievalEnabled(): Boolean
-        fun setPeriodicLocationRetrievalIntervalPreset(preset: PeriodicLocationRetrievalIntervalPreset)
-        fun getPeriodicLocationRetrievalIntervalPreset(): PeriodicLocationRetrievalIntervalPreset
-    }
-
-    sealed interface PeriodicLocationRetrievalIntervalPreset {
-        val interval: Long
-
-        object High : PeriodicLocationRetrievalIntervalPreset {
-            override val interval: Long
-                get() = 1
-        }
-
-        object Medium : PeriodicLocationRetrievalIntervalPreset {
-            override val interval: Long
-                get() = 3
-        }
-
-        object Low : PeriodicLocationRetrievalIntervalPreset {
-            override val interval: Long
-                get() = 10
-        }
+        suspend fun setPeriodicLocationRetrievalEnabled(enabled: Boolean)
+        suspend fun getPeriodicLocationRetrievalEnabled(): Boolean
+        suspend fun setPeriodicLocationRetrievalIntervalPreset(preset: PeriodicLocationRetrievalIntervalPreset)
+        suspend fun getPeriodicLocationRetrievalIntervalPreset(): PeriodicLocationRetrievalIntervalPreset
     }
 
     sealed interface ScreenState {

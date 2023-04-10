@@ -20,7 +20,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -112,7 +111,6 @@ private fun LocationAccessAcquirementScreenColumn(
             Text(
                 text = stringResource(R.string.location_settings_location_access_acquirement_screen_column_title),
                 style = InterscheckinTextStyle.ExtraLarge,
-                color = Color.Black.copy(LocalContentAlpha.current),
             )
             Box(
                 modifier = Modifier
@@ -197,7 +195,6 @@ private fun PeriodicLocationRetrievalEnabledSettingsRow(
         Text(
             text = stringResource(R.string.location_settings_periodic_location_retrieval_enabled),
             style = InterscheckinTextStyle.Large,
-            color = Color.Black.copy(if (enabled) ContentAlpha.high else ContentAlpha.disabled),
         )
         Switch(
             checked = periodicLocationRetrievalEnabled,
@@ -217,7 +214,6 @@ private fun PeriodicLocationRetrievalIntervalPresetSettingsColumn(
         Text(
             text = stringResource(R.string.location_settings_periodic_location_retrieval_interval_preset_column_title),
             style = InterscheckinTextStyle.ExtraLarge,
-            color = Color.Black.copy(LocalContentAlpha.current),
         )
         listOf(
             PeriodicLocationRetrievalIntervalPreset.High,
@@ -234,7 +230,6 @@ private fun PeriodicLocationRetrievalIntervalPresetSettingsColumn(
                 Text(
                     text = it.name(),
                     style = InterscheckinTextStyle.Large,
-                    color = Color.Black.copy(LocalContentAlpha.current),
                 )
                 RadioButton(
                     selected = periodicLocationRetrievalIntervalPreset == it,

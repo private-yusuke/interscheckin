@@ -69,4 +69,5 @@
     <string name="location_settings_periodic_location_retrieval_interval_preset_medium">中（%1$d 秒毎）</string>
     <string name="location_settings_periodic_location_retrieval_interval_preset_high">高（%1$d 秒毎）</string>
     <string name="location_settings_periodic_location_retrieval_interval_preset_column_title">間隔プリセット</string>
+    <string name="main_periodic_location_retrieval_enabled">%1$s 秒毎に自動更新されています</string>
 </resources>

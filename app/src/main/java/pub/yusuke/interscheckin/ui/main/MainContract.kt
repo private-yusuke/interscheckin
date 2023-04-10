@@ -15,6 +15,7 @@ interface MainContract {
         val checkinState: State<CheckinState>
         val venuesState: State<VenuesState>
         val snackbarMessageState: State<SnackbarState>
+        val periodicLocationRetrievalEnabledState: State<PeriodicLocationRetrievalState>
 
         suspend fun onDrivingModeStateChanged(enabled: Boolean)
         suspend fun checkIn(

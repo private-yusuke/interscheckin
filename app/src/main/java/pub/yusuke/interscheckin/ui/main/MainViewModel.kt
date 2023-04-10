@@ -3,7 +3,6 @@ package pub.yusuke.interscheckin.ui.main
 import android.annotation.SuppressLint
 import android.location.Location
 import android.os.VibrationEffect
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +51,8 @@ class MainViewModel @Inject constructor(
     private var _snackbarMessageState: MutableState<MainContract.SnackbarState> =
         mutableStateOf(MainContract.SnackbarState.None)
     override val snackbarMessageState: State<MainContract.SnackbarState> = _snackbarMessageState
+    private val _periodicLocationRetrievalEnabledState: MutableState<MainContract.PeriodicLocationRetrievalState> = mutableStateOf(MainContract.PeriodicLocationRetrievalState.Disabled)
+    override val periodicLocationRetrievalEnabledState: State<MainContract.PeriodicLocationRetrievalState> = _periodicLocationRetrievalEnabledState
 
     init {
         viewModelScope.launch {
@@ -63,14 +64,19 @@ class MainViewModel @Inject constructor(
         if (checkLocationAccessAvailable()) {
             interactor.fetchPeriodicLocationRetrievalPreferencesFlow()
                 .collectLatest {
-                    Log.i("PeriodicLocationRetrievalPreferencesFlow", "$it")
+                    _periodicLocationRetrievalEnabledState.value = when (it.enabled) {
+                        false -> MainContract.PeriodicLocationRetrievalState.Disabled
+                        true -> MainContract.PeriodicLocationRetrievalState.Enabled(
+                            interval = it.intervalPreset.translate().interval,
+                        )
+                    }
+
                     if (it.enabled) {
                         interactor.fetchLocationFlow(
                             LocationRequest.Builder(it.intervalPreset.translate().interval * 1000)
                                 .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
                                 .build(),
                         ).collectLatest { location ->
-                            Log.i("LocationAccess", "location: $location")
                             updateLocation(location)
                         }
                     } else {

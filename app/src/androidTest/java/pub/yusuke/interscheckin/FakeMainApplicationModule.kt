@@ -13,6 +13,8 @@ import pub.yusuke.interscheckin.repositories.locationaccessacquirementscreendisp
 import pub.yusuke.interscheckin.repositories.locationaccessacquirementscreendisplayedonce.LocationAccessAcquirementScreenDisplayedOnceRepositoryImpl
 import pub.yusuke.interscheckin.repositories.credentialsettings.FakeCredentialSettingsRepository
 import pub.yusuke.interscheckin.repositories.credentialsettings.CredentialSettingsRepository
+import pub.yusuke.interscheckin.repositories.periodiclocationretrieval.PeriodicLocationRetrievalRepository
+import pub.yusuke.interscheckin.repositories.periodiclocationretrieval.SharedPreferencesPeriodicLocationRetrievalRepository
 import pub.yusuke.interscheckin.repositories.userpreferences.FakeUserPreferencesRepository
 import pub.yusuke.interscheckin.repositories.visitedvenues.FakeVisitedVenueDao
 import pub.yusuke.interscheckin.repositories.visitedvenues.VisitedVenueDao
@@ -57,4 +59,10 @@ interface FakeMainApplicationModule {
     fun bindLocationAccessAcquirementScreenDisplayedOnceRepository(
         locationAccessAcquirementScreenDisplayedOnceRepository: LocationAccessAcquirementScreenDisplayedOnceRepositoryImpl,
     ): LocationAccessAcquirementScreenDisplayedOnceRepository
+
+    @Singleton
+    @Binds
+    fun bindPeriodicLocationRetrievalRepository(
+        periodicLocationRetrievalRepository: SharedPreferencesPeriodicLocationRetrievalRepository
+    ): PeriodicLocationRetrievalRepository
 }

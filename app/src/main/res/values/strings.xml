@@ -58,6 +58,13 @@
 
     <!-- LocationSettingsScreen -->
     <string name="location_settings_topbar_title">Locations</string>
+    <string name="location_settings_location_access_acquirement_screen_column_title">Location access acquirement</string>
+    <string name="location_settings_periodic_location_retrieval_enabled">enabled</string>
+    <string name="location_settings_periodic_location_retrieval_column_title">periodic location retrieval</string>
+    <string name="location_settings_periodic_location_retrieval_interval_preset_column_title">interval preset</string>
+    <string name="location_settings_periodic_location_retrieval_interval_preset_low">Low (every %1$d seconds)</string>
+    <string name="location_settings_periodic_location_retrieval_interval_preset_medium">Medium (every %1$d seconds)</string>
+    <string name="location_settings_periodic_location_retrieval_interval_preset_high">High (every %1$d second)</string>
 
     <!-- ResetSettingsScreen -->
     <string name="reset_settings_topbar_title">Reset</string>

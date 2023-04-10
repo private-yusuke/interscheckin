@@ -1,20 +1,34 @@
 package pub.yusuke.interscheckin.ui.locationsettings
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.RadioButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.navigation.InterscheckinScreens
+import pub.yusuke.interscheckin.ui.theme.InterscheckinTextStyle
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
 import pub.yusuke.interscheckin.ui.utils.InterscheckinTopBar
 import pub.yusuke.interscheckin.ui.utils.copy
@@ -27,8 +41,10 @@ import pub.yusuke.interscheckin.ui.utils.rememberLocationAccessAcquirementState
 fun LocationSettingsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
+    viewModel: LocationSettingsContract.ViewModel = hiltViewModel<LocationSettingsViewModel>(),
 ) {
     val locationPermissionState = rememberLocationAccessAcquirementState()
+    val screenState by viewModel.screenStateFlow.collectAsState()
 
     InterscheckinTheme {
         Scaffold(
@@ -42,16 +58,70 @@ fun LocationSettingsScreen(
         ) { innerPadding ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(innerPadding.copy(top = 16.dp)),
+                    .padding(
+                        innerPadding.copy(
+                            top = 16.dp,
+                            start = 16.dp,
+                            end = 16.dp,
+                        ),
+                    ),
+            ) {
+                when (val it = screenState) {
+                    LocationSettingsContract.ScreenState.Loading -> CircularProgressIndicator()
+                    is LocationSettingsContract.ScreenState.Idle -> {
+                        LocationAccessAcquirementScreenColumn(
+                            locationAccessAcquired = locationPermissionState.locationAccessAcquired(),
+                            preciseLocationAccessAcquired = locationPermissionState.preciseLocationAccessAcquired(),
+                            onClickLocationAccessAcquirementScreenButton = {
+                                navController.navigate(InterscheckinScreens.LocationAccessAcquirement.route)
+                            },
+                        )
+                        PeriodicLocationRetrievalSettingsColumn(
+                            enabled = locationPermissionState.locationAccessAcquired(),
+                            periodicLocationRetrievalEnabled = it.periodicLocationRetrievalEnabled,
+                            onPeriodicLocationRetrievalEnabledCheckedChange = { viewModel.setPeriodicLocationRetrievalEnabled(it) },
+                            periodicLocationRetrievalIntervalPreset = it.periodicLocationRetrievalIntervalPreset,
+                            onPeriodicLocationRetrievalIntervalPresetChanged = { viewModel.setPeriodicLocationRetrievalPreset(it) },
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LocationAccessAcquirementScreenColumn(
+    locationAccessAcquired: Boolean,
+    preciseLocationAccessAcquired: Boolean,
+    onClickLocationAccessAcquirementScreenButton: () -> Unit,
+) {
+    CompositionLocalProvider(
+        LocalContentAlpha provides if (!preciseLocationAccessAcquired) ContentAlpha.high else ContentAlpha.disabled,
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier
+                .fillMaxWidth(),
+        ) {
+            Text(
+                text = stringResource(R.string.location_settings_location_access_acquirement_screen_column_title),
+                style = InterscheckinTextStyle.ExtraLarge,
+                color = Color.Black.copy(LocalContentAlpha.current),
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center,
             ) {
                 LocationAccessAcquirementScreenButton(
-                    locationAccessAcquired = locationPermissionState.locationAccessAcquired(),
-                    preciseLocationAccessAcquired = locationPermissionState.preciseLocationAccessAcquired(),
-                    onClick = {
-                        navController.navigate(InterscheckinScreens.LocationAccessAcquirement.route)
-                    },
+                    locationAccessAcquired = locationAccessAcquired,
+                    preciseLocationAccessAcquired = preciseLocationAccessAcquired,
+                    onClick = onClickLocationAccessAcquirementScreenButton,
                 )
             }
         }
@@ -75,4 +145,109 @@ private fun LocationAccessAcquirementScreenButton(
     ) {
         Text(buttonText)
     }
+}
+
+@Composable
+private fun PeriodicLocationRetrievalSettingsColumn(
+    enabled: Boolean,
+    periodicLocationRetrievalEnabled: Boolean,
+    onPeriodicLocationRetrievalEnabledCheckedChange: (Boolean) -> Unit,
+    periodicLocationRetrievalIntervalPreset: LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset,
+    onPeriodicLocationRetrievalIntervalPresetChanged: (LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset) -> Unit,
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalAlignment = Alignment.Start,
+    ) {
+        Text(
+            text = stringResource(R.string.location_settings_periodic_location_retrieval_column_title),
+            style = InterscheckinTextStyle.ExtraLarge,
+        )
+        PeriodicLocationRetrievalEnabledSettingsRow(
+            enabled = enabled,
+            periodicLocationRetrievalEnabled = periodicLocationRetrievalEnabled,
+            onPeriodicLocationRetrievalEnabledCheckedChange = onPeriodicLocationRetrievalEnabledCheckedChange,
+        )
+        CompositionLocalProvider(
+            LocalContentAlpha provides if (enabled && periodicLocationRetrievalEnabled) ContentAlpha.high else ContentAlpha.disabled,
+        ) {
+            PeriodicLocationRetrievalIntervalPresetSettingsColumn(
+                enabled = enabled && periodicLocationRetrievalEnabled,
+                periodicLocationRetrievalIntervalPreset = periodicLocationRetrievalIntervalPreset,
+                onPeriodicLocationRetrievalIntervalPresetChanged = onPeriodicLocationRetrievalIntervalPresetChanged,
+            )
+        }
+    }
+}
+
+@Composable
+private fun PeriodicLocationRetrievalEnabledSettingsRow(
+    enabled: Boolean,
+    periodicLocationRetrievalEnabled: Boolean,
+    onPeriodicLocationRetrievalEnabledCheckedChange: (Boolean) -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+    ) {
+        Text(
+            text = stringResource(R.string.location_settings_periodic_location_retrieval_enabled),
+            style = InterscheckinTextStyle.Large,
+            color = Color.Black.copy(if (enabled) ContentAlpha.high else ContentAlpha.disabled),
+        )
+        Switch(
+            checked = periodicLocationRetrievalEnabled,
+            onCheckedChange = onPeriodicLocationRetrievalEnabledCheckedChange,
+            enabled = enabled,
+        )
+    }
+}
+
+@Composable
+private fun PeriodicLocationRetrievalIntervalPresetSettingsColumn(
+    enabled: Boolean,
+    periodicLocationRetrievalIntervalPreset: LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset,
+    onPeriodicLocationRetrievalIntervalPresetChanged: (LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset) -> Unit,
+) {
+    Column {
+        Text(
+            text = stringResource(R.string.location_settings_periodic_location_retrieval_interval_preset_column_title),
+            style = InterscheckinTextStyle.ExtraLarge,
+            color = Color.Black.copy(LocalContentAlpha.current),
+        )
+        listOf(
+            LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.High,
+            LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.Medium,
+            LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.Low,
+        ).forEach {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            ) {
+                Text(
+                    text = it.name(),
+                    style = InterscheckinTextStyle.Large,
+                    color = Color.Black.copy(LocalContentAlpha.current),
+                )
+                RadioButton(
+                    selected = periodicLocationRetrievalIntervalPreset == it,
+                    onClick = { onPeriodicLocationRetrievalIntervalPresetChanged(it) },
+                    enabled = enabled,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.name(): String = when (this) {
+    LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.Low -> stringResource(R.string.location_settings_periodic_location_retrieval_interval_preset_low, interval)
+    LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.Medium -> stringResource(R.string.location_settings_periodic_location_retrieval_interval_preset_medium, interval)
+    LocationSettingsContract.PeriodicLocationRetrievalIntervalPreset.High -> stringResource(R.string.location_settings_periodic_location_retrieval_interval_preset_high, interval)
 }

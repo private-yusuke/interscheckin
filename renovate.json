@@ -9,7 +9,7 @@
       "groupName": "kotlin"
     },
     {
-      "matchPackagePatterns": ["androidx.compose.compiler:compiler"],
+      "matchPackagePatterns": ["composeOptions"],
       "groupName": "kotlin"
     },
     {

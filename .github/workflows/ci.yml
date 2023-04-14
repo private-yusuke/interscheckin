@@ -49,7 +49,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build APK for instrumented tests
-      run: ./gradlew packageDebugAndroidTest
+      run: ./gradlew packageDebug packageDebugAndroidTest
     - name: Wake up the device
       run: adb shell input keyevent KEYCODE_MENU
     - name: Run instrumented tests with the physical device connected

@@ -5,17 +5,17 @@ sealed interface PeriodicLocationRetrievalIntervalPreset {
 
     object High : PeriodicLocationRetrievalIntervalPreset {
         override val interval: Long
-            get() = 1
+            get() = 10
     }
 
     object Medium : PeriodicLocationRetrievalIntervalPreset {
         override val interval: Long
-            get() = 3
+            get() = 15
     }
 
     object Low : PeriodicLocationRetrievalIntervalPreset {
         override val interval: Long
-            get() = 10
+            get() = 30
     }
 }
 

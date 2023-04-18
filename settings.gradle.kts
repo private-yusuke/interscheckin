@@ -10,10 +10,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
+        maven { setUrl("https://jitpack.io") }
     }
 }
 rootProject.name = "Interscheckin"
-include ':app'
-include ':library:fusedlocationktx'
-include ':library:foursquare-client'
+include(":app")
+include(":library:fusedlocationktx")
+include(":library:foursquare-client")

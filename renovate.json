@@ -22,10 +22,5 @@
       "automergeType": "pr",
       "platformAutomerge": true
     }
-  ],
-  "gradle": {
-    "fileMatch": [
-      "(^|/)buildSrc/.+\\.kts"
-    ]
-  }
+  ]
 }

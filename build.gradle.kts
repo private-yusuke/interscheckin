@@ -5,17 +5,17 @@ import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 buildscript {
     dependencies {
-        classpath(DependencyNames.hiltAndroidGradlePlugin)
-        classpath(DependencyNames.twitterComposeRulesDetekt)
+        classpath(libs.dagger.hilt.android.gradle.plugin)
+        classpath(libs.twitter.compose.rules.detekt)
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id("com.android.application") version "8.0.0" apply false
-    id("com.android.library") version "8.0.0" apply false
-    kotlin("android") version DependencyVersions.kotlinVersion apply false
-    kotlin("jvm") version DependencyVersions.kotlinVersion
-    kotlin("plugin.serialization") version DependencyVersions.kotlinVersion
-    id("io.gitlab.arturbosch.detekt") version DependencyVersions.detektVersion
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.plugin.serialization)
+    alias(libs.plugins.detekt)
 }
 // see https://detekt.dev/docs/introduction/reporting/#merging-reports
 val reportMerge by tasks.registering(ReportMergeTask::class) {
@@ -25,8 +25,8 @@ subprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
     dependencies {
-        detektPlugins(DependencyNames.detektFormatting)
-        detektPlugins(DependencyNames.twitterComposeRulesDetekt)
+        detektPlugins(rootProject.project.libs.detekt.formatting)
+        detektPlugins(rootProject.project.libs.twitter.compose.rules.detekt)
     }
 
     detekt {

@@ -1,7 +1,7 @@
 plugins {
-    kotlin("android")
-    id("com.android.application")
-    id("kotlinx-serialization")
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.plugin.serialization)
     id("kotlin-kapt")
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
@@ -68,61 +68,60 @@ android {
 }
 
 dependencies {
-    val composeBom = platform("androidx.compose:compose-bom:2023.04.00")
-    implementation(composeBom)
-    androidTestImplementation(composeBom)
+    implementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(platform(libs.androidx.compose.bom))
 
-    implementation("androidx.core:core-ktx:1.10.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.0")
-    implementation("androidx.fragment:fragment-ktx:1.5.6")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material:material")
-    implementation(DependencyNames.navigationCompose)
-    implementation(DependencyNames.datastorePreferences)
-    implementation(DependencyNames.playServicesLocation)
-    implementation(DependencyNames.hiltAndroid)
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.compose.ui.core)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.gms.play.services.location)
+    implementation(libs.dagger.hilt.android.core)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Paging
-    implementation(DependencyNames.pagingCommon)
-    implementation("androidx.paging:paging-compose:1.0.0-alpha18")
+    implementation(libs.androidx.paging.common)
+    implementation(libs.androidx.paging.compose)
 
     // For loading remote images with Jetpack Compose
-    implementation("io.coil-kt:coil-compose:2.3.0")
+    implementation(libs.coil.compose)
 
     implementation(project(path = ":library:foursquare-client"))
-    kapt(DependencyNames.hiltCompiler)
+    kapt(libs.dagger.hilt.compiler)
     implementation(project(path = ":library:fusedlocationktx"))
-    testImplementation(DependencyNames.junit)
-    testImplementation(DependencyNames.mockk)
-    androidTestImplementation(DependencyNames.mockkAndroid)
-    androidTestImplementation(DependencyNames.mockkAgent)
-    androidTestImplementation(DependencyNames.androidxJunit)
-    androidTestImplementation(DependencyNames.espressoCore)
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk.core)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.mockk.agent)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    androidTestImplementation(DependencyNames.hiltAndroidTesting)
-    kaptAndroidTest(DependencyNames.hiltAndroidCompiler)
+    androidTestImplementation(libs.dagger.hilt.android.testing)
+    kaptAndroidTest(libs.dagger.hilt.android.compiler)
 
     // For encrypting and decrypting credentials
-    implementation("com.google.crypto.tink:tink-android:1.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.5.0")
+    implementation(libs.tink.android)
+    implementation(libs.kotlinx.serialization.protobuf)
 
     // Room
-    implementation(DependencyNames.roomRuntime)
-    kapt(DependencyNames.roomCompiler)
-    implementation(DependencyNames.roomPaging)
-    implementation(DependencyNames.roomKtx)
-    implementation("com.github.anboralabs:spatia-room:0.2.6")
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.paging)
+    implementation(libs.room.ktx)
+    implementation(libs.spatia.room)
 
     // Immutable collections for Composable functions
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+    implementation(libs.kotlinx.collections.immutable)
 
     // Requesting the permission for location access within screens written with Jetpack Compose
-    implementation("com.google.accompanist:accompanist-permissions:0.30.1")
+    implementation(libs.accompanist.permissions)
 }

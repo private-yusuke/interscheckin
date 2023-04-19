@@ -1,6 +1,6 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     id("kotlinx-serialization")
 }
 
@@ -33,21 +33,21 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.10.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.8.0")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.android.material.material)
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation(libs.retrofit2.retrofit)
     // Retrofit with Moshi Converter
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation(libs.retrofit2.converter.moshi)
 
     // Moshi
-    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
-    testImplementation(DependencyNames.junit)
+    implementation(libs.moshi.kotlin)
+    testImplementation(libs.junit)
 
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation(libs.okhttp3.logging.interceptor)
 
-    androidTestImplementation(DependencyNames.androidxJunit)
-    androidTestImplementation(DependencyNames.espressoCore)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
 }

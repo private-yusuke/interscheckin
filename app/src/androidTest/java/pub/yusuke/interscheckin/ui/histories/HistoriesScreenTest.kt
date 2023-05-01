@@ -47,7 +47,7 @@ class HistoriesScreenTest {
     }
 
     @Test
-    fun `A check-in with a venue is displayed on the screen`() {
+    fun `A_Check-in_with_a_venue_is_displayed_on_the_screen`() {
         composeTestRule.setContent {
             HistoriesScreen(
                 viewModel = vm,
@@ -61,7 +61,7 @@ class HistoriesScreenTest {
     }
 
     @Test
-    fun `Display _No Histories Found_ when no check-in history is found`() {
+    fun `Display__No_Histories_Found__when_no_check-in_history_is_found`() {
         // given (that no histories are available)
         every { vm.checkinsFlow } returns flowOf(
             PagingData.empty(

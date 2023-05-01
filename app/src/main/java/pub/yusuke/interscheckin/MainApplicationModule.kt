@@ -2,7 +2,8 @@ package pub.yusuke.interscheckin
 
 import android.app.Application
 import android.content.Context
-import android.os.VibratorManager
+import android.os.Vibrator
+import androidx.core.content.getSystemService
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.room.RoomDatabase
@@ -115,9 +116,9 @@ class MainApplicationModule {
     }
 
     @Provides
-    fun provideVibratorManager(
+    fun provideVibrator(
         @ApplicationContext context: Context,
-    ) = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+    ): Vibrator = requireNotNull(context.getSystemService())
 
     @Provides
     fun provideFusedLocationProviderClient(

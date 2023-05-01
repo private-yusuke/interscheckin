@@ -49,9 +49,6 @@ class MainScreenTest {
     lateinit var navController: NavController
 
     @Inject
-    lateinit var vibratorManager: VibratorManager
-
-    @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     /**

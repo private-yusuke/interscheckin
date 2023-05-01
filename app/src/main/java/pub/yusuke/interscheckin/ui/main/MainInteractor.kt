@@ -6,7 +6,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.VibrationEffect
-import android.os.VibratorManager
+import android.os.Vibrator
 import androidx.annotation.FloatRange
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -33,7 +33,7 @@ class MainInteractor @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val foursquarePlacesRepository: FoursquarePlacesRepository,
     private val foursquareCheckinsRepository: FoursquareCheckinsRepository,
-    private val vibratorManager: VibratorManager,
+    private val vibrator: Vibrator,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val visitedVenueDao: VisitedVenueDao,
     private val periodicLocationRetrievalRepository: PeriodicLocationRetrievalRepository,
@@ -108,7 +108,7 @@ class MainInteractor @Inject constructor(
         periodicLocationRetrievalRepository.periodicLocationRetrievalPreferencesFlow
 
     override fun vibrate(vibrationEffect: VibrationEffect) =
-        vibratorManager.defaultVibrator.vibrate(vibrationEffect)
+        vibrator.vibrate(vibrationEffect)
 
     private fun List<Venue>.translateToMainContractVenues(): List<MainContract.Venue> =
         map { it.translateToMainContractVenue() }

@@ -1,6 +1,6 @@
 package pub.yusuke.interscheckin.ui.main
 
-import android.os.VibratorManager
+import android.os.Vibrator
 import androidx.compose.runtime.mutableStateOf
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -49,12 +49,7 @@ interface FakeMainViewModelModule {
         }
 
         @Provides
-        fun provideVibratorManager(): VibratorManager {
-            val vibratorManager: VibratorManager = mockk()
-            every { vibratorManager.defaultVibrator } returns mockk(relaxUnitFun = true)
-
-            return vibratorManager
-        }
+        fun provideVibrator(): Vibrator = mockk(relaxUnitFun = true)
 
         @Provides
         fun provideFusedLocationProviderClient(): FusedLocationProviderClient {

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
-class HistoriesViewModel @Inject constructor(
+open class HistoriesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     paging: HistoriesContract.Paging,
 ) : ViewModel(), HistoriesContract.ViewModel {

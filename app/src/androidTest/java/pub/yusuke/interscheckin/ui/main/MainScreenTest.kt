@@ -1,6 +1,6 @@
 package pub.yusuke.interscheckin.ui.main
 
-import android.os.VibratorManager
+import android.os.Build
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.assertIsEnabled
@@ -23,6 +23,7 @@ import io.mockk.junit4.MockKRule
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.After
+import org.junit.Assume
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -56,6 +57,11 @@ class MainScreenTest {
      */
     @Before
     fun init() {
+        /*
+         * io.mockk.proxy.MockKAgentException: Mocking static is supported starting from Android P
+         */
+        Assume.assumeTrue(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+
         /*
          * To mock `suspend fun FusedLocationProviderClient.currentLocation()`,
          * calling `mockkStatic` is required.

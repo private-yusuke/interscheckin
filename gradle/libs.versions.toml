@@ -61,7 +61,7 @@ retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", vers
 retrofit2-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version = "2.9.0" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.15.0" }
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "4.11.0" }
-kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.7.0" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.7.1" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "1.7.1" }
 
 [plugins]

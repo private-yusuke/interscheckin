@@ -51,7 +51,8 @@ class MainViewModel @Inject constructor(
     private var _snackbarMessageState: MutableState<MainContract.SnackbarState> =
         mutableStateOf(MainContract.SnackbarState.None)
     override val snackbarMessageState: State<MainContract.SnackbarState> = _snackbarMessageState
-    private val _periodicLocationRetrievalEnabledState: MutableState<MainContract.PeriodicLocationRetrievalState> = mutableStateOf(MainContract.PeriodicLocationRetrievalState.Disabled)
+    private val _periodicLocationRetrievalEnabledState: MutableState<MainContract.PeriodicLocationRetrievalState> =
+        mutableStateOf(MainContract.PeriodicLocationRetrievalState.Disabled)
     override val periodicLocationRetrievalEnabledState: State<MainContract.PeriodicLocationRetrievalState> = _periodicLocationRetrievalEnabledState
 
     init {

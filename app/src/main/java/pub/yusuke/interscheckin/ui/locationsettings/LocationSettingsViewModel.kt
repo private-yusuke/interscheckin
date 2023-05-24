@@ -14,7 +14,8 @@ import javax.inject.Inject
 class LocationSettingsViewModel @Inject constructor(
     private val interactor: LocationSettingsContract.Interactor,
 ) : ViewModel(), LocationSettingsContract.ViewModel {
-    private val _screenStateFlow: MutableStateFlow<LocationSettingsContract.ScreenState> = MutableStateFlow(LocationSettingsContract.ScreenState.Loading)
+    private val _screenStateFlow: MutableStateFlow<LocationSettingsContract.ScreenState> =
+        MutableStateFlow(LocationSettingsContract.ScreenState.Loading)
     override val screenStateFlow: StateFlow<LocationSettingsContract.ScreenState>
         get() = _screenStateFlow.asStateFlow()
 

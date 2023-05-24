@@ -63,6 +63,8 @@ formatting:
     active: true
   TrailingCommaOnCallSite:
     active: true
+  ParameterWrapping:
+    maxLineLength: 500
 
 TwitterCompose:
   active: true

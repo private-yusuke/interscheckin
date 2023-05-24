@@ -463,8 +463,10 @@ private fun MainActivityScreenPreview() {
         viewModel = object : MainContract.ViewModel {
             override var venuesState: State<MainContract.VenuesState> =
                 remember { mutableStateOf(MainContract.VenuesState.Idle(listOf(previewVenue).toImmutableList())) }
-            override val snackbarMessageState: State<MainContract.SnackbarState> = remember { mutableStateOf(MainContract.SnackbarState.None) }
-            override val periodicLocationRetrievalEnabledState: State<MainContract.PeriodicLocationRetrievalState> = remember { mutableStateOf(MainContract.PeriodicLocationRetrievalState.Disabled) }
+            override val snackbarMessageState: State<MainContract.SnackbarState> =
+                remember { mutableStateOf(MainContract.SnackbarState.None) }
+            override val periodicLocationRetrievalEnabledState: State<MainContract.PeriodicLocationRetrievalState> =
+                remember { mutableStateOf(MainContract.PeriodicLocationRetrievalState.Disabled) }
 
             override suspend fun onDrivingModeStateChanged(enabled: Boolean) {}
             override suspend fun checkIn(venueId: String, shout: String?) {}

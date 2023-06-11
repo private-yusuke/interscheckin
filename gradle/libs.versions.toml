@@ -52,7 +52,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-spatia-room = { group = "com.github.anboralabs", name = "spatia-room", version = "0.2.6" }
+spatia-room = { group = "com.github.anboralabs", name = "spatia-room", version = "0.2.7" }
 tink-android = { group = "com.google.crypto.tink", name = "tink-android", version = "1.9.0" }
 twitter-compose-rules-detekt = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "twitterComposeRules" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }

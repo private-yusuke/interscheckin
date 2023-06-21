@@ -10,7 +10,7 @@ kotlin = "1.8.21"
 mockk = "1.13.3"
 paging = "3.1.1"
 playServicesLocation = "21.0.1"
-room = "2.5.1"
+room = "2.5.2"
 twitterComposeRules = "0.0.26"
 
 [libraries]

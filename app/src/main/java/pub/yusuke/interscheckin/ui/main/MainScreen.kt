@@ -19,6 +19,7 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -40,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -402,11 +404,12 @@ private fun VenueRow(
     venue: MainContract.Venue,
 ) {
     Box {
+        val intersectionItemBackgroundColor = MaterialTheme.colorScheme.surfaceVariant
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .applyIf(venue.name.contains("交差点")) {
-                    background(Color.Green.copy(alpha = 0.3f))
+                    background(intersectionItemBackgroundColor)
                 },
         )
         Row(
@@ -425,6 +428,7 @@ private fun VenueRow(
                     painter = rememberAsyncImagePainter(venue.icon.url),
                     contentDescription = venue.icon.name,
                     modifier = Modifier.size(32.dp),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
                 )
             }
             Column {

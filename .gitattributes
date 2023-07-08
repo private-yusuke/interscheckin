@@ -1,0 +1,5 @@
+README.md.assets/screenshot_location_request.png filter=lfs diff=lfs merge=lfs -text
+README.md.assets/screenshot_main_checkin_created.png filter=lfs diff=lfs merge=lfs -text
+README.md.assets/screenshot_main_en.png filter=lfs diff=lfs merge=lfs -text
+README.md.assets/screenshot_main_ja.png filter=lfs diff=lfs merge=lfs -text
+README.md.assets/screenshot_set_credentials_first.png filter=lfs diff=lfs merge=lfs -text

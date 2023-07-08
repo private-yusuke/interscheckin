@@ -57,7 +57,6 @@ spatia-room = { group = "com.github.anboralabs", name = "spatia-room", version =
 tink-android = { group = "com.google.crypto.tink", name = "tink-android", version = "1.9.0" }
 twitter-compose-rules-detekt = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "twitterComposeRules" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
-android-material-material = { group = "com.google.android.material", name = "material", version = "1.9.0" }
 retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" }
 retrofit2-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version = "2.9.0" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.15.0" }

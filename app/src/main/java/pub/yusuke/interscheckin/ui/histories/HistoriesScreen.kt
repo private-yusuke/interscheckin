@@ -241,8 +241,6 @@ private fun HistoriesTopBar(
                 Icon(Icons.Filled.ArrowBack, "backIcon")
             }
         },
-//        backgroundColor = MaterialTheme.colors.primary,
-//        contentColor = Color.White,
     )
 }
 

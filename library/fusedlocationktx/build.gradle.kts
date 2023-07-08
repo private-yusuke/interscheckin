@@ -35,7 +35,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.gms.play.services.location)
     implementation(libs.androidx.appcompat)
-    implementation(libs.android.material.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)

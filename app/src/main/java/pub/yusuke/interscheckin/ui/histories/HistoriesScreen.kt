@@ -13,22 +13,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -46,7 +47,6 @@ import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.flow.flowOf
 import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
-import pub.yusuke.interscheckin.ui.theme.Purple200
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -59,12 +59,10 @@ fun HistoriesScreen(
     viewModel: HistoriesContract.ViewModel = hiltViewModel<HistoriesViewModel>(),
 ) {
     val lazyPagingItems = viewModel.checkinsFlow.collectAsLazyPagingItems()
-    val scaffoldState = rememberScaffoldState()
 
     InterscheckinTheme {
         Scaffold(
             modifier = modifier,
-            scaffoldState = scaffoldState,
             topBar = {
                 HistoriesTopBar(
                     onNavigateToPreviousRoute = { navController.popBackStack() },
@@ -177,13 +175,14 @@ private fun CheckinRow(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(RoundedCornerShape(percent = 100))
-                    .background(Purple200),
+                    .background(MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center,
             ) {
                 Image(
                     painter = rememberAsyncImagePainter(checkin.venue.icon.url),
                     contentDescription = checkin.venue.icon.name,
                     modifier = Modifier.size(32.dp),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inversePrimary),
                 )
             }
         }
@@ -230,6 +229,7 @@ private fun ErrorContent(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HistoriesTopBar(
     onNavigateToPreviousRoute: () -> Unit,
@@ -241,8 +241,6 @@ private fun HistoriesTopBar(
                 Icon(Icons.Filled.ArrowBack, "backIcon")
             }
         },
-        backgroundColor = MaterialTheme.colors.primary,
-        contentColor = Color.White,
     )
 }
 

@@ -6,14 +6,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -63,7 +63,6 @@ fun LocationSettingsScreen(
                     .fillMaxWidth()
                     .padding(
                         innerPadding.copy(
-                            top = 16.dp,
                             start = 16.dp,
                             end = 16.dp,
                         ),
@@ -100,7 +99,7 @@ private fun LocationAccessAcquirementScreenColumn(
     onClickLocationAccessAcquirementScreenButton: () -> Unit,
 ) {
     CompositionLocalProvider(
-        LocalContentAlpha provides if (!preciseLocationAccessAcquired) ContentAlpha.high else ContentAlpha.disabled,
+        LocalContentColor provides if (!preciseLocationAccessAcquired) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -168,7 +167,7 @@ private fun PeriodicLocationRetrievalSettingsColumn(
             onPeriodicLocationRetrievalEnabledCheckedChange = onPeriodicLocationRetrievalEnabledCheckedChange,
         )
         CompositionLocalProvider(
-            LocalContentAlpha provides if (enabled && periodicLocationRetrievalEnabled) ContentAlpha.high else ContentAlpha.disabled,
+            LocalContentColor provides if (enabled && periodicLocationRetrievalEnabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
         ) {
             PeriodicLocationRetrievalIntervalPresetSettingsColumn(
                 enabled = enabled && periodicLocationRetrievalEnabled,

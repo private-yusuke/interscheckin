@@ -17,7 +17,8 @@ twitterComposeRules = "0.0.26"
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version = "0.30.1" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.7.2" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2023.06.01" }
-androidx-compose-material = { group = "androidx.compose.material", name = "material" }
+androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-ui-core = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -56,7 +57,6 @@ spatia-room = { group = "com.github.anboralabs", name = "spatia-room", version =
 tink-android = { group = "com.google.crypto.tink", name = "tink-android", version = "1.9.0" }
 twitter-compose-rules-detekt = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "twitterComposeRules" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
-android-material-material = { group = "com.google.android.material", name = "material", version = "1.9.0" }
 retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" }
 retrofit2-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version = "2.9.0" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.15.0" }

@@ -35,7 +35,6 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.android.material.material)
 
     // Retrofit
     implementation(libs.retrofit2.retrofit)

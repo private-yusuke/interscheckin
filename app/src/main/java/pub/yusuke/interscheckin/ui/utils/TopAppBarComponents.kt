@@ -1,17 +1,17 @@
 package pub.yusuke.interscheckin.ui.utils
 
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InterscheckinTopBar(
     titleText: String,
@@ -27,8 +27,6 @@ fun InterscheckinTopBar(
                 Icon(navigationIcon, navigationIconDescription)
             }
         },
-        backgroundColor = MaterialTheme.colors.primary,
-        contentColor = Color.White,
         modifier = modifier,
     )
 }

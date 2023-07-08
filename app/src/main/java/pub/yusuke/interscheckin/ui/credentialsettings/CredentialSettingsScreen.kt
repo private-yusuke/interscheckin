@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,7 +31,6 @@ import kotlinx.coroutines.launch
 import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
 import pub.yusuke.interscheckin.ui.utils.InterscheckinTopBar
-import pub.yusuke.interscheckin.ui.utils.copy
 
 @Composable
 fun CredentialSettingsScreen(
@@ -58,7 +57,7 @@ fun CredentialSettingsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier
-                    .padding(innerPadding.copy(top = 16.dp)),
+                    .padding(innerPadding),
             ) {
                 CredentialSettingRow(
                     label = stringResource(R.string.credential_settings_foursquare_oauth_token_label),

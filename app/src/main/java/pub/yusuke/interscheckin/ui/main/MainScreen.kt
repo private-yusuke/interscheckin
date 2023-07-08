@@ -16,17 +16,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material.Button
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.SnackbarResult
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -79,12 +79,12 @@ fun MainScreen(
     var shout by remember { mutableStateOf("") }
     var selectedVenueIdState by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     InterscheckinTheme {
         Scaffold(
             modifier = modifier,
-            scaffoldState = scaffoldState,
+            snackbarHost = { SnackbarHost(snackbarHostState) },
         ) { innerPadding ->
             Column(
                 modifier = Modifier
@@ -239,7 +239,7 @@ fun MainScreen(
 
     SnackbarStateHandler(
         snackbarState = snackbarState,
-        snackbarHostState = scaffoldState.snackbarHostState,
+        snackbarHostState = snackbarHostState,
         navController = navController,
         onSnackbarDismissed = viewModel::onSnackbarDismissed,
     )
@@ -262,6 +262,7 @@ private fun SnackbarStateHandler(
                 snackbarHostState.showSnackbar(
                     message,
                     snackbarActionLabel,
+                    true,
                     snackbarDuration,
                 )
             ) {

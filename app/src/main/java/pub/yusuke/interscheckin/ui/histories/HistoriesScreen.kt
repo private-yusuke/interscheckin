@@ -42,7 +42,8 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.flow.flowOf
 import pub.yusuke.interscheckin.R
@@ -131,8 +132,13 @@ private fun HistoriesContent(
         modifier = Modifier
             .fillMaxWidth(),
     ) {
-        items(lazyPagingItems) {
-            it?.let { checkin ->
+        items(
+            count = lazyPagingItems.itemCount,
+            key = lazyPagingItems.itemKey(),
+            contentType = lazyPagingItems.itemContentType(),
+        ) { index ->
+            val item = lazyPagingItems[index]
+            item?.let { checkin ->
                 CheckinRow(
                     checkin = checkin,
                 )
@@ -149,12 +155,14 @@ private fun HistoriesContent(
                     CircularProgressIndicator()
                 }
             }
+
             is LoadState.Error -> item {
                 Text("An error occurred while loading checkins")
                 it.error.message?.let {
                     Text(it)
                 }
             }
+
             is LoadState.NotLoading -> {}
         }
     }

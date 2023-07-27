@@ -47,7 +47,7 @@ mockk-agent = { group = "io.mockk", name = "mockk-agent", version.ref = "mockk" 
 mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNav" }
 androidx-paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
-androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version = "1.0.0-alpha20" }
+androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version = "3.2.0" }
 gms-play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }

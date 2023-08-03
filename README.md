@@ -16,6 +16,13 @@
 | --- | --- | ---        |
 | <img width="200" src="README.md.assets/screenshot_main_ja.png"> | <img width="200" src="README.md.assets/screenshot_main_en.png"> | <img width="200" src="README.md.assets/screenshot_main_checkin_created.png"> |
 
+## インストール方法
+https://github.com/private-yusuke/interscheckin/actions/runs/ から最新の workflow run のページを開き、Artifacts の一覧から APK ファイルが格納された zip ファイルをダウンロードしてください。
+
+zip ファイルを解凍して得られた APK は `adb install` 等で端末に追加できるかもしれません（未確認。署名がないせいで追加できない可能性があります）。
+
+うまくいかない場合は、手元に Android Studio をインストールし、自前でビルドとインストールをしてください。
+
 ## 使い方
 
 初回起動時には、位置情報取得の許可（†1）と、Foursquare の API キー、OAuth token といった認証情報の設定（†2）をする必要があります。

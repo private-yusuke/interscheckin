@@ -16,7 +16,7 @@ twitterComposeRules = "0.0.26"
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version = "0.32.0" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.7.2" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2023.09.00" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2023.09.01" }
 androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-ui-core = { group = "androidx.compose.ui", name = "ui" }

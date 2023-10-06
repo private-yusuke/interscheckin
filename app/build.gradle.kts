@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.plugin.serialization)
-    id("kotlin-kapt")
+    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
 }
@@ -49,7 +49,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.8"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packaging {
         resources {
@@ -94,7 +94,7 @@ dependencies {
     implementation(libs.coil.compose)
 
     implementation(project(path = ":library:foursquare-client"))
-    kapt(libs.dagger.hilt.compiler)
+    ksp(libs.dagger.hilt.compiler)
     implementation(project(path = ":library:fusedlocationktx"))
     testImplementation(libs.junit)
     testImplementation(libs.mockk.core)
@@ -107,7 +107,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     androidTestImplementation(libs.dagger.hilt.android.testing)
-    kaptAndroidTest(libs.dagger.hilt.android.compiler)
+    kspAndroidTest(libs.dagger.hilt.android.compiler)
 
     // For encrypting and decrypting credentials
     implementation(libs.tink.android)
@@ -115,7 +115,7 @@ dependencies {
 
     // Room
     implementation(libs.room.runtime)
-    kapt(libs.room.compiler)
+    ksp(libs.room.compiler)
     implementation(libs.room.paging)
     implementation(libs.room.ktx)
     implementation(libs.spatia.room)

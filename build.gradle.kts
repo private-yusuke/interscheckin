@@ -16,6 +16,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.ksp)
 }
 // see https://detekt.dev/docs/introduction/reporting/#merging-reports
 val reportMerge by tasks.registering(ReportMergeTask::class) {

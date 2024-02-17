@@ -17,7 +17,7 @@
 | <img width="200" src="README.md.assets/screenshot_main_ja.png"> | <img width="200" src="README.md.assets/screenshot_main_en.png"> | <img width="200" src="README.md.assets/screenshot_main_checkin_created.png"> |
 
 ## インストール方法
-https://github.com/private-yusuke/interscheckin/actions/runs/ から最新の workflow run のページを開き、Artifacts の一覧から APK ファイルが格納された zip ファイルをダウンロードしてください。
+https://github.com/private-yusuke/interscheckin/actions/workflows/build_apk.yml から最新の workflow run のページを開き、Artifacts の一覧から APK ファイルが格納された zip ファイルをダウンロードしてください。
 
 zip ファイルを解凍して得られた APK は `adb install` 等で端末に追加できるかもしれません（未確認。署名がないせいで追加できない可能性があります）。
 

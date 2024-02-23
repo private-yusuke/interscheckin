@@ -5,7 +5,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class FakeCredentialSettingsRepository @Inject constructor() : CredentialSettingsRepository {
+class FakeCredentialSettingsRepository @Inject constructor() :
+    CredentialSettingsRepository {
     private val _settingsFlow = MutableStateFlow(
         CredentialSettingsPreferences(
             foursquareOAuthToken = "fake_token",

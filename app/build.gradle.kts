@@ -72,10 +72,8 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.compose.ui.core)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material.icons.core)
@@ -94,6 +92,7 @@ dependencies {
     implementation(libs.coil.compose)
 
     implementation(project(path = ":library:foursquare-client"))
+    implementation(project(path = ":library:repositories"))
     ksp(libs.dagger.hilt.compiler)
     implementation(project(path = ":library:fusedlocationktx"))
     testImplementation(libs.junit)
@@ -111,12 +110,10 @@ dependencies {
 
     // For encrypting and decrypting credentials
     implementation(libs.tink.android)
-    implementation(libs.kotlinx.serialization.protobuf)
 
     // Room
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
-    implementation(libs.room.paging)
     implementation(libs.room.ktx)
     implementation(libs.spatia.room)
 

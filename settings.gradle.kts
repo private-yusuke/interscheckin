@@ -17,3 +17,4 @@ rootProject.name = "Interscheckin"
 include(":app")
 include(":library:fusedlocationktx")
 include(":library:foursquare-client")
+include(":library:repositories")

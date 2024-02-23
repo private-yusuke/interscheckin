@@ -32,10 +32,6 @@ android {
 }
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-
     // Retrofit
     implementation(libs.retrofit2.retrofit)
     // Retrofit with Moshi Converter

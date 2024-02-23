@@ -70,7 +70,9 @@ class MainApplicationModule {
     fun provideSettingsRepository(
         dataStore: DataStore<CredentialSettingsPreferences>,
     ): CredentialSettingsRepository {
-        return CredentialCredentialSettingsRepositoryImpl(dataStore)
+        return CredentialCredentialSettingsRepositoryImpl(
+            dataStore,
+        )
     }
 
     @Provides
@@ -111,7 +113,9 @@ class MainApplicationModule {
     ): DataStore<CredentialSettingsPreferences> {
         return DataStoreFactory.create(
             produceFile = { File(application.filesDir, "datastore/$DATASTORE_FILE") },
-            serializer = CredentialSettingsPreferencesSerializer(aead),
+            serializer = CredentialSettingsPreferencesSerializer(
+                aead,
+            ),
         )
     }
 

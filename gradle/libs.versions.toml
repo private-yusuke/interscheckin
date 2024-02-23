@@ -12,7 +12,6 @@ paging = "3.2.1"
 playServicesLocation = "21.1.0"
 room = "2.6.1"
 twitterComposeRules = "0.0.26"
-material = "1.9.0"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version = "0.34.0" }
@@ -64,7 +63,6 @@ moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = 
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "4.12.0" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.8.0" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "1.8.0" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version = "8.2.2" }

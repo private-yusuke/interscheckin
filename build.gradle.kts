@@ -17,8 +17,7 @@ plugins {
     alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.detekt)
     alias(libs.plugins.ksp)
-
-    id("com.autonomousapps.dependency-analysis") version "1.30.0"
+    alias(libs.plugins.dependency.analysis)
 }
 // see https://detekt.dev/docs/introduction/reporting/#merging-reports
 val reportMerge by tasks.registering(ReportMergeTask::class) {

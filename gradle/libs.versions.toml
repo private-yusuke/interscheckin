@@ -59,7 +59,7 @@ tink-android = { group = "com.google.crypto.tink", name = "tink-android", versio
 twitter-compose-rules-detekt = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "twitterComposeRules" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
 retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" }
-retrofit2-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version = "2.9.0" }
+retrofit2-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version = "2.10.0" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.15.1" }
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "4.12.0" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.8.0" }

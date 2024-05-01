@@ -1,7 +1,7 @@
 [versions]
 androidxJunit = "1.1.5"
 composeNav = "2.7.7"
-datastorePreferences = "1.1.0"
+datastorePreferences = "1.1.1"
 detekt = "1.23.6"
 espressoCore = "3.5.1"
 hilt = "2.51.1"

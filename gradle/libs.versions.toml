@@ -74,4 +74,4 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.24-1.0.20" }
-dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version = "1.31.0" }
+dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version = "1.32.0" }

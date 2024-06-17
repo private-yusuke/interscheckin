@@ -29,7 +29,7 @@ data class Chain(
 )
 
 data class Geocodes(
-    val main: LatAndLong,
+    val main: LatAndLong?,
 //    val roof: Roof?
 )
 

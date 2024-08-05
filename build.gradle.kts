@@ -18,6 +18,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.dependency.analysis)
+    alias(libs.plugins.compose.compiler) apply false
 }
 // see https://detekt.dev/docs/introduction/reporting/#merging-reports
 val reportMerge by tasks.registering(ReportMergeTask::class) {

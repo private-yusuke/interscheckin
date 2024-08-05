@@ -9,10 +9,6 @@
       "groupName": "kotlin"
     },
     {
-      "matchPackagePatterns": ["composeOptions"],
-      "groupName": "kotlin"
-    },
-    {
       "matchPackagePatterns": ["com.google.devtools.ksp"],
       "groupName": "kotlin"
     },

@@ -6,7 +6,7 @@ detekt = "1.23.6"
 espressoCore = "3.6.1"
 hilt = "2.51.1"
 junit = "4.13.2"
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 mockk = "1.13.12"
 paging = "3.3.1"
 playServicesLocation = "21.3.0"
@@ -69,9 +69,10 @@ androidx-wear-compose-material = { group = "androidx.wear.compose", name = "comp
 [plugins]
 android-application = { id = "com.android.application", version = "8.5.1" }
 android-library = { id = "com.android.library", version = "8.5.1" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-ksp = { id = "com.google.devtools.ksp", version = "1.9.24-1.0.20" }
+ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.23" }
 dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version = "1.33.0" }

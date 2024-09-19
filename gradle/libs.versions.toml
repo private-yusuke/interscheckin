@@ -1,6 +1,6 @@
 [versions]
 androidxJunit = "1.2.1"
-composeNav = "2.8.0"
+composeNav = "2.8.1"
 datastorePreferences = "1.1.1"
 detekt = "1.23.7"
 espressoCore = "3.6.1"

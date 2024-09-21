@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LocalContentColor
@@ -66,7 +68,8 @@ fun LocationSettingsScreen(
                             start = 16.dp,
                             end = 16.dp,
                         ),
-                    ),
+                    )
+                    .verticalScroll(rememberScrollState()),
             ) {
                 when (val it = screenState) {
                     LocationSettingsContract.ScreenState.Loading -> CircularProgressIndicator()

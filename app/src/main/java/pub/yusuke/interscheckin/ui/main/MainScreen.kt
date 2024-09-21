@@ -1,6 +1,7 @@
 package pub.yusuke.interscheckin.ui.main
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,14 +9,19 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
@@ -28,6 +34,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -42,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -88,154 +96,128 @@ fun MainScreen(
             modifier = modifier,
             snackbarHost = { SnackbarHost(snackbarHostState) },
         ) { innerPadding ->
-            Column(
-                modifier = Modifier
+            ColOrRow(
+                columnModifier = Modifier
                     .fillMaxWidth()
                     .padding(innerPadding),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                VenueList(
-                    venuesState = venuesState,
-                    locationState = locationState,
-                    selectedVenueIdState = selectedVenueIdState,
-                    onClickVenue = { selectedVenueIdState = it },
-                    onLongClickVenue = { venueId ->
-                        viewModel.onVibrationRequested()
-                        coroutineScope.launch {
-                            viewModel.checkIn(venueId, shout)
-                            shout = ""
-                        }
-                    },
-                    modifier = Modifier
-                        .height(220.dp),
-                )
-                Text(
-                    text = when (val it = locationState) {
-                        is MainContract.LocationState.Loading -> stringResource(R.string.main_location_loading)
-                        is MainContract.LocationState.Loaded -> stringResource(
-                            R.string.main_location_loaded,
-                            it.location.toFormattedString(),
-                            it.location.accuracy,
-                        )
-                        is MainContract.LocationState.Error -> it.throwable.stackTraceToString()
-                        MainContract.LocationState.Unavailable -> stringResource(R.string.main_location_unavailable)
-                    },
-                )
-                TextField(
-                    value = shout,
-                    onValueChange = { shout = it },
-                    modifier = Modifier
-                        .height(150.dp)
-                        .semantics { contentDescription = "TextField for shout" },
-                    placeholder = { Text(stringResource(R.string.main_shout_placeholder)) },
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Button(
-                        onClick = {
+                rowModifier = Modifier
+                    .fillMaxHeight()
+                    .padding(innerPadding),
+                columnContent = {
+                    VenueList(
+                        venuesState = venuesState,
+                        locationState = locationState,
+                        selectedVenueIdState = selectedVenueIdState,
+                        onClickVenue = { selectedVenueIdState = it },
+                        onLongClickVenue = { venueId ->
+                            viewModel.onVibrationRequested()
+                            coroutineScope.launch {
+                                viewModel.checkIn(venueId, shout)
+                                shout = ""
+                            }
+                        },
+                        modifier = Modifier
+                            .weight(0.4f),
+                    )
+                    ControlsColumn(
+                        locationState = locationState,
+                        onShoutChange = { shout = it },
+                        shout = shout,
+                        onCheckinButtonClicked = {
                             coroutineScope.launch {
                                 viewModel.checkIn(selectedVenueIdState, shout)
                                 shout = ""
                             }
                         },
-                        enabled = locationState is MainContract.LocationState.Loaded &&
-                            checkinState !is MainContract.CheckinState.Loading &&
-                            selectedVenueIdState != "",
-                        modifier = Modifier
-                            .semantics { contentDescription = "Button for creating a Checkin" },
-                    ) {
-                        Text(stringResource(R.string.main_button_checkin))
-                    }
-                    Row(
-                        modifier = Modifier
-                            .toggleable(
-                                value = drivingModeState,
-                                role = Role.Checkbox,
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        viewModel.onDrivingModeStateChanged(
-                                            !drivingModeState,
-                                        )
-                                    }
-                                },
-                            )
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Checkbox(
-                            checked = drivingModeState,
-                            onCheckedChange = null,
-                        )
-                        Text(
-                            text = stringResource(id = R.string.main_driving_mode_checkbox_label),
-                        )
-                    }
-                }
-                Text(
-                    text = when (val it = checkinState) {
-                        MainContract.CheckinState.InitialIdle ->
-                            stringResource(R.string.main_message_lets_checkin_today)
-                        MainContract.CheckinState.Loading ->
-                            stringResource(R.string.main_message_creating_checkin)
-                        is MainContract.CheckinState.Idle ->
-                            stringResource(
-                                R.string.main_message_checkin_success,
-                                it.lastCheckin.venueName,
-                            )
-                        is MainContract.CheckinState.Error ->
-                            "Error: ${it.throwable.message}\n${it.throwable.stackTrace}"
-                    },
-                )
-                Button(
-                    onClick = { coroutineScope.launch { viewModel.onLocationUpdateRequested() } },
-                    enabled = locationState is MainContract.LocationState.Loaded,
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.main_request_venue_list_update),
-                        style = TextStyle.Default.copy(
-                            fontSize = 40.sp,
-                        ),
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                ) {
-                    Button(
-                        onClick = {
+                        checkinState = checkinState,
+                        selectedVenueId = selectedVenueIdState,
+                        onDrivingModeCheckboxClicked = {
+                            coroutineScope.launch {
+                                viewModel.onDrivingModeStateChanged(
+                                    !drivingModeState,
+                                )
+                            }
+                        },
+                        drivingEnabled = drivingModeState,
+                        onUpdateVenueListButtonClicked = { coroutineScope.launch { viewModel.onLocationUpdateRequested() } },
+                        periodicLocationRetrievalEnabledState = periodicLocationRetrievalEnabledState,
+                        onHistoriesButtonClicked = {
                             navController.navigate(
                                 InterscheckinScreens.Histories.route,
                             )
                         },
-                    ) {
-                        Text(stringResource(R.string.main_button_histories))
-                    }
-                    Button(
-                        onClick = {
+                        onSettingsButtonClicked = {
                             navController.navigate(
                                 InterscheckinScreens.Settings.route,
                             )
                         },
-                    ) {
-                        Text(stringResource(R.string.main_go_to_settings_button_label))
-                    }
-                }
-                (periodicLocationRetrievalEnabledState as? MainContract.PeriodicLocationRetrievalState.Enabled)?.let {
-                    TextButton(
-                        onClick = { navController.navigate(InterscheckinScreens.LocationSettings.route) },
-                    ) {
-                        Text(
-                            text = stringResource(
-                                R.string.main_periodic_location_retrieval_enabled,
-                                it.interval,
-                            ),
-                            style = InterscheckinTextStyle.Large,
-                        )
-                    }
-                }
-            }
+                        onPeriodicLocationRetrievalSettingsButtonClicked = {
+                            navController.navigate(InterscheckinScreens.LocationSettings.route)
+                        },
+                        modifier = Modifier
+                            .weight(0.6f),
+                    )
+                },
+                rowContent = {
+                    VenueList(
+                        venuesState = venuesState,
+                        locationState = locationState,
+                        selectedVenueIdState = selectedVenueIdState,
+                        onClickVenue = { selectedVenueIdState = it },
+                        onLongClickVenue = { venueId ->
+                            viewModel.onVibrationRequested()
+                            coroutineScope.launch {
+                                viewModel.checkIn(venueId, shout)
+                                shout = ""
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(0.4f),
+                    )
+                    VerticalDivider()
+                    ControlsColumn(
+                        locationState = locationState,
+                        onShoutChange = { shout = it },
+                        shout = shout,
+                        onCheckinButtonClicked = {
+                            coroutineScope.launch {
+                                viewModel.checkIn(selectedVenueIdState, shout)
+                                shout = ""
+                            }
+                        },
+                        checkinState = checkinState,
+                        selectedVenueId = selectedVenueIdState,
+                        onDrivingModeCheckboxClicked = {
+                            coroutineScope.launch {
+                                viewModel.onDrivingModeStateChanged(
+                                    !drivingModeState,
+                                )
+                            }
+                        },
+                        drivingEnabled = drivingModeState,
+                        onUpdateVenueListButtonClicked = { coroutineScope.launch { viewModel.onLocationUpdateRequested() } },
+                        periodicLocationRetrievalEnabledState = periodicLocationRetrievalEnabledState,
+                        onHistoriesButtonClicked = {
+                            navController.navigate(
+                                InterscheckinScreens.Histories.route,
+                            )
+                        },
+                        onSettingsButtonClicked = {
+                            navController.navigate(
+                                InterscheckinScreens.Settings.route,
+                            )
+                        },
+                        onPeriodicLocationRetrievalSettingsButtonClicked = {
+                            navController.navigate(InterscheckinScreens.LocationSettings.route)
+                        },
+                        modifier = Modifier
+                            .weight(0.6f)
+                            .padding(vertical = 8.dp)
+                            .verticalScroll(rememberScrollState()),
+                    )
+                },
+            )
         }
     }
 
@@ -245,6 +227,32 @@ fun MainScreen(
         navController = navController,
         onSnackbarDismissed = viewModel::onSnackbarDismissed,
     )
+}
+
+private fun Configuration.isPortrait() = orientation == Configuration.ORIENTATION_PORTRAIT
+
+@Composable
+private fun ColOrRow(
+    columnContent: @Composable ColumnScope.() -> Unit,
+    rowContent: @Composable RowScope.() -> Unit,
+    @SuppressLint("ModifierParameter") columnModifier: Modifier = Modifier,
+    rowModifier: Modifier = Modifier,
+    isPortrait: Boolean = LocalConfiguration.current.isPortrait(),
+) {
+    if (isPortrait) {
+        Column(
+            modifier = columnModifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            content = columnContent,
+        )
+    } else {
+        Row(
+            modifier = rowModifier,
+            verticalAlignment = Alignment.Top,
+            content = rowContent,
+        )
+    }
 }
 
 @Composable
@@ -448,6 +456,141 @@ private fun VenueRow(
     }
 }
 
+@Composable
+private fun ControlsColumn(
+    locationState: MainContract.LocationState,
+    shout: String,
+    onShoutChange: (String) -> Unit,
+    onCheckinButtonClicked: () -> Unit,
+    checkinState: MainContract.CheckinState,
+    selectedVenueId: String,
+    onDrivingModeCheckboxClicked: (Boolean) -> Unit,
+    drivingEnabled: Boolean,
+    onUpdateVenueListButtonClicked: () -> Unit,
+    periodicLocationRetrievalEnabledState: MainContract.PeriodicLocationRetrievalState,
+    onHistoriesButtonClicked: () -> Unit,
+    onSettingsButtonClicked: () -> Unit,
+    onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = when (val it = locationState) {
+                is MainContract.LocationState.Loading -> stringResource(R.string.main_location_loading)
+                is MainContract.LocationState.Loaded -> stringResource(
+                    R.string.main_location_loaded,
+                    it.location.toFormattedString(),
+                    it.location.accuracy,
+                )
+
+                is MainContract.LocationState.Error -> it.throwable.stackTraceToString()
+                MainContract.LocationState.Unavailable -> stringResource(R.string.main_location_unavailable)
+            },
+        )
+        TextField(
+            value = shout,
+            onValueChange = onShoutChange,
+            modifier = Modifier
+                .height(150.dp)
+                .semantics { contentDescription = "TextField for shout" },
+            placeholder = { Text(stringResource(R.string.main_shout_placeholder)) },
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Button(
+                onClick = onCheckinButtonClicked,
+                enabled = locationState is MainContract.LocationState.Loaded &&
+                    checkinState !is MainContract.CheckinState.Loading &&
+                    selectedVenueId != "",
+                modifier = Modifier
+                    .semantics { contentDescription = "Button for creating a Checkin" },
+            ) {
+                Text(stringResource(R.string.main_button_checkin))
+            }
+            Row(
+                modifier = Modifier
+                    .toggleable(
+                        value = drivingEnabled,
+                        role = Role.Checkbox,
+                        onValueChange = onDrivingModeCheckboxClicked,
+                    )
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Checkbox(
+                    checked = drivingEnabled,
+                    onCheckedChange = null,
+                )
+                Text(
+                    text = stringResource(id = R.string.main_driving_mode_checkbox_label),
+                )
+            }
+        }
+        Text(
+            text = when (val it = checkinState) {
+                MainContract.CheckinState.InitialIdle ->
+                    stringResource(R.string.main_message_lets_checkin_today)
+
+                MainContract.CheckinState.Loading ->
+                    stringResource(R.string.main_message_creating_checkin)
+
+                is MainContract.CheckinState.Idle ->
+                    stringResource(
+                        R.string.main_message_checkin_success,
+                        it.lastCheckin.venueName,
+                    )
+
+                is MainContract.CheckinState.Error ->
+                    "Error: ${it.throwable.message}\n${it.throwable.stackTrace}"
+            },
+        )
+        Button(
+            onClick = onUpdateVenueListButtonClicked,
+            enabled = locationState is MainContract.LocationState.Loaded,
+        ) {
+            Text(
+                text = stringResource(id = R.string.main_request_venue_list_update),
+                style = TextStyle.Default.copy(
+                    fontSize = 40.sp,
+                ),
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Button(
+                onClick = onHistoriesButtonClicked,
+            ) {
+                Text(stringResource(R.string.main_button_histories))
+            }
+            Button(
+                onClick = onSettingsButtonClicked,
+            ) {
+                Text(stringResource(R.string.main_go_to_settings_button_label))
+            }
+        }
+        (periodicLocationRetrievalEnabledState as? MainContract.PeriodicLocationRetrievalState.Enabled)?.let {
+            TextButton(
+                onClick = onPeriodicLocationRetrievalSettingsButtonClicked,
+            ) {
+                Text(
+                    text = stringResource(
+                        R.string.main_periodic_location_retrieval_enabled,
+                        it.interval,
+                    ),
+                    style = InterscheckinTextStyle.Large,
+                )
+            }
+        }
+    }
+}
+
 private val previewVenue =
     MainContract.Venue(
         id = "id",
@@ -460,32 +603,34 @@ private val previewVenue =
         ),
     )
 
+private val previewViewModel @Composable get() = object : MainContract.ViewModel {
+    override var venuesState: State<MainContract.VenuesState> =
+        remember { mutableStateOf(MainContract.VenuesState.Idle(listOf(previewVenue).toImmutableList())) }
+    override val snackbarMessageState: State<MainContract.SnackbarState> =
+        remember { mutableStateOf(MainContract.SnackbarState.None) }
+    override val periodicLocationRetrievalEnabledState: State<MainContract.PeriodicLocationRetrievalState> =
+        remember { mutableStateOf(MainContract.PeriodicLocationRetrievalState.Disabled) }
+
+    override suspend fun onDrivingModeStateChanged(enabled: Boolean) {}
+    override suspend fun checkIn(venueId: String, shout: String?) {}
+
+    override fun onVibrationRequested() {}
+    override suspend fun onLocationUpdateRequested() {}
+    override fun onSnackbarDismissed() {}
+
+    override val checkinState: MutableState<MainContract.CheckinState> =
+        remember { mutableStateOf(MainContract.CheckinState.InitialIdle) }
+    override val drivingModeFlow = flowOf(false)
+    override val locationState: State<MainContract.LocationState> =
+        remember { mutableStateOf(MainContract.LocationState.Loading()) }
+}
+
 @SuppressLint("UnrememberedMutableState")
 @Preview(showBackground = true)
 @Composable
 private fun MainActivityScreenPreview() {
     MainScreen(
-        viewModel = object : MainContract.ViewModel {
-            override var venuesState: State<MainContract.VenuesState> =
-                remember { mutableStateOf(MainContract.VenuesState.Idle(listOf(previewVenue).toImmutableList())) }
-            override val snackbarMessageState: State<MainContract.SnackbarState> =
-                remember { mutableStateOf(MainContract.SnackbarState.None) }
-            override val periodicLocationRetrievalEnabledState: State<MainContract.PeriodicLocationRetrievalState> =
-                remember { mutableStateOf(MainContract.PeriodicLocationRetrievalState.Disabled) }
-
-            override suspend fun onDrivingModeStateChanged(enabled: Boolean) {}
-            override suspend fun checkIn(venueId: String, shout: String?) {}
-
-            override fun onVibrationRequested() {}
-            override suspend fun onLocationUpdateRequested() {}
-            override fun onSnackbarDismissed() {}
-
-            override val checkinState: MutableState<MainContract.CheckinState> =
-                remember { mutableStateOf(MainContract.CheckinState.InitialIdle) }
-            override val drivingModeFlow = flowOf(false)
-            override val locationState: State<MainContract.LocationState> =
-                remember { mutableStateOf(MainContract.LocationState.Loading()) }
-        },
+        viewModel = previewViewModel,
         navController = rememberNavController(),
     )
 }
@@ -516,3 +661,13 @@ private fun Modifier.applyIf(condition: Boolean, modifier: Modifier.() -> Modifi
     } else {
         this
     }
+
+@SuppressLint("UnrememberedMutableState")
+@Preview(showBackground = true, device = "spec:orientation=landscape,width=411dp,height=891dp")
+@Composable
+private fun MainActivityScreenPortraitPreview() {
+    MainScreen(
+        viewModel = previewViewModel,
+        navController = rememberNavController(),
+    )
+}

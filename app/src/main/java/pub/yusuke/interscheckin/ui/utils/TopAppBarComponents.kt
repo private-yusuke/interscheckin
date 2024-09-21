@@ -1,5 +1,6 @@
 package pub.yusuke.interscheckin.ui.utils
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,6 +20,7 @@ fun InterscheckinTopBar(
     modifier: Modifier = Modifier,
     navigationIcon: ImageVector = Icons.Filled.ArrowBack,
     navigationIconDescription: String = "backIcon",
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
         title = { Text(titleText) },
@@ -28,5 +30,6 @@ fun InterscheckinTopBar(
             }
         },
         modifier = modifier,
+        actions = actions,
     )
 }

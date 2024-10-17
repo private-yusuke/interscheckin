@@ -379,7 +379,12 @@ fun MainScreen(
                 locationState,
                 shout,
                 onShoutChange = { shout = it },
-                onCheckinButtonClicked = { },
+                onCheckinButtonClicked = {
+                    coroutineScope.launch {
+                        viewModel.checkIn(selectedVenueIdState, shout)
+                        shout = ""
+                    }
+                },
                 checkinState,
                 venuesState,
                 onClickVenue = { selectedVenueIdState = it },

@@ -1,7 +1,6 @@
 package pub.yusuke.interscheckin.ui.main
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,10 +8,9 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,9 +20,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -34,7 +34,8 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -44,12 +45,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -61,6 +62,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.window.core.layout.WindowHeightSizeClass
+import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -71,6 +75,281 @@ import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.navigation.InterscheckinScreens
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTextStyle
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
+
+private sealed interface MainScreenType {
+    data object Compact : MainScreenType
+    data object PortraitMedium : MainScreenType
+    data object Extra : MainScreenType
+}
+
+@Composable
+private fun screenType(windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass) = when {
+    windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT &&
+        windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT ->
+        MainScreenType.Compact
+    windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT &&
+        windowSizeClass.windowHeightSizeClass != WindowHeightSizeClass.COMPACT ->
+        MainScreenType.PortraitMedium
+    else -> MainScreenType.Extra
+}
+
+@Composable
+private fun MainScreenContent(
+    locationState: MainContract.LocationState,
+    shout: String,
+    onShoutChange: (String) -> Unit,
+    onCheckinButtonClicked: () -> Unit,
+    checkinState: MainContract.CheckinState,
+    venuesState: MainContract.VenuesState,
+    onClickVenue: (String) -> Unit,
+    onLongClickVenue: (String) -> Unit,
+    selectedVenueId: String,
+    onDrivingModeCheckboxClicked: (Boolean) -> Unit,
+    drivingEnabled: Boolean,
+    onUpdateVenueListButtonClicked: () -> Unit,
+    periodicLocationRetrievalEnabledState: MainContract.PeriodicLocationRetrievalState,
+    onHistoriesButtonClicked: () -> Unit,
+    onSettingsButtonClicked: () -> Unit,
+    onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
+) {
+    val screen = screenType(windowSizeClass)
+
+    when (screen) {
+        MainScreenType.Compact -> MainScreenCompactContent(
+            locationState,
+            shout,
+            onShoutChange,
+            onCheckinButtonClicked,
+            checkinState,
+            venuesState,
+            onClickVenue,
+            onLongClickVenue,
+            selectedVenueId,
+            onDrivingModeCheckboxClicked,
+            drivingEnabled,
+            onUpdateVenueListButtonClicked,
+            periodicLocationRetrievalEnabledState,
+            onHistoriesButtonClicked,
+            onSettingsButtonClicked,
+            onPeriodicLocationRetrievalSettingsButtonClicked, modifier,
+        )
+        MainScreenType.PortraitMedium -> MainScreenPortraitMediumContent(
+            locationState,
+            shout,
+            onShoutChange,
+            onCheckinButtonClicked,
+            checkinState,
+            venuesState,
+            onClickVenue,
+            onLongClickVenue,
+            selectedVenueId,
+            onDrivingModeCheckboxClicked,
+            drivingEnabled,
+            onUpdateVenueListButtonClicked,
+            periodicLocationRetrievalEnabledState,
+            onHistoriesButtonClicked,
+            onSettingsButtonClicked,
+            onPeriodicLocationRetrievalSettingsButtonClicked, modifier,
+        )
+        MainScreenType.Extra -> MainScreenExtraContent(
+            locationState,
+            shout,
+            onShoutChange,
+            onCheckinButtonClicked,
+            checkinState,
+            venuesState,
+            onClickVenue,
+            onLongClickVenue,
+            selectedVenueId,
+            onDrivingModeCheckboxClicked,
+            drivingEnabled,
+            onUpdateVenueListButtonClicked,
+            periodicLocationRetrievalEnabledState,
+            onHistoriesButtonClicked,
+            onSettingsButtonClicked,
+            onPeriodicLocationRetrievalSettingsButtonClicked, modifier,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MainScreenCompactContent(
+    locationState: MainContract.LocationState,
+    shout: String,
+    onShoutChange: (String) -> Unit,
+    onCheckinButtonClicked: () -> Unit,
+    checkinState: MainContract.CheckinState,
+    venuesState: MainContract.VenuesState,
+    onClickVenue: (String) -> Unit,
+    onLongClickVenue: (String) -> Unit,
+    selectedVenueId: String,
+    onDrivingModeCheckboxClicked: (Boolean) -> Unit,
+    drivingEnabled: Boolean,
+    onUpdateVenueListButtonClicked: () -> Unit,
+    periodicLocationRetrievalEnabledState: MainContract.PeriodicLocationRetrievalState,
+    onHistoriesButtonClicked: () -> Unit,
+    onSettingsButtonClicked: () -> Unit,
+    onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val scaffoldState = rememberBottomSheetScaffoldState()
+
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        sheetPeekHeight = 40.dp,
+        sheetContent = {
+            ControlsColumn(
+                locationState,
+                shout,
+                onShoutChange,
+                onCheckinButtonClicked,
+                checkinState,
+                selectedVenueId,
+                onDrivingModeCheckboxClicked,
+                drivingEnabled,
+                onUpdateVenueListButtonClicked,
+                periodicLocationRetrievalEnabledState,
+                onHistoriesButtonClicked,
+                onSettingsButtonClicked,
+                onPeriodicLocationRetrievalSettingsButtonClicked,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+            )
+        },
+        modifier = modifier,
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
+        ) {
+            VenueList(
+                venuesState,
+                locationState,
+                selectedVenueId,
+                onClickVenue,
+                onLongClickVenue,
+                modifier = Modifier
+                    .fillMaxSize(),
+            )
+        }
+    }
+}
+
+@Composable
+private fun MainScreenExtraContent(
+    locationState: MainContract.LocationState,
+    shout: String,
+    onShoutChange: (String) -> Unit,
+    onCheckinButtonClicked: () -> Unit,
+    checkinState: MainContract.CheckinState,
+    venuesState: MainContract.VenuesState,
+    onClickVenue: (String) -> Unit,
+    onLongClickVenue: (String) -> Unit,
+    selectedVenueId: String,
+    onDrivingModeCheckboxClicked: (Boolean) -> Unit,
+    drivingEnabled: Boolean,
+    onUpdateVenueListButtonClicked: () -> Unit,
+    periodicLocationRetrievalEnabledState: MainContract.PeriodicLocationRetrievalState,
+    onHistoriesButtonClicked: () -> Unit,
+    onSettingsButtonClicked: () -> Unit,
+    onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.Top,
+        modifier = modifier,
+    ) {
+        VenueList(
+            venuesState,
+            locationState,
+            selectedVenueId,
+            onClickVenue,
+            onLongClickVenue,
+            modifier = Modifier
+                .weight(0.4f),
+        )
+        ControlsColumn(
+            locationState,
+            shout,
+            onShoutChange,
+            onCheckinButtonClicked,
+            checkinState,
+            selectedVenueId,
+            onDrivingModeCheckboxClicked,
+            drivingEnabled,
+            onUpdateVenueListButtonClicked,
+            periodicLocationRetrievalEnabledState,
+            onHistoriesButtonClicked,
+            onSettingsButtonClicked,
+            onPeriodicLocationRetrievalSettingsButtonClicked,
+            modifier = Modifier
+                .weight(0.6f)
+                .padding(vertical = 8.dp)
+                .verticalScroll(rememberScrollState()),
+        )
+    }
+}
+
+@Composable
+private fun MainScreenPortraitMediumContent(
+    locationState: MainContract.LocationState,
+    shout: String,
+    onShoutChange: (String) -> Unit,
+    onCheckinButtonClicked: () -> Unit,
+    checkinState: MainContract.CheckinState,
+    venuesState: MainContract.VenuesState,
+    onClickVenue: (String) -> Unit,
+    onLongClickVenue: (String) -> Unit,
+    selectedVenueId: String,
+    onDrivingModeCheckboxClicked: (Boolean) -> Unit,
+    drivingEnabled: Boolean,
+    onUpdateVenueListButtonClicked: () -> Unit,
+    periodicLocationRetrievalEnabledState: MainContract.PeriodicLocationRetrievalState,
+    onHistoriesButtonClicked: () -> Unit,
+    onSettingsButtonClicked: () -> Unit,
+    onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier,
+    ) {
+        VenueList(
+            venuesState,
+            locationState,
+            selectedVenueId,
+            onClickVenue,
+            onLongClickVenue,
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(0.4f),
+        )
+        ControlsColumn(
+            locationState,
+            shout,
+            onShoutChange,
+            onCheckinButtonClicked,
+            checkinState,
+            selectedVenueId,
+            onDrivingModeCheckboxClicked,
+            drivingEnabled,
+            onUpdateVenueListButtonClicked,
+            periodicLocationRetrievalEnabledState,
+            onHistoriesButtonClicked,
+            onSettingsButtonClicked,
+            onPeriodicLocationRetrievalSettingsButtonClicked,
+            modifier = Modifier
+                .weight(0.6f)
+                .padding(vertical = 8.dp)
+                .verticalScroll(rememberScrollState()),
+        )
+    }
+}
 
 @Composable
 fun MainScreen(
@@ -86,8 +365,8 @@ fun MainScreen(
     val snackbarState by viewModel.snackbarMessageState
     val periodicLocationRetrievalEnabledState by viewModel.periodicLocationRetrievalEnabledState
 
-    var shout by remember { mutableStateOf("") }
-    var selectedVenueIdState by remember { mutableStateOf("") }
+    var shout by rememberSaveable { mutableStateOf("") }
+    var selectedVenueIdState by rememberSaveable { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -96,127 +375,47 @@ fun MainScreen(
             modifier = modifier,
             snackbarHost = { SnackbarHost(snackbarHostState) },
         ) { innerPadding ->
-            ColOrRow(
-                columnModifier = Modifier
-                    .fillMaxWidth()
-                    .padding(innerPadding),
-                rowModifier = Modifier
-                    .fillMaxHeight()
-                    .padding(innerPadding),
-                columnContent = {
-                    VenueList(
-                        venuesState = venuesState,
-                        locationState = locationState,
-                        selectedVenueIdState = selectedVenueIdState,
-                        onClickVenue = { selectedVenueIdState = it },
-                        onLongClickVenue = { venueId ->
-                            viewModel.onVibrationRequested()
-                            coroutineScope.launch {
-                                viewModel.checkIn(venueId, shout)
-                                shout = ""
-                            }
-                        },
-                        modifier = Modifier
-                            .weight(0.4f),
-                    )
-                    ControlsColumn(
-                        locationState = locationState,
-                        onShoutChange = { shout = it },
-                        shout = shout,
-                        onCheckinButtonClicked = {
-                            coroutineScope.launch {
-                                viewModel.checkIn(selectedVenueIdState, shout)
-                                shout = ""
-                            }
-                        },
-                        checkinState = checkinState,
-                        selectedVenueId = selectedVenueIdState,
-                        onDrivingModeCheckboxClicked = {
-                            coroutineScope.launch {
-                                viewModel.onDrivingModeStateChanged(
-                                    !drivingModeState,
-                                )
-                            }
-                        },
-                        drivingEnabled = drivingModeState,
-                        onUpdateVenueListButtonClicked = { coroutineScope.launch { viewModel.onLocationUpdateRequested() } },
-                        periodicLocationRetrievalEnabledState = periodicLocationRetrievalEnabledState,
-                        onHistoriesButtonClicked = {
-                            navController.navigate(
-                                InterscheckinScreens.Histories.route,
-                            )
-                        },
-                        onSettingsButtonClicked = {
-                            navController.navigate(
-                                InterscheckinScreens.Settings.route,
-                            )
-                        },
-                        onPeriodicLocationRetrievalSettingsButtonClicked = {
-                            navController.navigate(InterscheckinScreens.LocationSettings.route)
-                        },
-                        modifier = Modifier
-                            .weight(0.6f),
+            MainScreenContent(
+                locationState,
+                shout,
+                onShoutChange = { shout = it },
+                onCheckinButtonClicked = { },
+                checkinState,
+                venuesState,
+                onClickVenue = { selectedVenueIdState = it },
+                onLongClickVenue = { venueId ->
+                    viewModel.onVibrationRequested()
+                    coroutineScope.launch {
+                        viewModel.checkIn(venueId, shout)
+                        shout = ""
+                    }
+                },
+                selectedVenueId = selectedVenueIdState,
+                onDrivingModeCheckboxClicked = {
+                    coroutineScope.launch {
+                        viewModel.onDrivingModeStateChanged(
+                            !drivingModeState,
+                        )
+                    }
+                },
+                drivingEnabled = drivingModeState,
+                onUpdateVenueListButtonClicked = { coroutineScope.launch { viewModel.onLocationUpdateRequested() } },
+                periodicLocationRetrievalEnabledState = periodicLocationRetrievalEnabledState,
+                onHistoriesButtonClicked = {
+                    navController.navigate(
+                        InterscheckinScreens.Histories.route,
                     )
                 },
-                rowContent = {
-                    VenueList(
-                        venuesState = venuesState,
-                        locationState = locationState,
-                        selectedVenueIdState = selectedVenueIdState,
-                        onClickVenue = { selectedVenueIdState = it },
-                        onLongClickVenue = { venueId ->
-                            viewModel.onVibrationRequested()
-                            coroutineScope.launch {
-                                viewModel.checkIn(venueId, shout)
-                                shout = ""
-                            }
-                        },
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(0.4f),
-                    )
-                    VerticalDivider()
-                    ControlsColumn(
-                        locationState = locationState,
-                        onShoutChange = { shout = it },
-                        shout = shout,
-                        onCheckinButtonClicked = {
-                            coroutineScope.launch {
-                                viewModel.checkIn(selectedVenueIdState, shout)
-                                shout = ""
-                            }
-                        },
-                        checkinState = checkinState,
-                        selectedVenueId = selectedVenueIdState,
-                        onDrivingModeCheckboxClicked = {
-                            coroutineScope.launch {
-                                viewModel.onDrivingModeStateChanged(
-                                    !drivingModeState,
-                                )
-                            }
-                        },
-                        drivingEnabled = drivingModeState,
-                        onUpdateVenueListButtonClicked = { coroutineScope.launch { viewModel.onLocationUpdateRequested() } },
-                        periodicLocationRetrievalEnabledState = periodicLocationRetrievalEnabledState,
-                        onHistoriesButtonClicked = {
-                            navController.navigate(
-                                InterscheckinScreens.Histories.route,
-                            )
-                        },
-                        onSettingsButtonClicked = {
-                            navController.navigate(
-                                InterscheckinScreens.Settings.route,
-                            )
-                        },
-                        onPeriodicLocationRetrievalSettingsButtonClicked = {
-                            navController.navigate(InterscheckinScreens.LocationSettings.route)
-                        },
-                        modifier = Modifier
-                            .weight(0.6f)
-                            .padding(vertical = 8.dp)
-                            .verticalScroll(rememberScrollState()),
+                onSettingsButtonClicked = {
+                    navController.navigate(
+                        InterscheckinScreens.Settings.route,
                     )
                 },
+                onPeriodicLocationRetrievalSettingsButtonClicked = {
+                    navController.navigate(InterscheckinScreens.LocationSettings.route)
+                },
+                modifier = Modifier
+                    .padding(innerPadding),
             )
         }
     }
@@ -227,32 +426,6 @@ fun MainScreen(
         navController = navController,
         onSnackbarDismissed = viewModel::onSnackbarDismissed,
     )
-}
-
-private fun Configuration.isPortrait() = orientation == Configuration.ORIENTATION_PORTRAIT
-
-@Composable
-private fun ColOrRow(
-    columnContent: @Composable ColumnScope.() -> Unit,
-    rowContent: @Composable RowScope.() -> Unit,
-    @SuppressLint("ModifierParameter") columnModifier: Modifier = Modifier,
-    rowModifier: Modifier = Modifier,
-    isPortrait: Boolean = LocalConfiguration.current.isPortrait(),
-) {
-    if (isPortrait) {
-        Column(
-            modifier = columnModifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            content = columnContent,
-        )
-    } else {
-        Row(
-            modifier = rowModifier,
-            verticalAlignment = Alignment.Top,
-            content = rowContent,
-        )
-    }
 }
 
 @Composable
@@ -362,7 +535,7 @@ private fun VenueColumn(
 fun VenueList(
     venuesState: MainContract.VenuesState,
     locationState: MainContract.LocationState,
-    selectedVenueIdState: String,
+    selectedVenueId: String,
     onClickVenue: (String) -> Unit,
     onLongClickVenue: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -382,14 +555,14 @@ fun VenueList(
             is MainContract.VenuesState.Idle ->
                 VenueColumn(
                     venues = venuesState.venues,
-                    selectedVenueIdState = selectedVenueIdState,
+                    selectedVenueIdState = selectedVenueId,
                     onClickVenue = onClickVenue,
                     onLongClickVenue = onLongClickVenue,
                 )
             is MainContract.VenuesState.Loading ->
                 VenueColumn(
                     venues = venuesState.lastVenues,
-                    selectedVenueIdState = selectedVenueIdState,
+                    selectedVenueIdState = selectedVenueId,
                     onClickVenue = onClickVenue,
                     onLongClickVenue = onLongClickVenue,
                 )

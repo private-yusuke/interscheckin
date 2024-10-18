@@ -107,6 +107,10 @@ class MainInteractor @Inject constructor(
     override fun fetchPeriodicLocationRetrievalPreferencesFlow(): Flow<PeriodicLocationRetrievalPreferences> =
         periodicLocationRetrievalRepository.periodicLocationRetrievalPreferencesFlow
 
+    override suspend fun enablePeriodicLocationRetrieval(enabled: Boolean) {
+        periodicLocationRetrievalRepository.enablePeriodicLocationRetrieval(enabled)
+    }
+
     override fun vibrate(vibrationEffect: VibrationEffect) =
         vibrator.vibrate(vibrationEffect)
 

@@ -91,7 +91,7 @@ class MainScreenTest {
 
         // then
         composeTestRule
-            .onNodeWithContentDescription("Button for creating a Checkin")
+            .onNodeWithContentDescription("Create a Checkin")
             .assertIsNotEnabled()
     }
 
@@ -111,7 +111,7 @@ class MainScreenTest {
 
         // then
         composeTestRule
-            .onNodeWithContentDescription("Button for creating a Checkin")
+            .onNodeWithContentDescription("Create a Checkin")
             .assertIsEnabled()
     }
 
@@ -135,7 +135,7 @@ class MainScreenTest {
             .onNodeWithText("test categories")
             .performClick()
         composeTestRule
-            .onNodeWithContentDescription("Button for creating a Checkin")
+            .onNodeWithContentDescription("Create a Checkin")
             .performClick()
         composeTestRule.waitUntil {
             vm.checkinState.value is MainContract.CheckinState.Idle

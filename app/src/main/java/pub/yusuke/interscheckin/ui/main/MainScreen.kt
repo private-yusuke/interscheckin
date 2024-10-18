@@ -21,11 +21,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -113,11 +121,13 @@ private fun MainScreenContent(
     periodicLocationRetrievalEnabledState: MainContract.PeriodicLocationRetrievalState,
     onHistoriesButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
+    onPeriodicLocationRetrievalToggleButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
 ) {
     val screen = screenType(windowSizeClass)
+//    val screen: MainScreenType = MainScreenType.Compact
 
     when (screen) {
         MainScreenType.Compact -> MainScreenCompactContent(
@@ -136,7 +146,9 @@ private fun MainScreenContent(
             periodicLocationRetrievalEnabledState,
             onHistoriesButtonClicked,
             onSettingsButtonClicked,
-            onPeriodicLocationRetrievalSettingsButtonClicked, modifier,
+            onPeriodicLocationRetrievalSettingsButtonClicked,
+            onPeriodicLocationRetrievalToggleButtonClicked,
+            modifier,
         )
         MainScreenType.PortraitMedium -> MainScreenPortraitMediumContent(
             locationState,
@@ -154,7 +166,8 @@ private fun MainScreenContent(
             periodicLocationRetrievalEnabledState,
             onHistoriesButtonClicked,
             onSettingsButtonClicked,
-            onPeriodicLocationRetrievalSettingsButtonClicked, modifier,
+            onPeriodicLocationRetrievalSettingsButtonClicked,
+            modifier,
         )
         MainScreenType.Extra -> MainScreenExtraContent(
             locationState,
@@ -172,7 +185,8 @@ private fun MainScreenContent(
             periodicLocationRetrievalEnabledState,
             onHistoriesButtonClicked,
             onSettingsButtonClicked,
-            onPeriodicLocationRetrievalSettingsButtonClicked, modifier,
+            onPeriodicLocationRetrievalSettingsButtonClicked,
+            modifier,
         )
     }
 }
@@ -196,9 +210,12 @@ private fun MainScreenCompactContent(
     onHistoriesButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    onPeriodicLocationRetrievalToggleButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scaffoldState = rememberBottomSheetScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
+    val venueSelected = selectedVenueId.isNotBlank()
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
@@ -238,9 +255,47 @@ private fun MainScreenCompactContent(
                 modifier = Modifier
                     .fillMaxSize(),
             )
+            Column(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                FloatingActionButton(
+                    onClick = onUpdateVenueListButtonClicked,
+                ) {
+                    Icon(imageVector = Icons.Filled.Refresh, contentDescription = "Loading the latest location info")
+                }
+                FloatingActionButton(
+                    // Ripple effect remains even the state indicates disabled
+                    onClick = if (periodicLocationRetrievalEnabledState is MainContract.PeriodicLocationRetrievalState.Enabled) {
+                        onPeriodicLocationRetrievalToggleButtonClicked
+                    } else { {} },
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.LocationOn,
+                        contentDescription = "Toggle periodic location retrieval",
+                        tint = if (periodicLocationRetrievalEnabledState is MainContract.PeriodicLocationRetrievalState.Enabled) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.inversePrimary
+                        },
+                    )
+                }
+                FloatingActionButton(
+                    onClick = onCheckinButtonClicked,
+                    containerColor = ButtonDefaults.buttonColors().containerColor(venueSelected),
+                    contentColor = ButtonDefaults.buttonColors().contentColor(venueSelected),
+                ) {
+                    Icon(imageVector = Icons.Filled.Create, contentDescription = "Create a Checkin")
+                }
+            }
         }
     }
 }
+
+private fun ButtonColors.containerColor(enabled: Boolean) = if (enabled) containerColor else disabledContainerColor
+private fun ButtonColors.contentColor(enabled: Boolean) = if (enabled) contentColor else disabledContentColor
 
 @Composable
 private fun MainScreenExtraContent(
@@ -421,6 +476,11 @@ fun MainScreen(
                 },
                 onPeriodicLocationRetrievalSettingsButtonClicked = {
                     navController.navigate(InterscheckinScreens.LocationSettings.route)
+                },
+                onPeriodicLocationRetrievalToggleButtonClicked = {
+                    coroutineScope.launch {
+                        viewModel.onPeriodicLocationRetrievalStateChanged(periodicLocationRetrievalEnabledState !is MainContract.PeriodicLocationRetrievalState.Enabled)
+                    }
                 },
                 modifier = Modifier
                     .padding(innerPadding),
@@ -703,7 +763,7 @@ private fun ControlsColumn(
                     checkinState !is MainContract.CheckinState.Loading &&
                     selectedVenueId != "",
                 modifier = Modifier
-                    .semantics { contentDescription = "Button for creating a Checkin" },
+                    .semantics { contentDescription = "Create a Checkin" },
             ) {
                 Text(stringResource(R.string.main_button_checkin))
             }
@@ -807,6 +867,7 @@ private val previewViewModel @Composable get() = object : MainContract.ViewModel
         remember { mutableStateOf(MainContract.PeriodicLocationRetrievalState.Disabled) }
 
     override suspend fun onDrivingModeStateChanged(enabled: Boolean) {}
+    override suspend fun onPeriodicLocationRetrievalStateChanged(enabled: Boolean) {}
     override suspend fun checkIn(venueId: String, shout: String?) {}
 
     override fun onVibrationRequested() {}

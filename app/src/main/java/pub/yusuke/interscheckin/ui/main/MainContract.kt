@@ -18,6 +18,7 @@ interface MainContract {
         val periodicLocationRetrievalEnabledState: State<PeriodicLocationRetrievalState>
 
         suspend fun onDrivingModeStateChanged(enabled: Boolean)
+        suspend fun onPeriodicLocationRetrievalStateChanged(enabled: Boolean)
         suspend fun checkIn(
             venueId: String,
             shout: String? = null,
@@ -53,6 +54,7 @@ interface MainContract {
         fun preciseLocationAccessAvailable(): Boolean
 
         fun fetchPeriodicLocationRetrievalPreferencesFlow(): Flow<PeriodicLocationRetrievalPreferences>
+        suspend fun enablePeriodicLocationRetrieval(enabled: Boolean)
 
         fun vibrate(vibrationEffect: VibrationEffect)
     }

@@ -180,6 +180,10 @@ class MainViewModel @Inject constructor(
         requireVenueUpdate = true
     }
 
+    override suspend fun onPeriodicLocationRetrievalStateChanged(enabled: Boolean) {
+        interactor.enablePeriodicLocationRetrieval(enabled)
+    }
+
     private suspend fun createCheckin(
         venueId: String,
         shout: String,

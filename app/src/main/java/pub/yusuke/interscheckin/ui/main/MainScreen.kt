@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -384,7 +383,6 @@ private fun MainScreenPortraitMediumContent(
             onClickVenue,
             onLongClickVenue,
             modifier = Modifier
-                .fillMaxHeight()
                 .weight(0.4f),
         )
         ControlsColumn(
@@ -483,7 +481,8 @@ fun MainScreen(
                     }
                 },
                 modifier = Modifier
-                    .padding(innerPadding),
+                    .padding(innerPadding)
+                    .fillMaxSize(),
             )
         }
     }
@@ -683,8 +682,8 @@ private fun VenueRow(
                     Image(
                         painter = rememberAsyncImagePainter(venue.icon.url),
                         contentDescription = venue.icon.name,
-                        modifier = Modifier.size(40.dp),
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
+                        modifier = Modifier.size(32.dp),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inversePrimary),
                     )
                 }
             }

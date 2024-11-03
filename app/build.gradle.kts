@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "pub.yusuke.interscheckin"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "pub.yusuke.interscheckin"

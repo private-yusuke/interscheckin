@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "pub.yusuke.fusedlocationktx"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26

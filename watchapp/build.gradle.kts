@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "pub.yusuke.interscheckin.watchapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "pub.yusuke.interscheckin.watchapp"
         minSdk = 30
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
         vectorDrawables {

@@ -5,11 +5,10 @@ plugins {
 
 android {
     namespace = "pub.yusuke.fusedlocationktx"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
-        targetSdk = 33
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFile("consumer-rules.pro")

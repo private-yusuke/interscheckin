@@ -70,7 +70,7 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 androidx-wear-compose-material = { group = "androidx.wear.compose", name = "compose-material", version = "1.4.1" }
 
 [plugins]
-android-application = { id = "com.android.application", version = "8.8.0" }
+android-application = { id = "com.android.application", version = "8.8.1" }
 android-library = { id = "com.android.library", version = "8.8.1" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

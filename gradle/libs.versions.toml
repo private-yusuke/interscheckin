@@ -2,7 +2,7 @@
 androidxJunit = "1.2.1"
 composeNav = "2.8.7"
 datastorePreferences = "1.1.2"
-detekt = "1.23.7"
+detekt = "1.23.8"
 espressoCore = "3.6.1"
 hilt = "2.55"
 junit = "4.13.2"

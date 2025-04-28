@@ -14,7 +14,7 @@ room = "2.7.1"
 twitterComposeRules = "0.0.26"
 
 [libraries]
-accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version = "0.37.2" }
+accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version = "0.37.3" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.10.1" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2025.04.01" }
 androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }

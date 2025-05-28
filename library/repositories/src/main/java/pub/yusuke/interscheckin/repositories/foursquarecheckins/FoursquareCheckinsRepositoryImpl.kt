@@ -13,10 +13,12 @@ class FoursquareCheckinsRepositoryImpl(
         shout: String,
         latitude: Double,
         longitude: Double,
+        broadcast: String?,
     ): Checkin =
         foursquareClient.createCheckin(
             venueId = venueId,
             shout = shout,
+            broadcast = broadcast,
             ll = LatAndLong(
                 latitude = latitude,
                 longitude = longitude,

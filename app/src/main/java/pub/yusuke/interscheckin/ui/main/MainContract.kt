@@ -22,6 +22,7 @@ interface MainContract {
         suspend fun checkIn(
             venueId: String,
             shout: String? = null,
+            isPrivate: Boolean = false,
         )
 
         fun onVibrationRequested()
@@ -49,6 +50,7 @@ interface MainContract {
             shout: String,
             latitude: Double,
             longitude: Double,
+            isPrivate: Boolean = false,
         ): Checkin
         fun locationProvidersAvailable(): Boolean
         fun preciseLocationAccessAvailable(): Boolean

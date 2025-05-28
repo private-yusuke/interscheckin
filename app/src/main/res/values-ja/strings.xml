@@ -29,6 +29,7 @@
     <string name="main_location_loaded">あなたは %1$s にいます\n（精度: ± %2$s m）</string>
     <string name="main_shout_placeholder">今何してる？</string>
     <string name="main_button_checkin">チェックイン</string>
+    <string name="main_private_checkin_checkbox_label">プライベートチェックイン</string>
     <string name="main_venues_not_updated_as_location_is_not_changed">位置情報が変化しなかったため、リストは更新されませんでした</string>
     <string name="main_venue_selected">選択中</string>
     <string name="reset_settings_reset_cached_venues">Venue のキャッシュをリセット</string>

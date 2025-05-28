@@ -34,6 +34,7 @@
     <string name="main_location_unavailable">Location unavailable</string>
     <string name="main_shout_placeholder">What are you up to?</string>
     <string name="main_button_checkin">Check-in</string>
+    <string name="main_private_checkin_checkbox_label">Private check-in</string>
     <string name="main_driving_mode_checkbox_label">driving mode</string>
     <string name="main_venue_selected">selected</string>
     <string name="main_message_lets_checkin_today">Let\'s check-in today!</string>

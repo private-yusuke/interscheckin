@@ -85,11 +85,13 @@ class MainInteractor @Inject constructor(
         shout: String,
         latitude: Double,
         longitude: Double,
+        isPrivate: Boolean,
     ): MainContract.Checkin = foursquareCheckinsRepository.createCheckin(
         venueId = venueId,
         shout = shout,
         latitude = latitude,
         longitude = longitude,
+        broadcast = if (isPrivate) "private" else "public",
     ).translateToMainContractCheckin()
 
     override fun locationProvidersAvailable(): Boolean =

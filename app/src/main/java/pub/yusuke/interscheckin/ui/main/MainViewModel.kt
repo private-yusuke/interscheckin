@@ -146,6 +146,7 @@ class MainViewModel @Inject constructor(
     override suspend fun checkIn(
         venueId: String,
         shout: String?,
+        isPrivate: Boolean,
     ) {
         val location: Location = when (val it = _locationState.value) {
             is MainContract.LocationState.Loading -> requireNotNull(it.lastLocation)
@@ -164,6 +165,7 @@ class MainViewModel @Inject constructor(
                 shout = shout ?: "",
                 latitude = location.latitude,
                 longitude = location.longitude,
+                isPrivate = isPrivate,
             )
         }.fold(
             onSuccess = {
@@ -189,12 +191,14 @@ class MainViewModel @Inject constructor(
         shout: String,
         latitude: Double,
         longitude: Double,
+        isPrivate: Boolean = false,
     ): MainContract.Checkin =
         interactor.createCheckin(
             venueId = venueId,
             shout = shout,
             latitude = latitude,
             longitude = longitude,
+            isPrivate = isPrivate,
         )
 
     override fun onVibrationRequested() =

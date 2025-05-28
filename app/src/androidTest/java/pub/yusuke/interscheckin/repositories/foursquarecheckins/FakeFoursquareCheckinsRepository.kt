@@ -47,6 +47,7 @@ class FakeFoursquareCheckinsRepository @Inject constructor() : FoursquareCheckin
         shout: String,
         latitude: Double,
         longitude: Double,
+        broadcast: String?,
     ): Checkin = exampleCheckin.copy(
         shout = shout,
         venue = exampleCheckin.venue.copy(

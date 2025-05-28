@@ -21,13 +21,10 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -120,8 +117,10 @@ private fun MainScreenContent(
     periodicLocationRetrievalEnabledState: MainContract.PeriodicLocationRetrievalState,
     onHistoriesButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
-    onPeriodicLocationRetrievalToggleButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    onPeriodicLocationRetrievalToggleButtonClicked: () -> Unit,
+    isPrivateCheckin: Boolean,
+    onPrivateCheckinChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
 ) {
@@ -147,6 +146,8 @@ private fun MainScreenContent(
             onSettingsButtonClicked,
             onPeriodicLocationRetrievalSettingsButtonClicked,
             onPeriodicLocationRetrievalToggleButtonClicked,
+            isPrivateCheckin,
+            onPrivateCheckinChanged,
             modifier,
         )
         MainScreenType.PortraitMedium -> MainScreenPortraitMediumContent(
@@ -166,6 +167,8 @@ private fun MainScreenContent(
             onHistoriesButtonClicked,
             onSettingsButtonClicked,
             onPeriodicLocationRetrievalSettingsButtonClicked,
+            isPrivateCheckin,
+            onPrivateCheckinChanged,
             modifier,
         )
         MainScreenType.Extra -> MainScreenExtraContent(
@@ -185,6 +188,8 @@ private fun MainScreenContent(
             onHistoriesButtonClicked,
             onSettingsButtonClicked,
             onPeriodicLocationRetrievalSettingsButtonClicked,
+            isPrivateCheckin,
+            onPrivateCheckinChanged,
             modifier,
         )
     }
@@ -210,11 +215,12 @@ private fun MainScreenCompactContent(
     onSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalToggleButtonClicked: () -> Unit,
+    isPrivateCheckin: Boolean,
+    onPrivateCheckinChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scaffoldState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
-    val venueSelected = selectedVenueId.isNotBlank()
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
@@ -234,6 +240,8 @@ private fun MainScreenCompactContent(
                 onHistoriesButtonClicked,
                 onSettingsButtonClicked,
                 onPeriodicLocationRetrievalSettingsButtonClicked,
+                isPrivateCheckin,
+                onPrivateCheckinChanged,
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .fillMaxSize()
@@ -282,19 +290,27 @@ private fun MainScreenCompactContent(
                     )
                 }
                 FloatingActionButton(
-                    onClick = onCheckinButtonClicked,
-                    containerColor = ButtonDefaults.buttonColors().containerColor(venueSelected),
-                    contentColor = ButtonDefaults.buttonColors().contentColor(venueSelected),
+                    onClick = { onPrivateCheckinChanged(!isPrivateCheckin) },
+                    containerColor = if (isPrivateCheckin) {
+                        MaterialTheme.colorScheme.secondary
+                    } else {
+                        MaterialTheme.colorScheme.surfaceVariant
+                    },
+                    contentColor = if (isPrivateCheckin) {
+                        MaterialTheme.colorScheme.onSecondary
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
                 ) {
-                    Icon(imageVector = Icons.Filled.Create, contentDescription = "Create a Checkin")
+                    Text(
+                        text = if (isPrivateCheckin) "🔒" else "🌐",
+                        style = MaterialTheme.typography.titleLarge,
+                    )
                 }
             }
         }
     }
 }
-
-private fun ButtonColors.containerColor(enabled: Boolean) = if (enabled) containerColor else disabledContainerColor
-private fun ButtonColors.contentColor(enabled: Boolean) = if (enabled) contentColor else disabledContentColor
 
 @Composable
 private fun MainScreenExtraContent(
@@ -314,6 +330,8 @@ private fun MainScreenExtraContent(
     onHistoriesButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    isPrivateCheckin: Boolean,
+    onPrivateCheckinChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -343,6 +361,8 @@ private fun MainScreenExtraContent(
             onHistoriesButtonClicked,
             onSettingsButtonClicked,
             onPeriodicLocationRetrievalSettingsButtonClicked,
+            isPrivateCheckin,
+            onPrivateCheckinChanged,
             modifier = Modifier
                 .weight(0.6f)
                 .padding(vertical = 8.dp)
@@ -369,6 +389,8 @@ private fun MainScreenPortraitMediumContent(
     onHistoriesButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    isPrivateCheckin: Boolean,
+    onPrivateCheckinChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -399,6 +421,8 @@ private fun MainScreenPortraitMediumContent(
             onHistoriesButtonClicked,
             onSettingsButtonClicked,
             onPeriodicLocationRetrievalSettingsButtonClicked,
+            isPrivateCheckin,
+            onPrivateCheckinChanged,
             modifier = Modifier
                 .weight(0.6f)
                 .padding(vertical = 8.dp)
@@ -423,6 +447,7 @@ fun MainScreen(
 
     var shout by rememberSaveable { mutableStateOf("") }
     var selectedVenueIdState by rememberSaveable { mutableStateOf("") }
+    var isPrivateCheckin by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -437,7 +462,7 @@ fun MainScreen(
                 onShoutChange = { shout = it },
                 onCheckinButtonClicked = {
                     coroutineScope.launch {
-                        viewModel.checkIn(selectedVenueIdState, shout)
+                        viewModel.checkIn(selectedVenueIdState, shout, isPrivateCheckin)
                         shout = ""
                     }
                 },
@@ -447,7 +472,7 @@ fun MainScreen(
                 onLongClickVenue = { venueId ->
                     viewModel.onVibrationRequested()
                     coroutineScope.launch {
-                        viewModel.checkIn(venueId, shout)
+                        viewModel.checkIn(venueId, shout, isPrivateCheckin)
                         shout = ""
                     }
                 },
@@ -480,6 +505,8 @@ fun MainScreen(
                         viewModel.onPeriodicLocationRetrievalStateChanged(periodicLocationRetrievalEnabledState !is MainContract.PeriodicLocationRetrievalState.Enabled)
                     }
                 },
+                isPrivateCheckin = isPrivateCheckin,
+                onPrivateCheckinChanged = { isPrivateCheckin = it },
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxSize(),
@@ -725,6 +752,8 @@ private fun ControlsColumn(
     onHistoriesButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    isPrivateCheckin: Boolean,
+    onPrivateCheckinChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -766,6 +795,11 @@ private fun ControlsColumn(
             ) {
                 Text(stringResource(R.string.main_button_checkin))
             }
+        }
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Row(
                 modifier = Modifier
                     .toggleable(
@@ -783,6 +817,25 @@ private fun ControlsColumn(
                 )
                 Text(
                     text = stringResource(id = R.string.main_driving_mode_checkbox_label),
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .toggleable(
+                        value = isPrivateCheckin,
+                        role = Role.Checkbox,
+                        onValueChange = onPrivateCheckinChanged,
+                    )
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Checkbox(
+                    checked = isPrivateCheckin,
+                    onCheckedChange = null,
+                )
+                Text(
+                    text = stringResource(id = R.string.main_private_checkin_checkbox_label),
                 )
             }
         }
@@ -867,7 +920,7 @@ private val previewViewModel @Composable get() = object : MainContract.ViewModel
 
     override suspend fun onDrivingModeStateChanged(enabled: Boolean) {}
     override suspend fun onPeriodicLocationRetrievalStateChanged(enabled: Boolean) {}
-    override suspend fun checkIn(venueId: String, shout: String?) {}
+    override suspend fun checkIn(venueId: String, shout: String?, isPrivate: Boolean) {}
 
     override fun onVibrationRequested() {}
     override suspend fun onLocationUpdateRequested() {}

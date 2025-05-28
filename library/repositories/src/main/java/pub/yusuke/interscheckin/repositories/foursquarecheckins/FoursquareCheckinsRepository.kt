@@ -8,6 +8,7 @@ interface FoursquareCheckinsRepository {
         shout: String,
         latitude: Double,
         longitude: Double,
+        broadcast: String? = null,
     ): Checkin
 
     suspend fun getCheckins(

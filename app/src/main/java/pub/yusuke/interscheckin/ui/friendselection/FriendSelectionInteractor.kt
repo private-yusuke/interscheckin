@@ -24,3 +24,4 @@ class FriendSelectionInteractor @Inject constructor(
             )
         }
 }
+

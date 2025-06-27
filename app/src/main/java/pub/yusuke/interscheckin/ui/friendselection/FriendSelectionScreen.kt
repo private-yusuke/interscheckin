@@ -34,8 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
@@ -47,7 +45,6 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import pub.yusuke.interscheckin.R
 import pub.yusuke.interscheckin.navigation.entity.Friend
 import pub.yusuke.interscheckin.navigation.entity.url
 import pub.yusuke.interscheckin.ui.theme.InterscheckinTheme
@@ -68,9 +65,9 @@ fun FriendSelectionScreen(
                 FriendSelectionTopBar(
                     onNavigateBack = { navController.popBackStack() },
                     onConfirm = {
-                        // TODO: Pass selected friends back to previous screen
+                        // Pass selected friends back to previous screen
                         navController.popBackStack()
-                    }
+                    },
                 )
             },
         ) { innerPadding ->
@@ -81,7 +78,7 @@ fun FriendSelectionScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                when (friendsState) {
+                when (val state = friendsState) {
                     FriendSelectionContract.FriendsState.Loading -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -92,12 +89,12 @@ fun FriendSelectionScreen(
                     }
                     is FriendSelectionContract.FriendsState.Error -> {
                         ErrorContent(
-                            reason = friendsState.throwable.message ?: "Unknown error",
+                            reason = state.throwable.message ?: "Unknown error",
                             onClick = { /* TODO: Retry loading */ },
                         )
                     }
                     is FriendSelectionContract.FriendsState.Loaded -> {
-                        if (friendsState.friends.isEmpty()) {
+                        if (state.friends.isEmpty()) {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center,
@@ -110,7 +107,7 @@ fun FriendSelectionScreen(
                             }
                         } else {
                             FriendSelectionContent(
-                                friends = friendsState.friends,
+                                friends = state.friends,
                                 selectedFriends = selectedFriends,
                                 onFriendToggle = viewModel::toggleFriendSelection,
                             )
@@ -193,7 +190,7 @@ private fun FriendRow(
                 )
             }
         }
-        
+
         Column(
             modifier = Modifier.weight(1f),
         ) {
@@ -208,7 +205,7 @@ private fun FriendRow(
                 )
             }
         }
-        
+
         Checkbox(
             checked = isSelected,
             onCheckedChange = { onToggle() },
@@ -250,7 +247,7 @@ private fun FriendSelectionTopBar(
             IconButton(onClick = onConfirm) {
                 Icon(Icons.Filled.Check, "完了")
             }
-        }
+        },
     )
 }
 
@@ -298,3 +295,4 @@ private val exampleFriend2 = Friend(
     photo = null,
     homeCity = "大阪, 日本",
 )
+

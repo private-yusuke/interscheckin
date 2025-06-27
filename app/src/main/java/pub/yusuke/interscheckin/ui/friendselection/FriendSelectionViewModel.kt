@@ -34,12 +34,12 @@ class FriendSelectionViewModel @Inject constructor(
 
     override suspend fun loadFriends() {
         _friendsState.value = FriendSelectionContract.FriendsState.Loading
-        
+
         runCatching {
             interactor.fetchFriends()
         }.onSuccess { friends ->
             _friendsState.value = FriendSelectionContract.FriendsState.Loaded(
-                friends = friends.toImmutableList()
+                friends = friends.toImmutableList(),
             )
         }.onFailure { throwable ->
             _friendsState.value = FriendSelectionContract.FriendsState.Error(throwable)
@@ -49,9 +49,9 @@ class FriendSelectionViewModel @Inject constructor(
     override fun toggleFriendSelection(friend: Friend) {
         val currentSelection = _selectedFriends.value
         _selectedFriends.value = if (currentSelection.contains(friend)) {
-            currentSelection.remove(friend)
+            currentSelection.toMutableList().apply { remove(friend) }.toImmutableList()
         } else {
-            currentSelection.add(friend)
+            currentSelection.toMutableList().apply { add(friend) }.toImmutableList()
         }
     }
 
@@ -59,3 +59,4 @@ class FriendSelectionViewModel @Inject constructor(
         _selectedFriends.value = friends.toImmutableList()
     }
 }
+

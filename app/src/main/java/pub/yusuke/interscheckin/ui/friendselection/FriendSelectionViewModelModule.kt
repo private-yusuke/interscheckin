@@ -11,3 +11,4 @@ internal interface FriendSelectionViewModelModule {
     @Binds
     fun bindInteractor(interactor: FriendSelectionInteractor): FriendSelectionContract.Interactor
 }
+

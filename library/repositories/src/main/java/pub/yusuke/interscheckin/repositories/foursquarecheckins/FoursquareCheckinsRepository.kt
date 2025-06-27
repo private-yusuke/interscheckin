@@ -1,6 +1,7 @@
 package pub.yusuke.interscheckin.repositories.foursquarecheckins
 
 import pub.yusuke.foursquareclient.models.Checkin
+import pub.yusuke.foursquareclient.models.Friend
 
 interface FoursquareCheckinsRepository {
     suspend fun createCheckin(
@@ -18,4 +19,6 @@ interface FoursquareCheckinsRepository {
         beforeTimestamp: Long? = null,
         limit: Long? = null,
     ): List<Checkin>
+
+    suspend fun fetchFriends(): List<Friend>
 }

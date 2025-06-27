@@ -67,6 +67,7 @@ moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = 
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "4.12.0" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.9.0" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "1.9.0" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "1.9.0" }
 androidx-wear-compose-material = { group = "androidx.wear.compose", name = "compose-material", version = "1.4.1" }
 
 [plugins]

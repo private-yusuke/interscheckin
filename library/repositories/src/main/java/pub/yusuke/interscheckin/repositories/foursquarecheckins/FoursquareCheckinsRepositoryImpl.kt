@@ -39,4 +39,6 @@ class FoursquareCheckinsRepositoryImpl(
             beforeTimestamp = beforeTimestamp,
             limit = limit,
         )
+
+    override suspend fun fetchFriends() = foursquareClient.getFriends()
 }

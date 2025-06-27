@@ -23,7 +23,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        resConfigs("en", "ja")
+        androidResources {
+            localeFilters.addAll(listOf("en", "ja"))
+        }
 
 
         javaCompileOptions {
@@ -62,6 +64,20 @@ android {
                 useLegacyPackaging = true
             }
         }
+        managedDevices {
+            localDevices {
+                create("pixel2api30") {
+                    device = "Pixel 2"
+                    apiLevel = 30
+                    systemImageSource = "aosp-atd"
+                }
+                create("pixel6api33") {
+                    device = "Pixel 6"
+                    apiLevel = 33
+                    systemImageSource = "aosp-atd"
+                }
+            }
+        }
     }
 }
 
@@ -98,6 +114,7 @@ dependencies {
     implementation(project(path = ":library:fusedlocationktx"))
     testImplementation(libs.junit)
     testImplementation(libs.mockk.core)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.mockk.agent)
     androidTestImplementation(libs.androidx.test.ext.junit)

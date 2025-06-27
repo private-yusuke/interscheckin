@@ -48,6 +48,7 @@ class FakeFoursquareCheckinsRepository @Inject constructor() : FoursquareCheckin
         latitude: Double,
         longitude: Double,
         broadcast: String?,
+        with: String?,
     ): Checkin = exampleCheckin.copy(
         shout = shout,
         venue = exampleCheckin.venue.copy(
@@ -68,4 +69,27 @@ class FakeFoursquareCheckinsRepository @Inject constructor() : FoursquareCheckin
                 ),
             )
         }
+
+    override suspend fun fetchFriends(): List<pub.yusuke.foursquareclient.models.Friend> =
+        listOf(
+            pub.yusuke.foursquareclient.models.Friend(
+                id = "friend1",
+                firstName = "太郎",
+                lastName = "田中",
+                bio = "こんにちは！",
+                photo = pub.yusuke.foursquareclient.models.Friend.Photo(
+                    prefix = "https://example.com/photo_",
+                    suffix = ".jpg",
+                ),
+                homeCity = "東京, 日本",
+            ),
+            pub.yusuke.foursquareclient.models.Friend(
+                id = "friend2",
+                firstName = "花子",
+                lastName = "佐藤",
+                bio = null,
+                photo = null,
+                homeCity = "大阪, 日本",
+            ),
+        )
 }

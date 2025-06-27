@@ -1,6 +1,7 @@
 package pub.yusuke.foursquareclient
 
 import pub.yusuke.foursquareclient.models.Checkin
+import pub.yusuke.foursquareclient.models.Friend
 import pub.yusuke.foursquareclient.models.LatAndLong
 import pub.yusuke.foursquareclient.models.Venue
 
@@ -57,12 +58,14 @@ interface FoursquareClient {
      * Calls an V2 API endpoint in the implementation.
      *
      * @param shout An comment for the check-in.
+     * @param with Comma-separated list of friend user IDs to check in with.
      */
     suspend fun createCheckin(
         venueId: String,
         shout: String? = null,
         mentions: String? = null,
         broadcast: String? = null,
+        with: String? = null,
         ll: String,
     ): Checkin
 
@@ -79,6 +82,18 @@ interface FoursquareClient {
         beforeTimestamp: Long? = null,
         limit: Long? = null,
     ): List<Checkin>
+
+    /**
+     * Retrieves the friends list for the authenticated user.
+     * Calls a V2 API endpoint in the implementation.
+     *
+     * @param limit Maximum number of friends to return.
+     * @param offset Offset for pagination.
+     */
+    suspend fun getFriends(
+        limit: Int? = null,
+        offset: Int? = null,
+    ): List<Friend>
 
     class InvalidRequestTokenException(message: String) : Exception(message)
 }

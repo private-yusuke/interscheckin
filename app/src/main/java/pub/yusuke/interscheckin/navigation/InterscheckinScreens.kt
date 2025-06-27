@@ -18,6 +18,7 @@ sealed class InterscheckinScreens(
     object LocationSettings : InterscheckinScreens("locationSettings")
     object ResetSettings : InterscheckinScreens("resetSettings")
     object Histories : InterscheckinScreens("histories")
+    object FriendSelection : InterscheckinScreens("friendSelection")
 }
 
 private fun String.withArguments(navArguments: List<NamedNavArgument>): String {

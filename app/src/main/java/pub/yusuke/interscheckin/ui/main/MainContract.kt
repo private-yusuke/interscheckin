@@ -51,6 +51,7 @@ interface MainContract {
             latitude: Double,
             longitude: Double,
             isPrivate: Boolean = false,
+            with: String? = null,
         ): Checkin
         fun locationProvidersAvailable(): Boolean
         fun preciseLocationAccessAvailable(): Boolean

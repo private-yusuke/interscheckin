@@ -23,6 +23,8 @@ interface CheckinApiService {
         mentions: String?,
         @Query("broadcast")
         broadcast: String?,
+        @Query("with")
+        with: String? = null,
         @Query("v")
         v: String? = "20221002",
     ): CreateCheckinResponse

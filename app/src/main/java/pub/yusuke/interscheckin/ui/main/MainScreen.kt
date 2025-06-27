@@ -119,6 +119,7 @@ private fun MainScreenContent(
     onSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalToggleButtonClicked: () -> Unit,
+    onFriendSelectionButtonClicked: () -> Unit,
     isPrivateCheckin: Boolean,
     onPrivateCheckinChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -146,6 +147,7 @@ private fun MainScreenContent(
             onSettingsButtonClicked,
             onPeriodicLocationRetrievalSettingsButtonClicked,
             onPeriodicLocationRetrievalToggleButtonClicked,
+            onFriendSelectionButtonClicked,
             isPrivateCheckin,
             onPrivateCheckinChanged,
             modifier,
@@ -167,6 +169,7 @@ private fun MainScreenContent(
             onHistoriesButtonClicked,
             onSettingsButtonClicked,
             onPeriodicLocationRetrievalSettingsButtonClicked,
+            onFriendSelectionButtonClicked,
             isPrivateCheckin,
             onPrivateCheckinChanged,
             modifier,
@@ -188,6 +191,7 @@ private fun MainScreenContent(
             onHistoriesButtonClicked,
             onSettingsButtonClicked,
             onPeriodicLocationRetrievalSettingsButtonClicked,
+            onFriendSelectionButtonClicked,
             isPrivateCheckin,
             onPrivateCheckinChanged,
             modifier,
@@ -215,6 +219,7 @@ private fun MainScreenCompactContent(
     onSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalToggleButtonClicked: () -> Unit,
+    onFriendSelectionButtonClicked: () -> Unit,
     isPrivateCheckin: Boolean,
     onPrivateCheckinChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -240,6 +245,7 @@ private fun MainScreenCompactContent(
                 onHistoriesButtonClicked,
                 onSettingsButtonClicked,
                 onPeriodicLocationRetrievalSettingsButtonClicked,
+                onFriendSelectionButtonClicked,
                 isPrivateCheckin,
                 onPrivateCheckinChanged,
                 modifier = Modifier
@@ -330,6 +336,7 @@ private fun MainScreenExtraContent(
     onHistoriesButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    onFriendSelectionButtonClicked: () -> Unit,
     isPrivateCheckin: Boolean,
     onPrivateCheckinChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -361,6 +368,7 @@ private fun MainScreenExtraContent(
             onHistoriesButtonClicked,
             onSettingsButtonClicked,
             onPeriodicLocationRetrievalSettingsButtonClicked,
+            onFriendSelectionButtonClicked,
             isPrivateCheckin,
             onPrivateCheckinChanged,
             modifier = Modifier
@@ -389,6 +397,7 @@ private fun MainScreenPortraitMediumContent(
     onHistoriesButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    onFriendSelectionButtonClicked: () -> Unit,
     isPrivateCheckin: Boolean,
     onPrivateCheckinChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -421,6 +430,7 @@ private fun MainScreenPortraitMediumContent(
             onHistoriesButtonClicked,
             onSettingsButtonClicked,
             onPeriodicLocationRetrievalSettingsButtonClicked,
+            onFriendSelectionButtonClicked,
             isPrivateCheckin,
             onPrivateCheckinChanged,
             modifier = Modifier
@@ -504,6 +514,11 @@ fun MainScreen(
                     coroutineScope.launch {
                         viewModel.onPeriodicLocationRetrievalStateChanged(periodicLocationRetrievalEnabledState !is MainContract.PeriodicLocationRetrievalState.Enabled)
                     }
+                },
+                onFriendSelectionButtonClicked = {
+                    navController.navigate(
+                        InterscheckinScreens.FriendSelection.route,
+                    )
                 },
                 isPrivateCheckin = isPrivateCheckin,
                 onPrivateCheckinChanged = { isPrivateCheckin = it },
@@ -752,6 +767,7 @@ private fun ControlsColumn(
     onHistoriesButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onPeriodicLocationRetrievalSettingsButtonClicked: () -> Unit,
+    onFriendSelectionButtonClicked: () -> Unit,
     isPrivateCheckin: Boolean,
     onPrivateCheckinChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -881,6 +897,11 @@ private fun ControlsColumn(
             ) {
                 Text(stringResource(R.string.main_go_to_settings_button_label))
             }
+        }
+        Button(
+            onClick = onFriendSelectionButtonClicked,
+        ) {
+            Text("友達を選択")
         }
         (periodicLocationRetrievalEnabledState as? MainContract.PeriodicLocationRetrievalState.Enabled)?.let {
             TextButton(

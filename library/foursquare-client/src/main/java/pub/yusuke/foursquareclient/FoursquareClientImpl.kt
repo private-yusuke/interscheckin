@@ -5,10 +5,12 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import pub.yusuke.foursquareclient.models.Checkin
+import pub.yusuke.foursquareclient.models.Friend
 import pub.yusuke.foursquareclient.models.LatAndLong
 import pub.yusuke.foursquareclient.models.Venue
 import pub.yusuke.foursquareclient.models.llString
 import pub.yusuke.foursquareclient.network.CheckinApiService
+import pub.yusuke.foursquareclient.network.FriendApiService
 import pub.yusuke.foursquareclient.network.VenueApiService
 import retrofit2.HttpException
 import retrofit2.Retrofit
@@ -43,6 +45,10 @@ class FoursquareClientImpl(
 
     private val checkinApiService by lazy {
         retrofit.create(CheckinApiService::class.java)
+    }
+
+    private val friendApiService by lazy {
+        retrofit.create(FriendApiService::class.java)
     }
 
     override suspend fun searchPlaces(
@@ -184,6 +190,7 @@ class FoursquareClientImpl(
         shout: String?,
         mentions: String?,
         broadcast: String?,
+        with: String?,
         ll: String,
     ): Checkin = runCatching {
         checkinApiService.createCheckin(
@@ -191,6 +198,7 @@ class FoursquareClientImpl(
             shout = shout,
             mentions = mentions,
             broadcast = broadcast,
+            with = with,
             ll = ll,
             oauthToken = oauthToken,
         ).response.checkin
@@ -219,6 +227,44 @@ class FoursquareClientImpl(
             beforeTimestamp = beforeTimestamp,
             oauthToken = oauthToken,
         ).response.checkins.items
+    }.fold(
+        onSuccess = { it },
+        onFailure = {
+            if (it is HttpException) {
+                if (it.code() == 401) {
+                    throw FoursquareClient.InvalidRequestTokenException(it.message())
+                }
+            }
+            throw it
+        },
+    )
+
+    override suspend fun getFriends(
+        limit: Int?,
+        offset: Int?,
+    ): List<Friend> = runCatching {
+        if (oauthToken.isBlank()) {
+            throw EmptyOAuthTokenException("Foursquare OAuth token is blank.")
+        }
+        friendApiService.getFriends(
+            oauthToken = oauthToken,
+            limit = limit,
+            offset = offset,
+        ).response.friends.items.map { apiFriend ->
+            Friend(
+                id = apiFriend.id,
+                firstName = apiFriend.firstName,
+                lastName = apiFriend.lastName,
+                bio = apiFriend.bio,
+                photo = apiFriend.photo?.let {
+                    Friend.Photo(
+                        prefix = it.prefix,
+                        suffix = it.suffix,
+                    )
+                },
+                homeCity = apiFriend.homeCity,
+            )
+        }
     }.fold(
         onSuccess = { it },
         onFailure = {

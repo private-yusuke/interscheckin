@@ -7,6 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import pub.yusuke.interscheckin.MainActivity
 import pub.yusuke.interscheckin.ui.credentialsettings.CredentialSettingsScreen
+import pub.yusuke.interscheckin.ui.friendselection.FriendSelectionScreen
 import pub.yusuke.interscheckin.ui.histories.HistoriesScreen
 import pub.yusuke.interscheckin.ui.locationaccessacquirement.LocationAccessAcquirementScreen
 import pub.yusuke.interscheckin.ui.locationsettings.LocationSettingsScreen
@@ -55,6 +56,11 @@ fun NavGraphBuilder.InterscheckinNavigations(
     }
     composable(InterscheckinScreens.Histories.route) {
         HistoriesScreen(
+            navController = navController,
+        )
+    }
+    composable(InterscheckinScreens.FriendSelection.route) {
+        FriendSelectionScreen(
             navController = navController,
         )
     }

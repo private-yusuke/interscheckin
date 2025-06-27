@@ -59,4 +59,3 @@ class FriendSelectionViewModel @Inject constructor(
         _selectedFriends.value = friends.toImmutableList()
     }
 }
-

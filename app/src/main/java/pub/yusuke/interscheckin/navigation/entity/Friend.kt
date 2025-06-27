@@ -11,7 +11,7 @@ data class Friend(
     data class Photo(
         val prefix: String,
         val suffix: String,
-        )
+    )
 
     val displayName: String
         get() = if (lastName != null) "$firstName $lastName" else firstName

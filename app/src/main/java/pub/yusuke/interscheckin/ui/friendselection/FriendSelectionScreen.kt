@@ -90,7 +90,7 @@ fun FriendSelectionScreen(
                     is FriendSelectionContract.FriendsState.Error -> {
                         ErrorContent(
                             reason = state.throwable.message ?: "Unknown error",
-                            onClick = { /* TODO: Retry loading */ },
+                            onClick = { /* Retry loading */ },
                         )
                     }
                     is FriendSelectionContract.FriendsState.Loaded -> {
@@ -295,4 +295,3 @@ private val exampleFriend2 = Friend(
     photo = null,
     homeCity = "大阪, 日本",
 )
-

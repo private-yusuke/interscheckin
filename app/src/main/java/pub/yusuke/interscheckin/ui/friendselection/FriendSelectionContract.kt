@@ -24,4 +24,3 @@ interface FriendSelectionContract {
         data class Error(val throwable: Throwable) : FriendsState()
     }
 }
-

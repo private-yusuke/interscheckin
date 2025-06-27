@@ -48,7 +48,7 @@ class FriendSelectionScreenTest {
     }
 
     @Test
-    fun `Friends are displayed in the list`() {
+    fun friendsAreDisplayedInTheList() {
         composeTestRule.setContent {
             FriendSelectionScreen(
                 navController = navController,
@@ -71,7 +71,7 @@ class FriendSelectionScreenTest {
     }
 
     @Test
-    fun `Friend selection toggles checkbox state`() {
+    fun friendSelectionTogglesCheckboxState() {
         composeTestRule.setContent {
             FriendSelectionScreen(
                 navController = navController,
@@ -92,7 +92,7 @@ class FriendSelectionScreenTest {
     // 実際のFakeFoursquareCheckinsRepositoryの動作をテストする
 
     @Test
-    fun `Back button navigates back`() {
+    fun backButtonNavigatesBack() {
         composeTestRule.setContent {
             FriendSelectionScreen(
                 navController = navController,
@@ -110,7 +110,7 @@ class FriendSelectionScreenTest {
     }
 
     @Test
-    fun `Confirm button navigates back`() {
+    fun confirmButtonNavigatesBack() {
         composeTestRule.setContent {
             FriendSelectionScreen(
                 navController = navController,
@@ -128,7 +128,7 @@ class FriendSelectionScreenTest {
     }
 
     @Test
-    fun `Loading state shows progress indicator`() {
+    fun loadingStateShowsProgressIndicator() {
         // 長時間かかるように設定してローディング状態をテスト
         composeTestRule.setContent {
             FriendSelectionScreen(

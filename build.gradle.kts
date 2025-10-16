@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 buildscript {
     dependencies {
         classpath(libs.dagger.hilt.android.gradle.plugin)
-        classpath(libs.twitter.compose.rules.detekt)
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

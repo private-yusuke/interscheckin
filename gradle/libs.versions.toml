@@ -64,7 +64,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "3.0.0" }
 retrofit2-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version = "3.0.0" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.15.2" }
-okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "5.3.0" }
+okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "5.3.1" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.10.2" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "1.10.2" }
 androidx-wear-compose-material = { group = "androidx.wear.compose", name = "compose-material", version = "1.5.5" }

@@ -20,7 +20,7 @@ jobs:
       run: ./gradlew testDebug --continue
     - name: Build
       run: ./gradlew assembleRelease
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       with:
         name: Interscheckin-${{ github.sha }}.apk
         path: app/build/outputs/apk/release/app-release-unsigned.apk

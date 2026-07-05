@@ -54,7 +54,7 @@ jobs:
         java-version: '17'
     - uses: gradle/actions/setup-gradle@v6
       with:
-        cache-overwrite-existing: true
+        cache-provider: basic
     - name: Build APK for instrumented tests
       run: ./gradlew packageDebug packageDebugAndroidTest
     - name: Wake up the device

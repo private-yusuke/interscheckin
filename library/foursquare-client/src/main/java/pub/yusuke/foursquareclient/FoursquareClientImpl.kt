@@ -4,9 +4,14 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import pub.yusuke.foursquareclient.models.Category
+import pub.yusuke.foursquareclient.models.Chain
 import pub.yusuke.foursquareclient.models.Checkin
+import pub.yusuke.foursquareclient.models.Geocodes
 import pub.yusuke.foursquareclient.models.LatAndLong
+import pub.yusuke.foursquareclient.models.Location
 import pub.yusuke.foursquareclient.models.Venue
+import pub.yusuke.foursquareclient.models.distanceFrom
 import pub.yusuke.foursquareclient.models.llString
 import pub.yusuke.foursquareclient.network.CheckinApiService
 import pub.yusuke.foursquareclient.network.VenueApiService
@@ -25,6 +30,7 @@ class FoursquareClientImpl(
 
     private val interceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
+        redactHeader("Authorization")
     }
 
     private val client = OkHttpClient.Builder()
@@ -84,16 +90,18 @@ class FoursquareClientImpl(
         limit: Int?,
     ): List<Venue> =
         runCatching {
-            if (apiKey.isBlank()) {
-                throw EmptyAPIKeyException("Foursquare API key is blank.")
+            if (oauthToken.isBlank()) {
+                throw EmptyOAuthTokenException("Foursquare OAuth token is blank.")
             }
             venueApiService.searchPlacesNearby(
                 ll = ll.llString(),
                 hacc = hacc,
                 query = query,
                 limit = limit,
-                authorization = apiKey,
-            ).results
+                authorization = "Bearer $oauthToken",
+            ).candidates.map { candidate ->
+                candidate.toVenue(ll)
+            }
         }.fold(
             onSuccess = { it },
             onFailure = {
@@ -233,4 +241,44 @@ class FoursquareClientImpl(
 
     class EmptyOAuthTokenException(message: String) : Exception(message)
     class EmptyAPIKeyException(message: String) : Exception(message)
+
+    private fun VenueApiService.GeotaggingCandidate.toVenue(origin: LatAndLong): Venue {
+        val coordinates = latitude?.let { latitude ->
+            longitude?.let { longitude -> LatAndLong(latitude, longitude) }
+        }
+        return Venue(
+            categories = categories.map { category ->
+                Category(
+                    id = category.fsqCategoryId,
+                    icon = category.icon,
+                    name = category.name,
+                )
+            },
+            chains = chains?.map { chain ->
+                Chain(
+                    id = chain.fsqChainId,
+                    name = chain.name,
+                )
+            },
+            distance = coordinates?.distanceFrom(origin),
+            fsqId = fsqPlaceId,
+            geocodes = Geocodes(main = coordinates),
+            link = link,
+            location = Location(
+                address = location?.address,
+                addressExtended = null,
+                censusBlock = null,
+                country = location?.country.orEmpty(),
+                crossStreet = null,
+                dma = null,
+                formattedAddress = location?.formattedAddress,
+                locality = location?.locality,
+                postcode = location?.postcode,
+                region = location?.region,
+            ),
+            name = name,
+            relatedPlaces = null,
+            timezone = null,
+        )
+    }
 }

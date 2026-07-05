@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "pub.yusuke.interscheckin.watchapp"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "pub.yusuke.interscheckin.watchapp"

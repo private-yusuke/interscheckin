@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.foursquare_client"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 26

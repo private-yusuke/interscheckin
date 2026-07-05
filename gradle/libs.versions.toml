@@ -6,7 +6,7 @@ detekt = "1.23.8"
 espressoCore = "3.7.0"
 hilt = "2.60"
 junit = "4.13.2"
-kotlin = "2.3.20"
+kotlin = "2.4.0"
 mockk = "1.14.11"
 paging = "3.4.2"
 playServicesLocation = "21.4.0"
@@ -44,8 +44,8 @@ dagger-hilt-android-testing = { group = "com.google.dagger", name = "hilt-androi
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.3.0" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version = "0.4.0" }
-kotlinx-serialization-protobuf = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-protobuf", version = "1.10.0" }
+kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version = "0.5.1" }
+kotlinx-serialization-protobuf = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-protobuf", version = "1.11.0" }
 mockk-core = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 mockk-agent = { group = "io.mockk", name = "mockk-agent", version.ref = "mockk" }
 mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
@@ -65,8 +65,8 @@ retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", vers
 retrofit2-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version = "3.0.0" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.15.2" }
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "5.3.2" }
-kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.10.2" }
-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "1.10.2" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.11.0" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "1.11.0" }
 androidx-wear-compose-material = { group = "androidx.wear.compose", name = "compose-material", version = "1.6.2" }
 
 [plugins]
@@ -76,5 +76,5 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-ksp = { id = "com.google.devtools.ksp", version = "2.3.6" }
+ksp = { id = "com.google.devtools.ksp", version = "2.3.9" }
 dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version = "3.16.0" }

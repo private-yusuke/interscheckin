@@ -1,5 +1,7 @@
 package pub.yusuke.foursquareclient.network
 
+import com.squareup.moshi.Json
+import pub.yusuke.foursquareclient.models.Icon
 import pub.yusuke.foursquareclient.models.Venue
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -34,9 +36,9 @@ interface VenueApiService {
     )
 
     /**
-     * https://developer.foursquare.com/reference/places-nearby
+     * https://docs.foursquare.com/fsq-developers-places/reference/geotagging-candidates
      */
-    @GET("/v3/places/nearby")
+    @GET("https://places-api.foursquare.com/geotagging/candidates")
     @Headers("Accept: application/json")
     suspend fun searchPlacesNearby(
         @Query("ll")
@@ -47,12 +49,51 @@ interface VenueApiService {
         query: String? = null,
         @Query("limit")
         limit: Int? = null,
+        @Query("fields")
+        fields: String = GEOTAGGING_CANDIDATE_FIELDS,
+        @Header("X-Places-Api-Version")
+        apiVersion: String = PLACES_API_VERSION,
         @Header("Authorization")
         authorization: String,
     ): SearchPlacesNearbyResponse
 
     data class SearchPlacesNearbyResponse(
-        val results: List<Venue>,
+        val candidates: List<GeotaggingCandidate>,
+    )
+
+    data class GeotaggingCandidate(
+        val categories: List<GeotaggingCandidateCategory>,
+        val chains: List<GeotaggingCandidateChain>?,
+        @Json(name = "fsq_place_id")
+        val fsqPlaceId: String,
+        val latitude: Double?,
+        val longitude: Double?,
+        val link: String?,
+        val location: GeotaggingCandidateLocation?,
+        val name: String,
+    )
+
+    data class GeotaggingCandidateCategory(
+        @Json(name = "fsq_category_id")
+        val fsqCategoryId: String,
+        val icon: Icon,
+        val name: String,
+    )
+
+    data class GeotaggingCandidateChain(
+        @Json(name = "fsq_chain_id")
+        val fsqChainId: String,
+        val name: String,
+    )
+
+    data class GeotaggingCandidateLocation(
+        val address: String? = null,
+        val country: String? = null,
+        @Json(name = "formatted_address")
+        val formattedAddress: String? = null,
+        val locality: String? = null,
+        val postcode: String? = null,
+        val region: String? = null,
     )
 
     /**
@@ -119,4 +160,10 @@ interface VenueApiService {
         val type: String,
         val place: Venue?,
     )
+
+    companion object {
+        const val PLACES_API_VERSION = "2025-06-17"
+        const val GEOTAGGING_CANDIDATE_FIELDS =
+            "fsq_place_id,name,categories,chains,latitude,longitude,link,location"
+    }
 }

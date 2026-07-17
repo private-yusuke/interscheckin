@@ -71,7 +71,7 @@ androidx-wear-compose-material = { group = "androidx.wear.compose", name = "comp
 
 [plugins]
 android-application = { id = "com.android.application", version = "9.3.0" }
-android-library = { id = "com.android.library", version = "9.2.1" }
+android-library = { id = "com.android.library", version = "9.3.0" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

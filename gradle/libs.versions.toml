@@ -6,7 +6,7 @@ detekt = "1.23.8"
 espressoCore = "3.7.0"
 hilt = "2.60.1"
 junit = "4.13.2"
-kotlin = "2.4.0"
+kotlin = "2.4.10"
 mockk = "1.14.11"
 paging = "3.5.0"
 playServicesLocation = "21.4.0"
@@ -76,5 +76,5 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-ksp = { id = "com.google.devtools.ksp", version = "2.3.9" }
+ksp = { id = "com.google.devtools.ksp", version = "2.3.10" }
 dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version = "3.17.0" }

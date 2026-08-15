@@ -83,7 +83,7 @@ interface VenueApiService {
     data class GeotaggingCandidateChain(
         @Json(name = "fsq_chain_id")
         val fsqChainId: String,
-        val name: String,
+        val name: String? = null,
     )
 
     data class GeotaggingCandidateLocation(

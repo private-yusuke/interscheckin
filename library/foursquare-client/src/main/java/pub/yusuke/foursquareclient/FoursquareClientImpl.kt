@@ -254,11 +254,8 @@ class FoursquareClientImpl(
                     name = category.name,
                 )
             },
-            chains = chains?.map { chain ->
-                Chain(
-                    id = chain.fsqChainId,
-                    name = chain.name,
-                )
+            chains = chains?.mapNotNull { chain ->
+                chain.name?.let { Chain(id = chain.fsqChainId, name = it) }
             },
             distance = coordinates?.distanceFrom(origin),
             fsqId = fsqPlaceId,

@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class GeotaggingCandidatesResponseTest {
@@ -32,6 +33,8 @@ class GeotaggingCandidatesResponseTest {
                 "chains": [{
                   "fsq_chain_id": "556f676fbd6a75a99038d8e9",
                   "name": "7-Eleven"
+                }, {
+                  "fsq_chain_id": "4d50347c-146e-4f05-8828-491e348c7145"
                 }],
                 "link": "/places/4dd0d870c65bdac7139b6d88",
                 "location": {
@@ -48,7 +51,8 @@ class GeotaggingCandidatesResponseTest {
         val candidate = response!!.candidates.single()
         assertEquals("4dd0d870c65bdac7139b6d88", candidate.fsqPlaceId)
         assertEquals("52f2ab2ebcbc57f1066b8b4f", candidate.categories.single().fsqCategoryId)
-        assertEquals("556f676fbd6a75a99038d8e9", candidate.chains?.single()?.fsqChainId)
+        assertEquals("556f676fbd6a75a99038d8e9", candidate.chains?.first()?.fsqChainId)
+        assertNull(candidate.chains?.last()?.name)
         assertEquals("つくば市, 茨城県", candidate.location?.formattedAddress)
     }
 }
